@@ -7,8 +7,6 @@ import org.springframework.stereotype.Component;
 
 @Configuration
 public class ConnectionData {
-//    @Value("${spring.datasource.driver-class-name}")
-    public String DRIVER = "org.postgresql.Driver";
 //    @Value("${spring.datasource.url}")
     public String URL = "jdbc:postgresql://localhost:5432/board";
 //    @Value("${spring.datasource.username}")

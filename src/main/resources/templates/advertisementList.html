@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>AdvertisementList</title>
+</head>
+<body>
+<h1>Advertisement</h1>
+<br/><br/>
+<table class="table table-striped">
+    <tr>
+        <th>Id</th>
+        <th>Name</th>
+    </tr>
+    <tr th:each="ad : ${adsList}">
+        <td th:text="${ad.id}"></td>
+        <td th:text="${ad.title}"></td>
+        <td th:text="${ad.text}"></td>
+        <td th:text="${ad.price}"></td>
+        <td th:text="${ad.image}"></td>
+        <td th:text="${ad.address}"></td>
+        <td th:text="${ad.publicationTime}"></td>
+        <td th:text="${ad.endTime}"></td>
+        <td th:text="${ad.categoryId}"></td>
+        <td th:text="${ad.typeId}"></td>
+        <td th:text="${ad.statusId}"></td>
+        <td th:text="${ad.ownerId}"></td>
+    </tr>
+</table>
+</body>
+</html>

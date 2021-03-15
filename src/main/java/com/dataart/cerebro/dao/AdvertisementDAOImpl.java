@@ -42,12 +42,12 @@ ConnectionData connectionData;
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        log.info("Result is received");
         return advertisementDTOList;
     }
 
     private AdvertisementDTO createAdvertisementDTO(ResultSet resultSet) throws SQLException {
         AdvertisementDTO advertisementDTO = new AdvertisementDTO();
-        log.info("Creating AdvertisementDTO");
 
         advertisementDTO.setId(resultSet.getInt("id"));
         advertisementDTO.setTitle(resultSet.getString("title"));
