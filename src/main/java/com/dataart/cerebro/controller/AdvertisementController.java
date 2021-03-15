@@ -21,11 +21,6 @@ public class AdvertisementController {
     }
 
     @RequestMapping("/advertisements")
-    public List<AdvertisementDTO> advertisementDTOList() {
-        log.info("Show all advertisement in the localhost:8080");
-        return advertisementDAO.getAllAdvertisements();
-    }
-    @RequestMapping("/list")
     public String list (Model model){
         model.addAttribute("adsList", advertisementDAO.getAllAdvertisements());
         return "advertisementList";

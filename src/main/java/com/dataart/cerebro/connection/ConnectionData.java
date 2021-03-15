@@ -7,10 +7,10 @@ import org.springframework.stereotype.Component;
 
 @Configuration
 public class ConnectionData {
-//    @Value("${spring.datasource.url}")
-    public String URL = "jdbc:postgresql://localhost:5432/board";
-//    @Value("${spring.datasource.username}")
-    public String USER = "postgres";
-//    @Value("${spring.datasource.password}")
-    public String PASSWORD = "12345";
+    @Value("${spring.datasource.url}")
+    public String URL;
+    @Value("${spring.datasource.username}")
+    public String USER;
+    @Value("${spring.datasource.password}")
+    public String PASSWORD;
 }
