@@ -13,5 +13,4 @@ public class CerebroApplication {
 		SpringApplication.run(CerebroApplication.class, args);
 		log.info("Application is run");
 	}
-
 }
