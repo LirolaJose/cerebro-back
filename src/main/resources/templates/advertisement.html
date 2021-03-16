@@ -28,7 +28,7 @@
         <td th:text="${advertisement.title}"></td>
         <td th:text="${advertisement.text}"></td>
         <td th:text="${advertisement.price}"></td>
-        <td> <img th:src="@{/image}"> </td>
+        <td> <img th:src="@{/image(id=${advertisement.id})}"> </td>
         <td th:text="${advertisement.address}"></td>
         <td th:text="${advertisement.publicationTime}"></td>
         <td th:text="${advertisement.endTime}"></td>
