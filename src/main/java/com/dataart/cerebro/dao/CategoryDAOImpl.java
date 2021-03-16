@@ -27,7 +27,7 @@ public class CategoryDAOImpl implements CategoryDAO {
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, categoryId);
             ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
+            if (resultSet.next()) {
                 return createCategoryDTO(resultSet);
             }
         } catch (SQLException e) {

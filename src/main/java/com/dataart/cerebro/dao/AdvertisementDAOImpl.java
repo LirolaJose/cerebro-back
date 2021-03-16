@@ -68,6 +68,7 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
     @Override
     public byte[] getImageByAdvertisementId(int id) {
         String sql = "SELECT image FROM advertisement WHERE id = ?;";
+
         try (Connection connection = DriverManager.getConnection(connectionData.URL, connectionData.USER, connectionData.PASSWORD);
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, id);
@@ -78,7 +79,7 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
         } catch (Exception e){
             log.error("Bad request for ID {}: {}", id, e.getMessage(), e);
         }
-        return null;
+        return new byte[0];
     }
 
 
