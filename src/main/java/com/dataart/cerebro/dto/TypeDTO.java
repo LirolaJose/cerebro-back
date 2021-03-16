@@ -1,4 +1,4 @@
 package com.dataart.cerebro.dto;
 
-public class TypeDTO {
+public enum TypeDTO {
 }

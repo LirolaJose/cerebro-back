@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
-<heid>
+<head>
     <meta charset="UTF-8">
     <title>Advertisement</title>
-</heid>
+</head>
 <body>
-<h1>Advertisements</h1>
+<h1>CEREBRO</h1>
 <br/><br/>
+<div>  <a th:href="@{/advertisements}"> Show all advertisement </a> </div>
 <table class="table table-striped">
     <tr>
         <th>Id</th>
@@ -22,19 +23,20 @@
         <th>Status</th>
         <th>Owner</th>
     </tr>
-    <tr th="${id}">
-        <td th:text="${id.id}"></td>
-        <td th:text="${id.title}"></td>
-        <td th:text="${id.text}"></td>
-        <td th:text="${id.price}"></td>
-        <td th:text="${id.image}"></td>
-        <td th:text="${id.address}"></td>
-        <td th:text="${id.publicationTime}"></td>
-        <td th:text="${id.endTime}"></td>
-        <td th:text="${id.categoryDTO.name}"></td>
-        <!--        <td th:text="${id.typeDTO.name}"></td>-->
-        <!--        <td th:text="${id.statusDTO.name}"></td>-->
-        <!--        <td th:text="${id.owner}"></td>-->
+    <tr th="${advertisement}">
+        <td th:text="${advertisement.id}"></td>
+        <td th:text="${advertisement.title}"></td>
+        <td th:text="${advertisement.text}"></td>
+        <td th:text="${advertisement.price}"></td>
+        <td> <img th:src="@{/image}"> </td>
+        <td th:text="${advertisement.address}"></td>
+        <td th:text="${advertisement.publicationTime}"></td>
+        <td th:text="${advertisement.endTime}"></td>
+        <td th:text="${advertisement.categoryDTO.name}"></td>
+        <!--        <td th:text="${advertisement.typeDTO.name}"></td>-->
+        <!--        <td th:text="${advertisement.statusDTO.name}"></td>-->
+        <!--        <td th:text="${advertisement.owner}"></td>-->
     </tr>
+</table>
 </body>
 </html>

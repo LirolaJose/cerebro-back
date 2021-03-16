@@ -10,7 +10,7 @@ public class AdvertisementDTO {
     private String title;
     private String text;
     private Double price;
-    private byte image;
+    private byte[] image;
     private String address;
     private Date publicationTime;
     private Date endTime;

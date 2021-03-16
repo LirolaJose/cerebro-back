@@ -31,7 +31,7 @@ public class CategoryDAOImpl implements CategoryDAO {
                 return createCategoryDTO(resultSet);
             }
         } catch (SQLException e) {
-            log.error("Bad request");
+            log.error("Bad request for ID {}: {}", categoryId, e.getMessage(), e);
         }
         return null;
     }

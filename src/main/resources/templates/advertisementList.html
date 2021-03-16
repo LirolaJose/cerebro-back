@@ -5,7 +5,7 @@
     <title>AdvertisementList</title>
 </head>
 <body>
-<h1>Advertisements</h1>
+<h1>CEREBRO</h1>
 <br/><br/>
 <table class="table table-striped">
     <tr>
@@ -22,9 +22,9 @@
         <th>Status</th>
         <th>Owner</th>
     </tr>
-    <tr th:each="ad : ${adsList}">
+    <tr th:each="ad : ${advertisementList}">
         <td th:text="${ad.id}"></td>
-        <td th:text="${ad.title}"></td>
+        <td> <a th:href="@{/advertisement(id=${ad.id})}"> <span th:text="${ad.title}"></span> </a></td>
         <td th:text="${ad.text}"></td>
         <td th:text="${ad.price}"></td>
         <td th:text="${ad.image}"></td>

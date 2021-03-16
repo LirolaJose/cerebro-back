@@ -2,11 +2,9 @@ package com.dataart.cerebro.dto;
 
 import lombok.Data;
 
-import java.util.Set;
-
 @Data
-public class CategoryDTO {
+public class ServiceDTO {
     private Integer id;
     private String name;
-    private Set<ServiceDTO> servicesSet;
+    private Double price;
 }

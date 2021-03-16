@@ -1,4 +1,6 @@
 package com.dataart.cerebro.dto;
 
-public class StatusDTO {
+public enum StatusDTO {
+//    ACTIVE(1),
+//    SOLD(2);
 }
