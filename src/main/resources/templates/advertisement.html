@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<heid>
+    <meta charset="UTF-8">
+    <title>Advertisement</title>
+</heid>
+<body>
+<h1>Advertisements</h1>
+<br/><br/>
+<table class="table table-striped">
+    <tr>
+        <th>Id</th>
+        <th>Title</th>
+        <th>Text</th>
+        <th>Price</th>
+        <th>Image</th>
+        <th>Address</th>
+        <th>Publication time</th>
+        <th>End time</th>
+        <th>Category</th>
+        <th>Type</th>
+        <th>Status</th>
+        <th>Owner</th>
+    </tr>
+    <tr th="${id}">
+        <td th:text="${id.id}"></td>
+        <td th:text="${id.title}"></td>
+        <td th:text="${id.text}"></td>
+        <td th:text="${id.price}"></td>
+        <td th:text="${id.image}"></td>
+        <td th:text="${id.address}"></td>
+        <td th:text="${id.publicationTime}"></td>
+        <td th:text="${id.endTime}"></td>
+        <td th:text="${id.categoryDTO.name}"></td>
+        <!--        <td th:text="${id.typeDTO.name}"></td>-->
+        <!--        <td th:text="${id.statusDTO.name}"></td>-->
+        <!--        <td th:text="${id.owner}"></td>-->
+    </tr>
+</body>
+</html>

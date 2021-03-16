@@ -35,10 +35,30 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
                 advertisementDTOList.add(createAdvertisementDTO(resultSet));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("Bad request");
         }
         log.info("Result is received");
         return advertisementDTOList;
+    }
+
+    @Override
+    public AdvertisementDTO getAdvertisementById(int id) {
+        String sql = "SELECT * FROM advertisement WHERE id = ?;";
+        log.info("Connecting to Data Base and sending request");
+        log.info("Sending request: get advertisement by id {}", id);
+
+        try (Connection connection = DriverManager.getConnection(connectionData.URL, connectionData.USER, connectionData.PASSWORD);
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                return createAdvertisementDTO(resultSet);
+            }
+        } catch (SQLException e){
+            log.error("Bad request: {}", e);
+        }
+
+        return null;
     }
 
     private AdvertisementDTO createAdvertisementDTO(ResultSet resultSet) throws SQLException {
@@ -56,9 +76,9 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
         int categoryId = resultSet.getInt("category_id");
         advertisementDTO.setCategoryDTO(categoryDAO.getCategoryDTObyId(categoryId));
 
-        advertisementDTO.setTypeId(resultSet.getInt("type_id"));
-        advertisementDTO.setStatusId(resultSet.getInt("status_id"));
-        advertisementDTO.setStatusId(resultSet.getInt("owner_id"));
+//        advertisementDTO.setTypeId(resultSet.getInt("type_id"));
+//        advertisementDTO.setStatusId(resultSet.getInt("status_id"));
+//        advertisementDTO.setStatusId(resultSet.getInt("owner_id"));
 
         return advertisementDTO;
     }

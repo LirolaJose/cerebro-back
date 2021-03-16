@@ -5,12 +5,22 @@
     <title>AdvertisementList</title>
 </head>
 <body>
-<h1>Advertisement</h1>
+<h1>Advertisements</h1>
 <br/><br/>
 <table class="table table-striped">
     <tr>
         <th>Id</th>
-        <th>Name</th>
+        <th>Title</th>
+        <th>Text</th>
+        <th>Price</th>
+        <th>Image</th>
+        <th>Address</th>
+        <th>Publication time</th>
+        <th>End time</th>
+        <th>Category</th>
+        <th>Type</th>
+        <th>Status</th>
+        <th>Owner</th>
     </tr>
     <tr th:each="ad : ${adsList}">
         <td th:text="${ad.id}"></td>
@@ -22,9 +32,9 @@
         <td th:text="${ad.publicationTime}"></td>
         <td th:text="${ad.endTime}"></td>
         <td th:text="${ad.categoryDTO.name}"></td>
-        <td th:text="${ad.typeId}"></td>
-        <td th:text="${ad.statusId}"></td>
-        <td th:text="${ad.ownerId}"></td>
+<!--        <td th:text="${ad.typeDTO.name}"></td>-->
+<!--        <td th:text="${ad.statusDTO.name}"></td>-->
+<!--        <td th:text="${ad.owner}"></td>-->
     </tr>
 </table>
 </body>

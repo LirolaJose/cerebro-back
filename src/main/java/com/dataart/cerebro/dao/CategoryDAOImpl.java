@@ -21,27 +21,27 @@ public class CategoryDAOImpl implements CategoryDAO {
     public CategoryDTO getCategoryDTObyId(int categoryId) {
         String sql = "SELECT * FROM category WHERE id = ?;";
 
+        log.info("Sending request: get category by id {}", categoryId);
+
         try (Connection connection = DriverManager.getConnection(connectionData.URL, connectionData.USER, connectionData.PASSWORD);
-             PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setInt(1, categoryId);
-            ResultSet resultSet = statement.executeQuery();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, categoryId);
+            ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 return createCategoryDTO(resultSet);
             }
         } catch (SQLException e) {
-            log.error("Wrong request");
+            log.error("Bad request");
         }
         return null;
     }
 
-    private CategoryDTO createCategoryDTO(ResultSet resultSet) {
+    private CategoryDTO createCategoryDTO(ResultSet resultSet) throws SQLException {
         CategoryDTO categoryDTO = new CategoryDTO();
-        try {
+
             categoryDTO.setId(resultSet.getInt("id"));
             categoryDTO.setName(resultSet.getString("name"));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+
         return categoryDTO;
     }
 }

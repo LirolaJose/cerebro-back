@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -21,9 +22,14 @@ public class AdvertisementController {
     }
 
     @RequestMapping("/advertisements")
-    public String list (Model model){
+    public String advertisementList(Model model){
         model.addAttribute("adsList", advertisementDAO.getAllAdvertisements());
         return "advertisementList";
+    }
+    @RequestMapping("/advertisement")
+    public String advertisementById(@RequestParam("id") int id, Model model){
+        model.addAttribute("id", advertisementDAO.getAdvertisementById(id));
+        return "advertisement";
     }
 
 }

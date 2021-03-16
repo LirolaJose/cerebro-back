@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface AdvertisementDAO {
     List<AdvertisementDTO> getAllAdvertisements ();
+    AdvertisementDTO getAdvertisementById(int id);
 }
