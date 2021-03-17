@@ -34,4 +34,3 @@ public class ImageController {
                 .body(image);
     }
 }
-

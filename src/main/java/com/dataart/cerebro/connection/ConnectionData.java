@@ -2,7 +2,6 @@ package com.dataart.cerebro.connection;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
 
 
 @Configuration
@@ -13,4 +12,5 @@ public class ConnectionData {
     public String USER;
     @Value("${spring.datasource.password}")
     public String PASSWORD;
+
 }

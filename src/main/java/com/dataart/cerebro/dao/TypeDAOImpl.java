@@ -17,7 +17,7 @@ public class TypeDAOImpl implements TypeDAO {
     }
 
     @Override
-    public TypeDTO getTypeDTOById(int statusId) {
+    public TypeDTO getTypeById(int statusId) {
         String sql = "SELECT * FROM type WHERE id = ?;";
         log.info("Sending request: get type by id {}", statusId);
 

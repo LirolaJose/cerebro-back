@@ -1,7 +1,6 @@
 package com.dataart.cerebro.dao;
 
 import com.dataart.cerebro.connection.ConnectionData;
-import com.dataart.cerebro.dto.CategoryDTO;
 import com.dataart.cerebro.dto.StatusDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -18,7 +17,7 @@ public class StatusDAOImpl implements StatusDAO {
     }
 
     @Override
-    public StatusDTO getStatusDTOById(int statusId) {
+    public StatusDTO getStatusById(int statusId) {
         String sql = "SELECT * FROM status WHERE id = ?;";
         log.info("Sending request: get status by id {}", statusId);
 

@@ -6,11 +6,12 @@ import com.dataart.cerebro.exception.AdvertisementNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
 @Slf4j
-public class AdvertisementServiceImpl implements com.dataart.cerebro.service.AdvertisementService {
+public class AdvertisementServiceImpl implements AdvertisementService {
     final
     AdvertisementDAO advertisementDAO;
 
@@ -26,10 +27,15 @@ public class AdvertisementServiceImpl implements com.dataart.cerebro.service.Adv
     @Override
     public AdvertisementDTO getAdvertisementById(int id) {
         AdvertisementDTO advertisementById = advertisementDAO.getAdvertisementById(id);
-        if(advertisementById == null){
+        if (advertisementById == null) {
             log.info("Bad request for ID({}), this id doesn't exist", id);
             throw new AdvertisementNotFoundException(id);
         }
         return advertisementById;
+    }
+
+    @Override
+    public void addAdvertisement(String title, String text, Double price, String address, Integer categoryId, Integer typeId, Integer statusId) {
+        advertisementDAO.addAdvertisement(title, text, price, address, categoryId, typeId, statusId);
     }
 }

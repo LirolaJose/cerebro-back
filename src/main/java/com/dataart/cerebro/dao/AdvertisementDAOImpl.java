@@ -60,7 +60,6 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
         } catch (Exception e) {
             log.error("Bad request for ID {}: {}", id, e.getMessage(), e);
         }
-
         return null;
     }
 
@@ -81,6 +80,28 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
         return new byte[0];
     }
 
+    @Override
+    public void addAdvertisement(String title, String text, Double price, String address,
+                                 Integer categoryId, Integer typeId, Integer statusId) {
+        String sql = "INSERT INTO advertisement (title, text, price, address, category_id, type_id, status_id)" +
+                "VALUES (?, ?, ?, ?, ?, ?, ?);";
+
+        try (Connection connection = DriverManager.getConnection(connectionData.URL, connectionData.USER, connectionData.PASSWORD);
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setString(1, title);
+            preparedStatement.setString(2, text);
+            preparedStatement.setDouble(3, price);
+            preparedStatement.setString(4, address);
+            preparedStatement.setInt(5, categoryId);
+            preparedStatement.setInt(6, typeId);
+            preparedStatement.setInt(7, statusId);
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            log.error("Bad request; {}", e.getMessage(), e);
+        }
+    }
 
     private AdvertisementDTO createAdvertisementDTO(ResultSet resultSet) throws SQLException {
         AdvertisementDTO advertisementDTO = new AdvertisementDTO();
@@ -95,13 +116,13 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
         advertisementDTO.setEndTime(resultSet.getDate("end_time"));
 
         int categoryId = resultSet.getInt("category_id");
-        advertisementDTO.setCategoryDTO(categoryDAO.getCategoryDTObyId(categoryId));
+        advertisementDTO.setCategoryDTO(categoryDAO.getCategoryById(categoryId));
 
         int statusId = resultSet.getInt("status_id");
-        advertisementDTO.setStatusDTO(statusDAO.getStatusDTOById(statusId));
+        advertisementDTO.setStatusDTO(statusDAO.getStatusById(statusId));
 
         int typeId = resultSet.getInt("type_id");
-        advertisementDTO.setTypeDTO(typeDAO.getTypeDTOById(typeId));
+        advertisementDTO.setTypeDTO(typeDAO.getTypeById(typeId));
 
 //        advertisementDTO.setStatusId(resultSet.getInt("owner_id"));
 

@@ -18,7 +18,7 @@ public class CategoryDAOImpl implements CategoryDAO {
     }
 
     @Override
-    public CategoryDTO getCategoryDTObyId(int categoryId) {
+    public CategoryDTO getCategoryById(int categoryId) {
         String sql = "SELECT * FROM category WHERE id = ?;";
 
         log.info("Sending request: get category by id {}", categoryId);
