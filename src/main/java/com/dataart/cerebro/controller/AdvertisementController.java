@@ -1,12 +1,12 @@
 package com.dataart.cerebro.controller;
 
 import com.dataart.cerebro.dao.AdvertisementDAO;
+import com.dataart.cerebro.dto.AdvertisementDTO;
 import com.dataart.cerebro.service.AdvertisementService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @Slf4j
@@ -40,5 +40,18 @@ public class AdvertisementController {
 
         advertisementDAO.addAdvertisement(title, text, price, address, categoryId, typeId, statusId);
         return "redirect:/advertisements";
+    }
+
+    //test
+    @GetMapping("/addAds")
+    public String greetingForm(Model model) {
+        model.addAttribute("advertisement", new AdvertisementDTO());
+        return "addAds";
+    }
+
+    @PostMapping("/addAds")
+    public String greetingSubmit(@ModelAttribute AdvertisementDTO advertisementDTO, Model model) {
+        model.addAttribute("advertisement", advertisementDTO);
+        return "advertisementList";
     }
 }

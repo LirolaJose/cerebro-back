@@ -16,6 +16,4 @@ public enum TypeDTO {
         this.id = id;
         this.name = name;
     }
-
-
-    }
+}
