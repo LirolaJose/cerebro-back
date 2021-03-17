@@ -2,9 +2,7 @@ package com.dataart.cerebro.dao;
 
 import com.dataart.cerebro.connection.ConnectionData;
 import com.dataart.cerebro.dto.AdvertisementDTO;
-import com.dataart.cerebro.exception.NotFoundIdException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
@@ -53,10 +51,8 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
-            if(resultSet.next()){
+            if(resultSet.next()) {
                 return createAdvertisementDTO(resultSet);
-            }else{
-                throw new NotFoundIdException();
             }
         } catch (Exception e){
             log.error("Bad request for ID {}: {}", id, e.getMessage(), e);
@@ -90,10 +86,7 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
         advertisementDTO.setTitle(resultSet.getString("title"));
         advertisementDTO.setText(resultSet.getString("text"));
         advertisementDTO.setPrice(resultSet.getDouble("price"));
-
-
         advertisementDTO.setImage(resultSet.getBytes("image"));
-
         advertisementDTO.setAddress(resultSet.getString("address"));
         advertisementDTO.setPublicationTime(resultSet.getDate("publication_time"));
         advertisementDTO.setEndTime(resultSet.getDate("end_time"));

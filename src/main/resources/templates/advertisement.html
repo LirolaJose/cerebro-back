@@ -9,6 +9,7 @@
 <br/><br/>
 <div>  <a th:href="@{/advertisements}"> Show all advertisement </a> </div>
 <table class="table table-striped">
+    <caption>Info</caption>
     <tr>
         <th>Id</th>
         <th>Title</th>
@@ -28,7 +29,7 @@
         <td th:text="${advertisement.title}"></td>
         <td th:text="${advertisement.text}"></td>
         <td th:text="${advertisement.price}"></td>
-        <td> <img th:src="@{/image(id=${advertisement.id})}"> </td>
+        <td> <img th:src="@{/image(id=${advertisement.id})}" alt="Image not load"> </td>
         <td th:text="${advertisement.address}"></td>
         <td th:text="${advertisement.publicationTime}"></td>
         <td th:text="${advertisement.endTime}"></td>

@@ -8,6 +8,7 @@
 <h1>CEREBRO</h1>
 <br/><br/>
 <table class="table table-striped">
+    <caption>Info</caption>
     <tr>
         <th>Id</th>
         <th>Title</th>
@@ -27,7 +28,7 @@
         <td> <a th:href="@{/advertisement(id=${ad.id})}"> <span th:text="${ad.title}"></span> </a></td>
         <td th:text="${ad.text}"></td>
         <td th:text="${ad.price}"></td>
-        <td><img th:src="@{/image(id=${ad.id})}"/></td>
+        <td><img th:src="@{/image(id=${ad.id})}" alt="Image not load"/></td>
         <td th:text="${ad.address}"></td>
         <td th:text="${ad.publicationTime}"></td>
         <td th:text="${ad.endTime}"></td>
