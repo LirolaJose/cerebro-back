@@ -12,13 +12,16 @@ import java.util.List;
 @Repository
 @Slf4j
 public class AdvertisementDAOImpl implements AdvertisementDAO {
-    final
-    ConnectionData connectionData;
+    final ConnectionData connectionData;
     final CategoryDAO categoryDAO;
+    final StatusDAO statusDAO;
+    final TypeDAO typeDAO;
 
-    public AdvertisementDAOImpl(ConnectionData connectionData, CategoryDAO categoryDAO) {
+    public AdvertisementDAOImpl(ConnectionData connectionData, CategoryDAO categoryDAO, StatusDAO statusDAO, TypeDAO typeDAO) {
         this.connectionData = connectionData;
         this.categoryDAO = categoryDAO;
+        this.statusDAO = statusDAO;
+        this.typeDAO = typeDAO;
     }
 
     @Override
@@ -51,10 +54,10 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
-            if(resultSet.next()) {
+            if (resultSet.next()) {
                 return createAdvertisementDTO(resultSet);
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             log.error("Bad request for ID {}: {}", id, e.getMessage(), e);
         }
 
@@ -69,10 +72,10 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
-            if(resultSet.next()) {
+            if (resultSet.next()) {
                 return resultSet.getBytes("image");
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             log.error("Bad request for ID {}: {}", id, e.getMessage(), e);
         }
         return new byte[0];
@@ -94,8 +97,12 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
         int categoryId = resultSet.getInt("category_id");
         advertisementDTO.setCategoryDTO(categoryDAO.getCategoryDTObyId(categoryId));
 
-//        advertisementDTO.setTypeId(resultSet.getInt("type_id"));
-//        advertisementDTO.setStatusId(resultSet.getInt("status_id"));
+        int statusId = resultSet.getInt("status_id");
+        advertisementDTO.setStatusDTO(statusDAO.getStatusDTOById(statusId));
+
+        int typeId = resultSet.getInt("type_id");
+        advertisementDTO.setTypeDTO(typeDAO.getTypeDTOById(typeId));
+
 //        advertisementDTO.setStatusId(resultSet.getInt("owner_id"));
 
         return advertisementDTO;

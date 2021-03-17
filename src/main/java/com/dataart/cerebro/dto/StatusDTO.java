@@ -4,8 +4,8 @@ import lombok.Getter;
 
 @Getter
 public enum StatusDTO {
-    ACTIVE(1, "active"),
-    SOLD(2, "sold");
+    active(1, "active"),
+    sold(2, "sold");
 
     private Integer id;
     private String name;
