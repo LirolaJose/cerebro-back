@@ -27,7 +27,7 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
     @Override
     public List<AdvertisementDTO> getAllAdvertisements() {
         String sql = "SELECT * FROM advertisement;";
-        List<AdvertisementDTO> advertisementDTOList = new ArrayList<>();
+        List<AdvertisementDTO> advertisementList = new ArrayList<>();
 
         log.info("Connecting to Data Base and sending request");
         try (Connection connection = DriverManager.getConnection(connectionData.URL, connectionData.USER, connectionData.PASSWORD);
@@ -35,13 +35,13 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
 
             ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
-                advertisementDTOList.add(createAdvertisementDTO(resultSet));
+                advertisementList.add(createAdvertisementDTO(resultSet));
             }
         } catch (SQLException e) {
             log.error("Bad request");
         }
         log.info("Result is received");
-        return advertisementDTOList;
+        return advertisementList;
     }
 
     @Override
@@ -82,9 +82,9 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
 
     @Override
     public void addAdvertisement(String title, String text, Double price, String address,
-                                 Integer categoryId, Integer typeId, Integer statusId) {
-        String sql = "INSERT INTO advertisement (title, text, price, address, category_id, type_id, status_id)" +
-                "VALUES (?, ?, ?, ?, ?, ?, ?);";
+                                  int typeId, int statusId) { //int categoryId,
+        String sql = "INSERT INTO advertisement (title, text, price, address, type_id, status_id)" +
+                "VALUES (?, ?, ?, ?, ?, ?);";
 
         try (Connection connection = DriverManager.getConnection(connectionData.URL, connectionData.USER, connectionData.PASSWORD);
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -93,9 +93,9 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
             preparedStatement.setString(2, text);
             preparedStatement.setDouble(3, price);
             preparedStatement.setString(4, address);
-            preparedStatement.setInt(5, categoryId);
-            preparedStatement.setInt(6, typeId);
-            preparedStatement.setInt(7, statusId);
+//            preparedStatement.setInt(5, categoryId);
+            preparedStatement.setInt(5, typeId);
+            preparedStatement.setInt(6, statusId);
             preparedStatement.executeUpdate();
 
         } catch (SQLException e) {

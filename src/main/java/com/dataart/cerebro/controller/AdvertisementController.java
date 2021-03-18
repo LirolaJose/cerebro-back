@@ -1,8 +1,14 @@
 package com.dataart.cerebro.controller;
 
 import com.dataart.cerebro.dao.AdvertisementDAO;
+import com.dataart.cerebro.dao.CategoryDAO;
+import com.dataart.cerebro.dao.StatusDAO;
+import com.dataart.cerebro.dao.TypeDAO;
 import com.dataart.cerebro.dto.AdvertisementDTO;
+import com.dataart.cerebro.dto.StatusDTO;
+import com.dataart.cerebro.dto.TypeDTO;
 import com.dataart.cerebro.service.AdvertisementService;
+import com.dataart.cerebro.service.CategoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,18 +18,18 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class AdvertisementController {
     final AdvertisementService advertisementService;
-    final AdvertisementDAO advertisementDAO;
+    final CategoryService categoryService;
 
-    public AdvertisementController(AdvertisementService advertisementService, AdvertisementDAO advertisementDAO) {
+    public AdvertisementController(AdvertisementService advertisementService, AdvertisementDAO advertisementDAO, CategoryDAO categoryDAO, TypeDAO typeDAO, StatusDAO statusDAO, CategoryService categoryService) {
         this.advertisementService = advertisementService;
-        this.advertisementDAO = advertisementDAO;
+        this.categoryService = categoryService;
     }
 
 
-    @RequestMapping("/advertisements")
+    @RequestMapping("/advertisementsList")
     public String getAdvertisementList(Model model) {
-        model.addAttribute("advertisementList", advertisementService.getAllAdvertisements());
-        return "advertisementList";
+        model.addAttribute("advertisementsList", advertisementService.getAllAdvertisements());
+        return "advertisementsList";
     }
 
     @RequestMapping("/advertisement")
@@ -32,26 +38,32 @@ public class AdvertisementController {
         return "advertisement";
     }
 
-    @RequestMapping(value = "/addAdvertisement")
-    public String addAdvertisement(@RequestParam("title") String title, @RequestParam("text") String text, @RequestParam("price") Double price,
-                                   @RequestParam("address") String address, @RequestParam("categoryId") Integer categoryId,
-                                   @RequestParam("typeId") Integer typeId,
-                                   @RequestParam("statusId") Integer statusId) {
-
-        advertisementDAO.addAdvertisement(title, text, price, address, categoryId, typeId, statusId);
-        return "redirect:/advertisements";
-    }
+//    @RequestMapping(value = "/addAdvertisement")
+//    public String addAdvertisement(@RequestParam("title") String title, @RequestParam("text") String text, @RequestParam("price") Double price,
+//                                   @RequestParam("address") String address, @RequestParam("categoryId") Integer categoryId,
+//                                   @RequestParam("typeId") Integer typeId,
+//                                   @RequestParam("statusId") Integer statusId) {
+//
+//        advertisementService.addAdvertisement(title, text, price, address, categoryId, typeId, statusId);
+//        return "redirect:/advertisements";
+//    }
 
     //test
-    @GetMapping("/addAds")
-    public String greetingForm(Model model) {
+    @RequestMapping(value = "/addAdvertisement", method = RequestMethod.GET)
+    public String advertisementForm(Model model) {
         model.addAttribute("advertisement", new AdvertisementDTO());
-        return "addAds";
+        model.addAttribute("categorySet", categoryService.getAllCategory());
+        model.addAttribute("typeEnum", TypeDTO.values());
+        model.addAttribute("statusEnum", StatusDTO.values());
+        return "addAdvertisement";
     }
 
-    @PostMapping("/addAds")
-    public String greetingSubmit(@ModelAttribute AdvertisementDTO advertisementDTO, Model model) {
-        model.addAttribute("advertisement", advertisementDTO);
-        return "advertisementList";
+    @RequestMapping (value = "/addAdvertisement", method = RequestMethod.POST)
+    public String advertisementSubmit(@ModelAttribute AdvertisementDTO advertisementDTO, Model model) {
+        advertisementService.addAdvertisement(advertisementDTO.getTitle(),advertisementDTO.getText(), advertisementDTO.getPrice(),
+                advertisementDTO.getAddress(), advertisementDTO.getTypeDTO(),
+                advertisementDTO.getStatusDTO());
+        model.addAttribute("advertisementList", advertisementService.getAllAdvertisements());
+        return "redirect:/advertisementsList";
     }
 }

@@ -7,6 +7,7 @@
 <body>
 <h1>CEREBRO</h1>
 <br/><br/>
+<div><a th:href="@{/addAdvertisement}"> New advertisement </a></div>
 <table class="table table-striped">
     <caption>Info</caption>
     <tr>
@@ -18,12 +19,12 @@
         <th>Address</th>
         <th>Publication time</th>
         <th>End time</th>
-        <th>Category</th>
+<!--        <th>Category</th>-->
         <th>Type</th>
         <th>Status</th>
         <th>Owner</th>
     </tr>
-    <tr th:each="ad : ${advertisementList}">
+    <tr th:each="ad : ${advertisementsList}">
         <td th:text="${ad.id}"></td>
         <td> <a th:href="@{/advertisement(id=${ad.id})}"> <span th:text="${ad.title}"></span> </a></td>
         <td th:text="${ad.text}"></td>
@@ -32,7 +33,7 @@
         <td th:text="${ad.address}"></td>
         <td th:text="${ad.publicationTime}"></td>
         <td th:text="${ad.endTime}"></td>
-        <td th:text="${ad.categoryDTO.name}"></td>
+<!--        <td th:text="${ad.categoryDTO.name}"></td>-->
         <td th:text="${ad.typeDTO.name}"></td>
         <td th:text="${ad.statusDTO.name}"></td>
 <!--        <td th:text="${ad.owner}"></td>-->

@@ -6,6 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Repository
 @Slf4j
@@ -36,11 +38,31 @@ public class CategoryDAOImpl implements CategoryDAO {
         return null;
     }
 
+    @Override
+    public Set<CategoryDTO> getAllCategory() {
+        String sql = "SELECT * FROM category;";
+        Set<CategoryDTO> categorySet = new HashSet<>();
+
+        log.info("Connecting to Data Base and sending request");
+        try (Connection connection = DriverManager.getConnection(connectionData.URL, connectionData.USER, connectionData.PASSWORD);
+             Statement statement = connection.createStatement()) {
+
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()) {
+                categorySet.add(createCategoryDTO(resultSet));
+            }
+        } catch (SQLException e) {
+            log.error("Bad request");
+        }
+        log.info("Result is received");
+        return categorySet;
+    }
+
     private CategoryDTO createCategoryDTO(ResultSet resultSet) throws SQLException {
         CategoryDTO categoryDTO = new CategoryDTO();
 
-            categoryDTO.setId(resultSet.getInt("id"));
-            categoryDTO.setName(resultSet.getString("name"));
+        categoryDTO.setId(resultSet.getInt("id"));
+        categoryDTO.setName(resultSet.getString("name"));
 
         return categoryDTO;
     }

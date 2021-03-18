@@ -2,7 +2,6 @@ package com.dataart.cerebro.dao;
 
 import com.dataart.cerebro.dto.AdvertisementDTO;
 
-import java.util.Date;
 import java.util.List;
 
 public interface AdvertisementDAO {
@@ -12,5 +11,5 @@ public interface AdvertisementDAO {
 
     byte[] getImageByAdvertisementId(int id);
 
-    void addAdvertisement(String title, String text, Double price, String address, Integer categoryId, Integer typeId, Integer statusId);
+    void addAdvertisement(String title, String text, Double price, String address, int typeId, int statusId); //int categoryId
 }

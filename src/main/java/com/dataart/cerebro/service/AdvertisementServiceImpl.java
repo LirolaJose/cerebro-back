@@ -2,11 +2,13 @@ package com.dataart.cerebro.service;
 
 import com.dataart.cerebro.dao.AdvertisementDAO;
 import com.dataart.cerebro.dto.AdvertisementDTO;
+import com.dataart.cerebro.dto.CategoryDTO;
+import com.dataart.cerebro.dto.StatusDTO;
+import com.dataart.cerebro.dto.TypeDTO;
 import com.dataart.cerebro.exception.AdvertisementNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -35,7 +37,7 @@ public class AdvertisementServiceImpl implements AdvertisementService {
     }
 
     @Override
-    public void addAdvertisement(String title, String text, Double price, String address, Integer categoryId, Integer typeId, Integer statusId) {
-        advertisementDAO.addAdvertisement(title, text, price, address, categoryId, typeId, statusId);
+    public void addAdvertisement(String title, String text, Double price, String address, TypeDTO typeDTO, StatusDTO statusDTO) {
+        advertisementDAO.addAdvertisement(title, text, price, address, typeDTO.getId(), statusDTO.getId());
     }
 }
