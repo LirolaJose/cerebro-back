@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Contacts List</title>
+</head>
+<body>
+<h1>Contacts</h1>
+<br/><br/>
+<div><a th:href="@{/advertisementsList}"> Go to main page </a></div>
+<table class="table table-striped">
+    <caption>Contacts list</caption>
+    <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Phone</th>
+        <th>Email</th>
+    </tr>
+    <tr th:each="contact : ${contactsList}">
+        <td th:text="${contact.id}"></td>
+        <td th:text="${contact.name}"></td>
+        <td th:text="${contact.phone}"></td>
+        <td th:text="${contact.email}"></td>
+    </tr>
+</table>
+</body>
+</html>

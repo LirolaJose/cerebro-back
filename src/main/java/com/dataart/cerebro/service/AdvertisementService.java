@@ -1,9 +1,6 @@
 package com.dataart.cerebro.service;
 
 import com.dataart.cerebro.dto.AdvertisementDTO;
-import com.dataart.cerebro.dto.CategoryDTO;
-import com.dataart.cerebro.dto.StatusDTO;
-import com.dataart.cerebro.dto.TypeDTO;
 
 import java.util.List;
 

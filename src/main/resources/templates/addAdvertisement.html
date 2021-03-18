@@ -5,8 +5,9 @@
     <title>AddAdvertisement</title>
 </head>
 <body>
-<h1>Form</h1>
+<h1>Form for advertisement</h1>
 <div><a th:href="@{/advertisementsList}"> Back to all advertisements </a></div>
+
 <form th:action="@{/addAdvertisement}" th:object="${advertisement}" method="post">
     <p>Title: <input type="text" th:field="*{title}"/></p>
     <p>Text: <input type="text" th:field="*{text}"/></p>

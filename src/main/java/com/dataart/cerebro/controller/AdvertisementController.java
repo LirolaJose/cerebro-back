@@ -1,11 +1,6 @@
 package com.dataart.cerebro.controller;
 
-import com.dataart.cerebro.dao.AdvertisementDAO;
-import com.dataart.cerebro.dao.CategoryDAO;
-import com.dataart.cerebro.dao.StatusDAO;
-import com.dataart.cerebro.dao.TypeDAO;
 import com.dataart.cerebro.dto.AdvertisementDTO;
-import com.dataart.cerebro.dto.CategoryDTO;
 import com.dataart.cerebro.dto.StatusDTO;
 import com.dataart.cerebro.dto.TypeDTO;
 import com.dataart.cerebro.service.AdvertisementService;
@@ -13,13 +8,7 @@ import com.dataart.cerebro.service.CategoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import java.time.LocalDateTime;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @Slf4j
@@ -36,7 +25,6 @@ public class AdvertisementController {
     @RequestMapping("/advertisementsList")
     public String getAdvertisementList(Model model) {
         model.addAttribute("advertisementsList", advertisementService.getAllAdvertisements());
-        model.addAttribute("localDateTime", LocalDateTime.class);
         return "advertisementsList";
     }
 
@@ -46,8 +34,8 @@ public class AdvertisementController {
         return "advertisement";
     }
 
-    @RequestMapping(value = "/addAdvertisement", method = RequestMethod.GET)
-    public String advertisementForm(Model model) {
+    @GetMapping(value = "/addAdvertisement")
+    public String addAdvertisementForm(Model model) {
         model.addAttribute("advertisement", new AdvertisementDTO());
         model.addAttribute("categorySet", categoryService.getAllCategory());
         model.addAttribute("typeEnum", TypeDTO.values());
@@ -55,10 +43,15 @@ public class AdvertisementController {
         return "addAdvertisement";
     }
 
-    @RequestMapping(value = "/addAdvertisement", method = RequestMethod.POST)
-    public String advertisementSubmit(@ModelAttribute  AdvertisementDTO advertisementDTO, Model model) {
+    @PostMapping(value = "/addAdvertisement")
+    public String addAdvertisementSubmit(@ModelAttribute AdvertisementDTO advertisementDTO, Model model) {
+        log.info("Creating new Advertisement, parameters title: {}, text: {}, price: {}, address: {}, category: {}," +
+                        "type: {}, status: {}", advertisementDTO.getTitle(), advertisementDTO.getText(), advertisementDTO.getPrice(),
+                advertisementDTO.getAddress(), advertisementDTO.getCategoryDTO().getId(), advertisementDTO.getTypeDTO().getId(),
+                advertisementDTO.getStatusDTO().getId());
+
         advertisementService.addAdvertisement(advertisementDTO.getTitle(), advertisementDTO.getText(), advertisementDTO.getPrice(),
-                advertisementDTO.getAddress(),advertisementDTO.getCategoryDTO().getId(), advertisementDTO.getTypeDTO().getId(),
+                advertisementDTO.getAddress(), advertisementDTO.getCategoryDTO().getId(), advertisementDTO.getTypeDTO().getId(),
                 advertisementDTO.getStatusDTO().getId());
         model.addAttribute("advertisementsList", advertisementService.getAllAdvertisements());
         return "redirect:/advertisementsList";
