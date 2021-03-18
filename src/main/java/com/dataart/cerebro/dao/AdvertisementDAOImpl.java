@@ -82,9 +82,9 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
 
     @Override
     public void addAdvertisement(String title, String text, Double price, String address,
-                                  int typeId, int statusId) { //int categoryId,
-        String sql = "INSERT INTO advertisement (title, text, price, address, type_id, status_id)" +
-                "VALUES (?, ?, ?, ?, ?, ?);";
+                                 int categoryId, int typeId, int statusId) {
+        String sql = "INSERT INTO advertisement (title, text, price, address, category_id, type_id, status_id)" +
+                "VALUES (?, ?, ?, ?, ?, ?, ?);";
 
         try (Connection connection = DriverManager.getConnection(connectionData.URL, connectionData.USER, connectionData.PASSWORD);
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -93,9 +93,9 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
             preparedStatement.setString(2, text);
             preparedStatement.setDouble(3, price);
             preparedStatement.setString(4, address);
-//            preparedStatement.setInt(5, categoryId);
-            preparedStatement.setInt(5, typeId);
-            preparedStatement.setInt(6, statusId);
+            preparedStatement.setInt(5, categoryId);
+            preparedStatement.setInt(6, typeId);
+            preparedStatement.setInt(7, statusId);
             preparedStatement.executeUpdate();
 
         } catch (SQLException e) {

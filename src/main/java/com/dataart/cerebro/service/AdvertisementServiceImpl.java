@@ -3,8 +3,6 @@ package com.dataart.cerebro.service;
 import com.dataart.cerebro.dao.AdvertisementDAO;
 import com.dataart.cerebro.dto.AdvertisementDTO;
 import com.dataart.cerebro.dto.CategoryDTO;
-import com.dataart.cerebro.dto.StatusDTO;
-import com.dataart.cerebro.dto.TypeDTO;
 import com.dataart.cerebro.exception.AdvertisementNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -14,11 +12,12 @@ import java.util.List;
 @Service
 @Slf4j
 public class AdvertisementServiceImpl implements AdvertisementService {
-    final
-    AdvertisementDAO advertisementDAO;
+    final AdvertisementDAO advertisementDAO;
+    final CategoryService categoryService;
 
-    public AdvertisementServiceImpl(AdvertisementDAO advertisementDAO) {
+    public AdvertisementServiceImpl(AdvertisementDAO advertisementDAO, CategoryService categoryService) {
         this.advertisementDAO = advertisementDAO;
+        this.categoryService = categoryService;
     }
 
     @Override
@@ -37,7 +36,9 @@ public class AdvertisementServiceImpl implements AdvertisementService {
     }
 
     @Override
-    public void addAdvertisement(String title, String text, Double price, String address, TypeDTO typeDTO, StatusDTO statusDTO) {
-        advertisementDAO.addAdvertisement(title, text, price, address, typeDTO.getId(), statusDTO.getId());
+    public void addAdvertisement(String title, String text, Double price, String address,
+                                 int categoryId, int typeId, int statusId) {
+        CategoryDTO categoryDTO = categoryService.getCategoryById(categoryId);
+        advertisementDAO.addAdvertisement(title, text, price, address, categoryDTO.getId(), typeId, statusId);
     }
 }
