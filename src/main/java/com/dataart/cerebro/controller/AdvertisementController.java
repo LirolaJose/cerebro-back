@@ -12,7 +12,10 @@ import com.dataart.cerebro.service.CategoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @Slf4j
@@ -20,7 +23,7 @@ public class AdvertisementController {
     final AdvertisementService advertisementService;
     final CategoryService categoryService;
 
-    public AdvertisementController(AdvertisementService advertisementService, AdvertisementDAO advertisementDAO, CategoryDAO categoryDAO, TypeDAO typeDAO, StatusDAO statusDAO, CategoryService categoryService) {
+    public AdvertisementController(AdvertisementService advertisementService, CategoryService categoryService) {
         this.advertisementService = advertisementService;
         this.categoryService = categoryService;
     }
@@ -38,17 +41,6 @@ public class AdvertisementController {
         return "advertisement";
     }
 
-//    @RequestMapping(value = "/addAdvertisement")
-//    public String addAdvertisement(@RequestParam("title") String title, @RequestParam("text") String text, @RequestParam("price") Double price,
-//                                   @RequestParam("address") String address, @RequestParam("categoryId") Integer categoryId,
-//                                   @RequestParam("typeId") Integer typeId,
-//                                   @RequestParam("statusId") Integer statusId) {
-//
-//        advertisementService.addAdvertisement(title, text, price, address, categoryId, typeId, statusId);
-//        return "redirect:/advertisements";
-//    }
-
-    //test
     @RequestMapping(value = "/addAdvertisement", method = RequestMethod.GET)
     public String advertisementForm(Model model) {
         model.addAttribute("advertisement", new AdvertisementDTO());
@@ -58,12 +50,12 @@ public class AdvertisementController {
         return "addAdvertisement";
     }
 
-    @RequestMapping (value = "/addAdvertisement", method = RequestMethod.POST)
+    @RequestMapping(value = "/addAdvertisement", method = RequestMethod.POST)
     public String advertisementSubmit(@ModelAttribute AdvertisementDTO advertisementDTO, Model model) {
-        advertisementService.addAdvertisement(advertisementDTO.getTitle(),advertisementDTO.getText(), advertisementDTO.getPrice(),
+        advertisementService.addAdvertisement(advertisementDTO.getTitle(), advertisementDTO.getText(), advertisementDTO.getPrice(),
                 advertisementDTO.getAddress(), advertisementDTO.getTypeDTO(),
                 advertisementDTO.getStatusDTO());
-        model.addAttribute("advertisementList", advertisementService.getAllAdvertisements());
+        model.addAttribute("advertisementsList", advertisementService.getAllAdvertisements());
         return "redirect:/advertisementsList";
     }
 }

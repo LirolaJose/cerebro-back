@@ -2,14 +2,38 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>AdvertisementList</title>
+    <title>AdvertisementsList</title>
+    <style type="text/css">
+        table {
+            font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+            font-size: 14px;
+            background: white;
+            max-width: 70%;
+            width: 70%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+        th {
+            font-weight: normal;
+            color: #039;
+            border-bottom: 2px solid #6678b1;
+            padding: 10px 8px;
+        }
+        td {
+            color: #669;
+            padding: 9px 8px;
+            transition: .3s linear;
+        }
+        tr:hover td {color: #6699ff;}
+    </style>
 </head>
+
 <body>
 <h1>CEREBRO</h1>
 <br/><br/>
 <div><a th:href="@{/addAdvertisement}"> New advertisement </a></div>
 <table class="table table-striped">
-    <caption>Info</caption>
+    <caption>ADVERTISEMENTS</caption>
     <tr>
         <th>Id</th>
         <th>Title</th>

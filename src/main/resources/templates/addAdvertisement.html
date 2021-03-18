@@ -2,12 +2,12 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>AddAdvertisement</title>
 </head>
 <body>
 <h1>Form</h1>
 <div><a th:href="@{/advertisementsList}"> Back to all advertisements </a></div>
-<form action="#" th:action="@{/addAds}" th:object="${advertisement}" method="post">
+<form action="#" th:action="@{/addAdvertisement}" th:object="${advertisement}" method="post">
     <p>Title: <input type="text" th:field="*{title}"/></p>
     <p>Text: <input type="text" th:field="*{text}"/></p>
     <p>Price: <input type="text" th:field="*{price}"/></p>

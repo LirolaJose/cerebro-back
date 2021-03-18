@@ -3,6 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <title>Advertisement</title>
+
+    <style type="text/css">
+        table {
+            font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+            font-size: 14px;
+            background: white;
+            max-width: 70%;
+            width: 70%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+        th {
+            font-weight: normal;
+            color: #039;
+            border-bottom: 2px solid #6678b1;
+            padding: 10px 8px;
+        }
+        td {
+            color: #669;
+            padding: 9px 8px;
+            transition: .3s linear;
+        }
+        tr:hover td {color: #6699ff;}
+    </style>
 </head>
 <body>
 <h1>CEREBRO</h1>
@@ -19,7 +43,7 @@
         <th>Address</th>
         <th>Publication time</th>
         <th>End time</th>
-        <th>Category</th>
+<!--        <th>Category</th>-->
         <th>Type</th>
         <th>Status</th>
         <th>Owner</th>
@@ -33,7 +57,7 @@
         <td th:text="${advertisement.address}"></td>
         <td th:text="${advertisement.publicationTime}"></td>
         <td th:text="${advertisement.endTime}"></td>
-        <td th:text="${advertisement.categoryDTO.name}"></td>
+<!--        <td th:text="${advertisement.categoryDTO.name}"></td>-->
         <td th:text="${advertisement.typeDTO.name}"></td>
         <td th:text="${advertisement.statusDTO.name}"></td>
         <!--        <td th:text="${advertisement.owner}"></td>-->
