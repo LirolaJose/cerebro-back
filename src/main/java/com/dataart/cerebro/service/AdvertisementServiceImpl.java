@@ -7,6 +7,9 @@ import com.dataart.cerebro.exception.AdvertisementNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -39,6 +42,11 @@ public class AdvertisementServiceImpl implements AdvertisementService {
     public void addAdvertisement(String title, String text, Double price, String address,
                                  int categoryId, int typeId, int statusId) {
         CategoryDTO categoryDTO = categoryService.getCategoryById(categoryId);
-        advertisementDAO.addAdvertisement(title, text, price, address, categoryDTO.getId(), typeId, statusId);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd-MM-yyyy");
+        LocalDateTime publicationTime = LocalDateTime.now();
+
+        LocalDateTime endTime = publicationTime.plusDays(7);
+
+        advertisementDAO.addAdvertisement(title, text, price, address, publicationTime, endTime, categoryDTO.getId(), typeId, statusId);
     }
 }

@@ -42,7 +42,7 @@
         <th>Image</th>
         <th>Address</th>
         <th>Publication time</th>
-        <th>End time</th>
+        <th>Expired time</th>
         <th>Category</th>
         <th>Type</th>
         <th>Status</th>
@@ -55,8 +55,8 @@
         <td th:text="${ad.price}"></td>
         <td><img th:src="@{/image(id=${ad.id})}"/></td>
         <td th:text="${ad.address}"></td>
-        <td th:text="${ad.publicationTime}"></td>
-        <td th:text="${ad.endTime}"></td>
+        <td th:text="${#temporals.format(ad.publicationTime, 'dd-MM-yyyy HH:mm')}"></td>
+        <td th:text="${#temporals.format(ad.endTime, 'dd-MM-yyyy HH:mm')}"></td>
         <td th:text="${ad.categoryDTO.name}"></td>
         <td th:text="${ad.typeDTO.name}"></td>
         <td th:text="${ad.statusDTO.name}"></td>

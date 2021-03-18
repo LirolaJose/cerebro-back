@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -81,10 +82,10 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
     }
 
     @Override
-    public void addAdvertisement(String title, String text, Double price, String address,
+    public void addAdvertisement(String title, String text, Double price, String address, LocalDateTime publicationTime, LocalDateTime endTime,
                                  int categoryId, int typeId, int statusId) {
-        String sql = "INSERT INTO advertisement (title, text, price, address, category_id, type_id, status_id)" +
-                "VALUES (?, ?, ?, ?, ?, ?, ?);";
+        String sql = "INSERT INTO advertisement (title, text, price, address,publication_time, end_time, category_id, type_id, status_id)" +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?,?);";
 
         try (Connection connection = DriverManager.getConnection(connectionData.URL, connectionData.USER, connectionData.PASSWORD);
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -93,9 +94,11 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
             preparedStatement.setString(2, text);
             preparedStatement.setDouble(3, price);
             preparedStatement.setString(4, address);
-            preparedStatement.setInt(5, categoryId);
-            preparedStatement.setInt(6, typeId);
-            preparedStatement.setInt(7, statusId);
+            preparedStatement.setObject(5, publicationTime);
+            preparedStatement.setObject(6, endTime);
+            preparedStatement.setInt(7, categoryId);
+            preparedStatement.setInt(8, typeId);
+            preparedStatement.setInt(9, statusId);
             preparedStatement.executeUpdate();
 
         } catch (SQLException e) {
@@ -112,8 +115,9 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
         advertisementDTO.setPrice(resultSet.getDouble("price"));
         advertisementDTO.setImage(resultSet.getBytes("image"));
         advertisementDTO.setAddress(resultSet.getString("address"));
-        advertisementDTO.setPublicationTime(resultSet.getDate("publication_time"));
-        advertisementDTO.setEndTime(resultSet.getDate("end_time"));
+
+        advertisementDTO.setPublicationTime(resultSet.getObject("publication_time", LocalDateTime.class));
+        advertisementDTO.setEndTime(resultSet.getObject("end_time", LocalDateTime.class));
 
         int categoryId = resultSet.getInt("category_id");
         advertisementDTO.setCategoryDTO(categoryDAO.getCategoryById(categoryId));

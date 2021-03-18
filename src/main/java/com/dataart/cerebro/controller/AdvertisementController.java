@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.LocalDateTime;
+
 @Controller
 @Slf4j
 public class AdvertisementController {
@@ -34,6 +36,7 @@ public class AdvertisementController {
     @RequestMapping("/advertisementsList")
     public String getAdvertisementList(Model model) {
         model.addAttribute("advertisementsList", advertisementService.getAllAdvertisements());
+        model.addAttribute("localDateTime", LocalDateTime.class);
         return "advertisementsList";
     }
 

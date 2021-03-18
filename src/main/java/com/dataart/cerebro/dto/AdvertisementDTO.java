@@ -2,6 +2,7 @@ package com.dataart.cerebro.dto;
 
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
@@ -12,8 +13,8 @@ public class AdvertisementDTO {
     private Double price;
     private byte[] image;
     private String address;
-    private Date publicationTime;
-    private Date endTime;
+    private LocalDateTime publicationTime;
+    private LocalDateTime endTime;
     private CategoryDTO categoryDTO;
     private TypeDTO typeDTO;
     private StatusDTO statusDTO;
