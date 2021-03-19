@@ -1,6 +1,7 @@
 package com.dataart.cerebro.controller;
 
 import com.dataart.cerebro.dto.AdvertisementDTO;
+import com.dataart.cerebro.dto.ContactInfoDTO;
 import com.dataart.cerebro.dto.StatusDTO;
 import com.dataart.cerebro.dto.TypeDTO;
 import com.dataart.cerebro.service.AdvertisementService;
@@ -40,20 +41,20 @@ public class AdvertisementController {
         model.addAttribute("categorySet", categoryService.getAllCategory());
         model.addAttribute("typeEnum", TypeDTO.values());
         model.addAttribute("statusEnum", StatusDTO.values());
+        model.addAttribute("contactInfo", new ContactInfoDTO());
         return "addAdvertisement";
     }
 
     @PostMapping(value = "/addAdvertisement")
-    public String addAdvertisementSubmit(@ModelAttribute AdvertisementDTO advertisementDTO, Model model) {
-        log.info("Creating new Advertisement, parameters title: {}, text: {}, price: {}, address: {}, category: {}," +
+    public String addAdvertisementSubmit(@ModelAttribute AdvertisementDTO advertisementDTO, ContactInfoDTO contactInfoDTO, Model model) {
+        log.info("Creating new Advertisement, parameters: title: {}, text: {}, price: {}, address: {}, category: {}," +
                         "type: {}, status: {}", advertisementDTO.getTitle(), advertisementDTO.getText(), advertisementDTO.getPrice(),
                 advertisementDTO.getAddress(), advertisementDTO.getCategoryDTO().getId(), advertisementDTO.getTypeDTO().getId(),
                 advertisementDTO.getStatusDTO().getId());
 
-        advertisementService.addAdvertisement(advertisementDTO.getTitle(), advertisementDTO.getText(), advertisementDTO.getPrice(),
-                advertisementDTO.getAddress(), advertisementDTO.getCategoryDTO().getId(), advertisementDTO.getTypeDTO().getId(),
-                advertisementDTO.getStatusDTO().getId());
-        model.addAttribute("advertisementsList", advertisementService.getAllAdvertisements());
+        advertisementService.addAdvertisement(advertisementDTO, contactInfoDTO);
+//        model.addAttribute("advertisementsList", advertisementService.getAllAdvertisements());
+//        model.addAttribute("contact", new ContactInfoDTO());
         return "redirect:/advertisementsList";
     }
 }

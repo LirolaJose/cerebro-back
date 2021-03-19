@@ -29,6 +29,11 @@
         <option th:each="status : ${statusEnum}"
                 th:value="${status}" th:text="${status}" th:field="*{statusDTO}"></option>
     </select></p>
+
+    <p>Name: <input type="text" th:field="${contactInfo.name}"/></p>
+    <p>Phone: <input type="text" th:field="${contactInfo.phone}"/></p>
+    <p>Email: <input type="text" th:field="${contactInfo.email}"/></p>
+
     <p><input type="submit" value="Submit"/> <input type="reset" value="Reset"/></p>
 </form>
 </body>

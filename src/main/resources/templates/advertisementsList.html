@@ -10,21 +10,23 @@
             background: white;
             max-width: 70%;
             width: 70%;
-            border-collapse: collapse;
+            border-right: 1px solid #0865c2;
+            border-top: 1px solid #0865c2;
+            border-left: 1px solid #0865c2;
+            border-bottom: 1px solid #fff;
             text-align: left;
         }
         th {
             font-weight: normal;
             color: #039;
-            border-bottom: 2px solid #6678b1;
-            padding: 10px 8px;
+            padding: 10px 15px;
         }
         td {
             color: #669;
-            padding: 9px 8px;
-            transition: .3s linear;
+            border-top: 1px solid #e8edff;
+            padding: 10px 15px;
         }
-        tr:hover td {color: #6699ff;}
+        tr:nth-child(2n) {background: #e8edff;}
     </style>
 </head>
 
@@ -60,7 +62,7 @@
         <td th:text="${ad.categoryDTO.name}"></td>
         <td th:text="${ad.typeDTO.name}"></td>
         <td th:text="${ad.statusDTO.name}"></td>
-<!--        <td th:text="${ad.owner}"></td>-->
+        <td th:utext="|${ad.owner.name} <br /> ${ad.owner.phone} <br /> ${ad.owner.email}|"></td>
     </tr>
 </table>
 </body>

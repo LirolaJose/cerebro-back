@@ -17,12 +17,14 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
     final CategoryDAO categoryDAO;
     final StatusDAO statusDAO;
     final TypeDAO typeDAO;
+    final ContactInfoDAO contactInfoDAO;
 
-    public AdvertisementDAOImpl(ConnectionData connectionData, CategoryDAO categoryDAO, StatusDAO statusDAO, TypeDAO typeDAO) {
+    public AdvertisementDAOImpl(ConnectionData connectionData, CategoryDAO categoryDAO, StatusDAO statusDAO, TypeDAO typeDAO, ContactInfoDAO contactInfoDAO) {
         this.connectionData = connectionData;
         this.categoryDAO = categoryDAO;
         this.statusDAO = statusDAO;
         this.typeDAO = typeDAO;
+        this.contactInfoDAO = contactInfoDAO;
     }
 
     @Override
@@ -83,9 +85,9 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
 
     @Override
     public void addAdvertisement(String title, String text, Double price, String address, LocalDateTime publicationTime, LocalDateTime endTime,
-                                 int categoryId, int typeId, int statusId) {
-        String sql = "INSERT INTO advertisement (title, text, price, address,publication_time, end_time, category_id, type_id, status_id)" +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?,?);";
+                                 int categoryId, int typeId, int statusId, int ownerId) {
+        String sql = "INSERT INTO advertisement (title, text, price, address,publication_time, end_time, category_id, type_id, status_id, owner_id)" +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
         try (Connection connection = DriverManager.getConnection(connectionData.URL, connectionData.USER, connectionData.PASSWORD);
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -99,6 +101,7 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
             preparedStatement.setInt(7, categoryId);
             preparedStatement.setInt(8, typeId);
             preparedStatement.setInt(9, statusId);
+            preparedStatement.setInt(10, ownerId);
             preparedStatement.executeUpdate();
 
         } catch (SQLException e) {
@@ -128,7 +131,8 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
         int typeId = resultSet.getInt("type_id");
         advertisementDTO.setTypeDTO(typeDAO.getTypeById(typeId));
 
-//        advertisementDTO.setStatusId(resultSet.getInt("owner_id"));
+        int ownerId = resultSet.getInt("owner_id");
+        advertisementDTO.setOwner(contactInfoDAO.getContactInfoById(ownerId));
 
         return advertisementDTO;
     }

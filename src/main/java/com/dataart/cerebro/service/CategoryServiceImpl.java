@@ -21,7 +21,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryDTO getCategoryById(int categoryId) {
+    public CategoryDTO getCategoryById(Integer categoryId) {
         return categoryDAO.getCategoryById(categoryId);
     }
 }

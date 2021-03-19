@@ -2,6 +2,7 @@ package com.dataart.cerebro.service;
 
 import com.dataart.cerebro.dao.ContactInfoDAO;
 import com.dataart.cerebro.dto.ContactInfoDTO;
+import com.dataart.cerebro.exception.ContactInfoNullPointerException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -17,8 +18,12 @@ public class ContactInfoServiceImpl implements ContactInfoService {
     }
 
     @Override
-    public void addContactInfo(String name, String phone, String email) {
-        contactInfoDAO.addContactInfo(name, phone, email);
+    public ContactInfoDTO addContactInfo(ContactInfoDTO contactInfoDTO) {
+        if(contactInfoDTO.getName().isEmpty() || contactInfoDTO.getPhone().isEmpty() || contactInfoDTO.getEmail().isEmpty()){
+            log.info("Some parameters are not filled");
+            throw new ContactInfoNullPointerException();
+        }
+        return contactInfoDAO.addContactInfo(contactInfoDTO.getName(), contactInfoDTO.getPhone(), contactInfoDTO.getEmail());
     }
 
     @Override

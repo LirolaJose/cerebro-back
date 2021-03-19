@@ -18,7 +18,7 @@ public class ContactInfoDAOImpl implements ContactInfoDAO {
         this.connectionData = connectionData;
     }
     @Override
-    public void addContactInfo(String name, String phone, String email) {
+    public ContactInfoDTO addContactInfo(String name, String phone, String email) {
         String sql = "INSERT INTO contact_info (name, phone, email) VALUES (?,?,?);";
         try (Connection connection = DriverManager.getConnection(connectionData.URL, connectionData.USER, connectionData.PASSWORD);
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -29,6 +29,7 @@ public class ContactInfoDAOImpl implements ContactInfoDAO {
         } catch (SQLException e) {
             log.error("Bad request; {}", e.getMessage(), e);
         }
+        return getContactInfoByName(name);
     }
 
     @Override
@@ -49,8 +50,47 @@ public class ContactInfoDAOImpl implements ContactInfoDAO {
         return contactInfoList;
     }
 
+    @Override
+    public ContactInfoDTO getContactInfoByName(String name) {
+        String sql = "SELECT * FROM contact_info WHERE name = ?;";
+        log.info("Connecting to Data Base and sending request");
+        try (Connection connection = DriverManager.getConnection(connectionData.URL, connectionData.USER, connectionData.PASSWORD);
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, name);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if(resultSet.next()){
+                return createContactInfoDTO(resultSet);
+            }
+
+        } catch (Exception e) {
+        log.error("Bad request for ID {}: {}", name, e.getMessage(), e);
+    }
+        return null;
+    }
+
+    public ContactInfoDTO getContactInfoById(int id) {
+        String sql = "SELECT * FROM contact_info WHERE id = ?;";
+        log.info("Connecting to Data Base and sending request");
+        try (Connection connection = DriverManager.getConnection(connectionData.URL, connectionData.USER, connectionData.PASSWORD);
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if(resultSet.next()){
+                return createContactInfoDTO(resultSet);
+            }
+
+        } catch (Exception e) {
+            log.error("Bad request for ID {}: {}", id, e.getMessage(), e);
+        }
+        return null;
+    }
+
+
     private ContactInfoDTO createContactInfoDTO (ResultSet resultSet) throws SQLException {
         ContactInfoDTO contactInfoDTO = new ContactInfoDTO();
+        contactInfoDTO.setId(resultSet.getInt("id"));
         contactInfoDTO.setName(resultSet.getString("name"));
         contactInfoDTO.setPhone(resultSet.getString("phone"));
         contactInfoDTO.setEmail((resultSet.getString("email")));

@@ -6,5 +6,5 @@ import java.util.Set;
 
 public interface CategoryService {
     Set<CategoryDTO> getAllCategory ();
-    CategoryDTO getCategoryById(int categoryId);
+    CategoryDTO getCategoryById(Integer categoryId);
 }

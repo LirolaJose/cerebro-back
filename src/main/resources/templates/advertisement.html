@@ -14,18 +14,23 @@
             border-collapse: collapse;
             text-align: left;
         }
+
         th {
             font-weight: normal;
             color: #039;
             border-bottom: 2px solid #6678b1;
             padding: 10px 8px;
         }
+
         td {
             color: #669;
             padding: 9px 8px;
             transition: .3s linear;
         }
-        tr:hover td {color: #6699ff;}
+
+        tr:hover td {
+            color: #6699ff;
+        }
     </style>
 </head>
 <body>
@@ -55,12 +60,12 @@
         <td th:text="${advertisement.price}"></td>
         <td><img th:src="@{/image(id=${advertisement.id})}" alt="Image not load"></td>
         <td th:text="${advertisement.address}"></td>
-        <td th:text="${advertisement.publicationTime}"></td>
-        <td th:text="${advertisement.endTime}"></td>
+        <td th:text="${#temporals.format(advertisement.publicationTime, 'dd-MM-yyyy HH:mm')}"></td>
+        <td th:text="${#temporals.format(advertisement.endTime, 'dd-MM-yyyy HH:mm')}"></td>
         <td th:text="${advertisement.categoryDTO.name}"></td>
         <td th:text="${advertisement.typeDTO.name}"></td>
         <td th:text="${advertisement.statusDTO.name}"></td>
-        <!--        <td th:text="${advertisement.owner}"></td>-->
+        <td th:utext="|${advertisement.owner.name} <br /> ${advertisement.owner.phone} <br /> ${advertisement.owner.email}|"></td>
     </tr>
 </table>
 </body>
