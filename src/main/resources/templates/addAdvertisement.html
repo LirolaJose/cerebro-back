@@ -15,7 +15,7 @@
     <p>Address: <input type="text" th:field="*{address}"/></p>
     <p>Image: <input type="file" th:field="*{image}"></p>
 
-    <p>Category: <select th:field="*{categoryDTO.id}" >
+    <p>Category: <select th:field="*{categoryDTO.id}">
         <option th:each="category : ${categorySet}"
                 th:value="${category.id}" th:text="${category.name}"></option>
     </select></p>

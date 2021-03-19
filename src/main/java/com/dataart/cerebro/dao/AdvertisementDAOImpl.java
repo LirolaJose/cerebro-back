@@ -88,7 +88,8 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
     @Override
     public void addAdvertisement(String title, String text, Double price, String address, byte[] image, LocalDateTime publicationTime, LocalDateTime endTime,
                                  int categoryId, int typeId, int statusId, int ownerId) {
-        String sql = "INSERT INTO advertisement (title, text, price, address, image, publication_time, end_time, category_id, type_id, status_id, owner_id)" +
+        String sql = "INSERT INTO advertisement " +
+                "(title, text, price, address, image, publication_time, end_time, category_id, type_id, status_id, owner_id)" +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
         try (Connection connection = DriverManager.getConnection(connectionData.URL, connectionData.USER, connectionData.PASSWORD);

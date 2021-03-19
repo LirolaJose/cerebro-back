@@ -21,11 +21,6 @@ public class ContactInfoServiceImpl implements ContactInfoService {
     public ContactInfoDTO addContactInfo(ContactInfoDTO contactInfoDTO) {
         log.info("Creating a new contact info: name - {}, phone: {}, email: {}",
                 contactInfoDTO.getName(), contactInfoDTO.getPhone(), contactInfoDTO.getEmail());
-
-        if(contactInfoDTO.getName().isEmpty() || contactInfoDTO.getPhone().isEmpty() || contactInfoDTO.getEmail().isEmpty()){
-            log.info("Some parameters are not filled");
-            throw new ContactInfoNullPointerException();
-        }
         return contactInfoDAO.addContactInfo(contactInfoDTO.getName(), contactInfoDTO.getPhone(), contactInfoDTO.getEmail());
     }
 

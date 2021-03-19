@@ -4,12 +4,15 @@ import com.dataart.cerebro.dto.AdvertisementDTO;
 import com.dataart.cerebro.dto.ContactInfoDTO;
 import com.dataart.cerebro.dto.StatusDTO;
 import com.dataart.cerebro.dto.TypeDTO;
+import com.dataart.cerebro.exception.ContactInfoNullPointerException;
 import com.dataart.cerebro.service.AdvertisementService;
 import com.dataart.cerebro.service.CategoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import javax.validation.Valid;
 
 @Controller
 @Slf4j
@@ -46,7 +49,13 @@ public class AdvertisementController {
     }
 
     @PostMapping(value = "/addAdvertisement")
-    public String addAdvertisementSubmit(@ModelAttribute AdvertisementDTO advertisementDTO, ContactInfoDTO contactInfoDTO) {
+    public String addAdvertisementSubmit(@ModelAttribute AdvertisementDTO advertisementDTO,
+                                         @Valid ContactInfoDTO contactInfoDTO, BindingResult bindingResult) {
+        if(bindingResult.hasErrors()){
+            log.info("Some parameters are not filled");
+            throw new ContactInfoNullPointerException();
+        }
+
         log.info("Creating new Advertisement, parameters: title: {}, text: {}, price: {}, address: {}, category: {}," +
                         "type: {}, status: {}", advertisementDTO.getTitle(), advertisementDTO.getText(), advertisementDTO.getPrice(),
                 advertisementDTO.getAddress(), advertisementDTO.getCategoryDTO().getId(), advertisementDTO.getTypeDTO().getId(),
