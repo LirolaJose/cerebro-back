@@ -8,6 +8,8 @@ import org.springframework.stereotype.Repository;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @Repository
@@ -44,6 +46,7 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
             log.error("Bad request");
         }
         log.info("Result is received");
+        advertisementList.sort(Comparator.comparing(AdvertisementDTO::getId));
         return advertisementList;
     }
 
