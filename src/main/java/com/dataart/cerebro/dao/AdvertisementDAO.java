@@ -12,6 +12,6 @@ public interface AdvertisementDAO {
 
     byte[] getImageByAdvertisementId(int id);
 
-    void addAdvertisement(String title, String text, Double price, String address, LocalDateTime publicationTime, LocalDateTime expiredTime,
+    void addAdvertisement(String title, String text, Double price, String address, byte[] image, LocalDateTime publicationTime, LocalDateTime expiredTime,
                           int categoryId, int typeId, int statusId, int ownerId);
 }

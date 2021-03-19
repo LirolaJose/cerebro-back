@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -46,7 +45,7 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
             log.error("Bad request");
         }
         log.info("Result is received");
-        advertisementList.sort(Comparator.comparing(AdvertisementDTO::getId));
+        advertisementList.sort(Comparator.comparing(AdvertisementDTO::getPublicationTime).reversed());
         return advertisementList;
     }
 
@@ -87,10 +86,10 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
     }
 
     @Override
-    public void addAdvertisement(String title, String text, Double price, String address, LocalDateTime publicationTime, LocalDateTime endTime,
+    public void addAdvertisement(String title, String text, Double price, String address, byte[] image, LocalDateTime publicationTime, LocalDateTime endTime,
                                  int categoryId, int typeId, int statusId, int ownerId) {
-        String sql = "INSERT INTO advertisement (title, text, price, address,publication_time, end_time, category_id, type_id, status_id, owner_id)" +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+        String sql = "INSERT INTO advertisement (title, text, price, address, image, publication_time, end_time, category_id, type_id, status_id, owner_id)" +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
         try (Connection connection = DriverManager.getConnection(connectionData.URL, connectionData.USER, connectionData.PASSWORD);
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -99,12 +98,13 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
             preparedStatement.setString(2, text);
             preparedStatement.setDouble(3, price);
             preparedStatement.setString(4, address);
-            preparedStatement.setObject(5, publicationTime);
-            preparedStatement.setObject(6, endTime);
-            preparedStatement.setInt(7, categoryId);
-            preparedStatement.setInt(8, typeId);
-            preparedStatement.setInt(9, statusId);
-            preparedStatement.setInt(10, ownerId);
+            preparedStatement.setBytes(5, image);
+            preparedStatement.setObject(6, publicationTime);
+            preparedStatement.setObject(7, endTime);
+            preparedStatement.setInt(8, categoryId);
+            preparedStatement.setInt(9, typeId);
+            preparedStatement.setInt(10, statusId);
+            preparedStatement.setInt(11, ownerId);
             preparedStatement.executeUpdate();
 
         } catch (SQLException e) {

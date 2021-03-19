@@ -46,15 +46,13 @@ public class AdvertisementController {
     }
 
     @PostMapping(value = "/addAdvertisement")
-    public String addAdvertisementSubmit(@ModelAttribute AdvertisementDTO advertisementDTO, ContactInfoDTO contactInfoDTO, Model model) {
+    public String addAdvertisementSubmit(@ModelAttribute AdvertisementDTO advertisementDTO, ContactInfoDTO contactInfoDTO) {
         log.info("Creating new Advertisement, parameters: title: {}, text: {}, price: {}, address: {}, category: {}," +
                         "type: {}, status: {}", advertisementDTO.getTitle(), advertisementDTO.getText(), advertisementDTO.getPrice(),
                 advertisementDTO.getAddress(), advertisementDTO.getCategoryDTO().getId(), advertisementDTO.getTypeDTO().getId(),
                 advertisementDTO.getStatusDTO().getId());
 
         advertisementService.addAdvertisement(advertisementDTO, contactInfoDTO);
-//        model.addAttribute("advertisementsList", advertisementService.getAllAdvertisements());
-//        model.addAttribute("contact", new ContactInfoDTO());
         return "redirect:/advertisementsList";
     }
 }

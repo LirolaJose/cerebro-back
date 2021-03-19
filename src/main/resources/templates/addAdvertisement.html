@@ -13,6 +13,7 @@
     <p>Text: <input type="text" th:field="*{text}"/></p>
     <p>Price: <input type="text" th:field="*{price}"/></p>
     <p>Address: <input type="text" th:field="*{address}"/></p>
+    <p>Image: <input type="file" th:field="*{image}"></p>
 
     <p>Category: <select th:field="*{categoryDTO.id}" >
         <option th:each="category : ${categorySet}"
@@ -33,6 +34,7 @@
     <p>Name: <input type="text" th:field="${contactInfo.name}"/></p>
     <p>Phone: <input type="text" th:field="${contactInfo.phone}"/></p>
     <p>Email: <input type="text" th:field="${contactInfo.email}"/></p>
+
 
     <p><input type="submit" value="Submit"/> <input type="reset" value="Reset"/></p>
 </form>
