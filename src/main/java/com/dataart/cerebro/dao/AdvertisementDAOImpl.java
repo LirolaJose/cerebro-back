@@ -4,6 +4,7 @@ import com.dataart.cerebro.connection.ConnectionData;
 import com.dataart.cerebro.dto.AdvertisementDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -99,7 +100,7 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
             preparedStatement.setString(2, text);
             preparedStatement.setDouble(3, price);
             preparedStatement.setString(4, address);
-            preparedStatement.setBytes(5, image);
+            preparedStatement.setObject(5, image);
             preparedStatement.setObject(6, publicationTime);
             preparedStatement.setObject(7, endTime);
             preparedStatement.setInt(8, categoryId);

@@ -24,7 +24,7 @@ public class ImageController {
     public ResponseEntity<byte[]> getImage(@RequestParam int id) throws IOException {
 
         byte[] image = advertisementDAO.getImageByAdvertisementId(id);
-        if(image == null){
+        if(image == null || image.length == 0){
             var path = new ClassPathResource("image/notFound.jpg");
             image = StreamUtils.copyToByteArray(path.getInputStream());
         }

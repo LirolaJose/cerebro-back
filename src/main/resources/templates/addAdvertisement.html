@@ -8,12 +8,14 @@
 <h1>Form for advertisement</h1>
 <div><a th:href="@{/advertisementsList}"> Back to all advertisements </a></div>
 
-<form th:action="@{/addAdvertisement}" th:object="${advertisement}" method="post">
+<form th:action="@{/addAdvertisement}" enctype="multipart/form-data" th:object="${advertisement}" method="post">
     <p>Title: <input type="text" th:field="*{title}"/></p>
     <p>Text: <input type="text" th:field="*{text}"/></p>
     <p>Price: <input type="text" th:field="*{price}"/></p>
     <p>Address: <input type="text" th:field="*{address}"/></p>
-    <p>Image: <input type="file" th:field="*{image}"></p>
+
+    <p>Image: <input type="file" name="file"  ></p>
+<!--    th:field="*{image}"-->
 
     <p>Category: <select th:field="*{categoryDTO.id}">
         <option th:each="category : ${categorySet}"

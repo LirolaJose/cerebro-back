@@ -41,12 +41,12 @@ public class AdvertisementServiceImpl implements AdvertisementService {
     @Override
     public void addAdvertisement(AdvertisementDTO advertisementDTO, ContactInfoDTO contactInfoDTO) {
 //        CategoryDTO categoryDTO = categoryService.getCategoryById(advertisementDTO.getCategoryDTO().getId());
-        contactInfoDTO = contactInfoService.addContactInfo(contactInfoDTO);
+        ContactInfoDTO contactInfoInitial = contactInfoService.addContactInfo(contactInfoDTO);
         LocalDateTime publicationTime = LocalDateTime.now();
         LocalDateTime endTime = publicationTime.plusDays(7);
 
         advertisementDAO.addAdvertisement(advertisementDTO.getTitle(), advertisementDTO.getText(), advertisementDTO.getPrice(),
                 advertisementDTO.getAddress(),advertisementDTO.getImage(), publicationTime, endTime, advertisementDTO.getCategoryDTO().getId(),
-                advertisementDTO.getTypeDTO().getId(), advertisementDTO.getStatusDTO().getId(), contactInfoDTO.getId());
+                advertisementDTO.getTypeDTO().getId(), advertisementDTO.getStatusDTO().getId(), contactInfoInitial.getId());
     }
 }

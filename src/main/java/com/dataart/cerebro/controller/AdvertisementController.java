@@ -12,7 +12,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
 import javax.validation.Valid;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 @Controller
 @Slf4j
@@ -49,12 +55,15 @@ public class AdvertisementController {
     }
 
     @PostMapping(value = "/addAdvertisement")
-    public String addAdvertisementSubmit(@ModelAttribute AdvertisementDTO advertisementDTO,
-                                         @Valid ContactInfoDTO contactInfoDTO, BindingResult bindingResult) {
-        if(bindingResult.hasErrors()){
+    public String addAdvertisementSubmit(MultipartFile file,
+                                         @ModelAttribute AdvertisementDTO advertisementDTO,
+                                         @Valid ContactInfoDTO contactInfoDTO, BindingResult bindingResult) throws IOException {
+        if (bindingResult.hasErrors()) {
             log.info("Some parameters are not filled");
             throw new ContactInfoNullPointerException();
         }
+        byte[] image = file.getBytes();
+        advertisementDTO.setImage(image);
 
         log.info("Creating new Advertisement, parameters: title: {}, text: {}, price: {}, address: {}, category: {}," +
                         "type: {}, status: {}", advertisementDTO.getTitle(), advertisementDTO.getText(), advertisementDTO.getPrice(),

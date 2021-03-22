@@ -16,7 +16,6 @@ public class ContactInfoDTO {
 
     @NotNull
     @Size(min = 2)
-//    @Pattern(regexp = "[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+")
     @Email(message = "Email should be valid")
     private String email;
 }
