@@ -31,7 +31,7 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
 
     @Override
     public List<AdvertisementDTO> getAllAdvertisements() {
-        String sql = "SELECT * FROM advertisement;";
+        String sql = "SELECT * FROM advertisement ORDER BY publication_time DESC;";
         List<AdvertisementDTO> advertisementList = new ArrayList<>();
 
         log.info("Connecting to Data Base and sending request");
@@ -46,7 +46,6 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
             log.error("Bad request");
         }
         log.info("Result is received");
-        advertisementList.sort(Comparator.comparing(AdvertisementDTO::getPublicationTime).reversed());
         return advertisementList;
     }
 

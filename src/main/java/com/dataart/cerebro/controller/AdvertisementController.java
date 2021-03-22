@@ -15,9 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 
 @Controller
@@ -55,22 +52,21 @@ public class AdvertisementController {
     }
 
     @PostMapping(value = "/addAdvertisement")
-    public String addAdvertisementSubmit(MultipartFile file,
-                                         @ModelAttribute AdvertisementDTO advertisementDTO,
-                                         @Valid ContactInfoDTO contactInfoDTO, BindingResult bindingResult) throws IOException {
+    public String addAdvertisementSubmit(@ModelAttribute AdvertisementDTO advertisementDTO,
+                                         @Valid ContactInfoDTO contactInfoDTO, BindingResult bindingResult,
+                                         MultipartFile file) throws IOException {
         if (bindingResult.hasErrors()) {
             log.info("Some parameters are not filled");
             throw new ContactInfoNullPointerException();
         }
         byte[] image = file.getBytes();
-        advertisementDTO.setImage(image);
 
         log.info("Creating new Advertisement, parameters: title: {}, text: {}, price: {}, address: {}, category: {}," +
                         "type: {}, status: {}", advertisementDTO.getTitle(), advertisementDTO.getText(), advertisementDTO.getPrice(),
                 advertisementDTO.getAddress(), advertisementDTO.getCategoryDTO().getId(), advertisementDTO.getTypeDTO().getId(),
                 advertisementDTO.getStatusDTO().getId());
 
-        advertisementService.addAdvertisement(advertisementDTO, contactInfoDTO);
+        advertisementService.addAdvertisement(advertisementDTO, contactInfoDTO, image);
         return "redirect:/advertisementsList";
     }
 }

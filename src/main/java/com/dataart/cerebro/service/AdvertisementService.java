@@ -10,5 +10,5 @@ public interface AdvertisementService {
 
     AdvertisementDTO getAdvertisementById(Integer id);
 
-    void addAdvertisement(AdvertisementDTO advertisementDTO, ContactInfoDTO contactInfoDTO);
+    void addAdvertisement(AdvertisementDTO advertisementDTO, ContactInfoDTO contactInfoDTO, byte[] image);
 }
