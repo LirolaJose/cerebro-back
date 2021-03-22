@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.sql.SQLException;
 
 @Controller
 @Slf4j
@@ -46,7 +47,6 @@ public class AdvertisementController {
         model.addAttribute("advertisement", new AdvertisementDTO());
         model.addAttribute("categorySet", categoryService.getAllCategory());
         model.addAttribute("typeEnum", TypeDTO.values());
-        model.addAttribute("statusEnum", StatusDTO.values());
         model.addAttribute("contactInfo", new ContactInfoDTO());
         return "addAdvertisement";
     }
@@ -54,7 +54,7 @@ public class AdvertisementController {
     @PostMapping(value = "/addAdvertisement")
     public String addAdvertisementSubmit(@ModelAttribute AdvertisementDTO advertisementDTO,
                                          @Valid ContactInfoDTO contactInfoDTO, BindingResult bindingResult,
-                                         MultipartFile file) throws IOException {
+                                         MultipartFile file) throws IOException, SQLException {
         if (bindingResult.hasErrors()) {
             log.info("Some parameters are not filled");
             throw new ContactInfoNullPointerException();
@@ -62,9 +62,8 @@ public class AdvertisementController {
         byte[] image = file.getBytes();
 
         log.info("Creating new Advertisement, parameters: title: {}, text: {}, price: {}, address: {}, category: {}," +
-                        "type: {}, status: {}", advertisementDTO.getTitle(), advertisementDTO.getText(), advertisementDTO.getPrice(),
-                advertisementDTO.getAddress(), advertisementDTO.getCategoryDTO().getId(), advertisementDTO.getTypeDTO().getId(),
-                advertisementDTO.getStatusDTO().getId());
+                        "type: {}", advertisementDTO.getTitle(), advertisementDTO.getText(), advertisementDTO.getPrice(),
+                advertisementDTO.getAddress(), advertisementDTO.getCategoryDTO().getId(), advertisementDTO.getTypeDTO().getId());
 
         advertisementService.addAdvertisement(advertisementDTO, contactInfoDTO, image);
         return "redirect:/advertisementsList";

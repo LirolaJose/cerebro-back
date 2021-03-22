@@ -5,10 +5,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
+
 
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
-@EnableTransactionManagement
 @Slf4j
 public class CerebroApplication implements CommandLineRunner {
 
@@ -21,3 +20,4 @@ public class CerebroApplication implements CommandLineRunner {
         log.info("Application is run");
     }
 }
+

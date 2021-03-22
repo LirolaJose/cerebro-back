@@ -1,0 +1,1 @@
+alter table advertisement alter column status_id drop not null;

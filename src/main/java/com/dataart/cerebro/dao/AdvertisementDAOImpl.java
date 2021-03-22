@@ -1,15 +1,15 @@
 package com.dataart.cerebro.dao;
 
-import com.dataart.cerebro.connection.ConnectionData;
+import com.dataart.cerebro.configuration.ConnectionData;
 import com.dataart.cerebro.dto.AdvertisementDTO;
+import com.dataart.cerebro.dto.ContactInfoDTO;
+import com.sun.jdi.VMDisconnectedException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 @Repository
@@ -21,12 +21,14 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
     final TypeDAO typeDAO;
     final ContactInfoDAO contactInfoDAO;
 
+
     public AdvertisementDAOImpl(ConnectionData connectionData, CategoryDAO categoryDAO, StatusDAO statusDAO, TypeDAO typeDAO, ContactInfoDAO contactInfoDAO) {
         this.connectionData = connectionData;
         this.categoryDAO = categoryDAO;
         this.statusDAO = statusDAO;
         this.typeDAO = typeDAO;
         this.contactInfoDAO = contactInfoDAO;
+
     }
 
     @Override
@@ -86,30 +88,44 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
     }
 
     @Override
-    public void addAdvertisement(String title, String text, Double price, String address, byte[] image, LocalDateTime publicationTime, LocalDateTime endTime,
-                                 int categoryId, int typeId, int statusId, int ownerId) {
+    public void addAdvertisement(String title, String text, Double price, String address, byte[] image,
+                                 LocalDateTime publicationTime, LocalDateTime endTime,
+                                 int categoryId, int typeId, int statusId, ContactInfoDTO contactInfoDTO) {
+
         String sql = "INSERT INTO advertisement " +
                 "(title, text, price, address, image, publication_time, end_time, category_id, type_id, status_id, owner_id)" +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
         try (Connection connection = DriverManager.getConnection(connectionData.URL, connectionData.USER, connectionData.PASSWORD);
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            try {
+                connection.setAutoCommit(false);
+                ContactInfoDTO contactInfoInitial = contactInfoDAO.addContactInfo(contactInfoDTO.getName(), contactInfoDTO.getPhone(),
+                        contactInfoDTO.getEmail(), connection);
 
-            preparedStatement.setString(1, title);
-            preparedStatement.setString(2, text);
-            preparedStatement.setDouble(3, price);
-            preparedStatement.setString(4, address);
-            preparedStatement.setObject(5, image);
-            preparedStatement.setObject(6, publicationTime);
-            preparedStatement.setObject(7, endTime);
-            preparedStatement.setInt(8, categoryId);
-            preparedStatement.setInt(9, typeId);
-            preparedStatement.setInt(10, statusId);
-            preparedStatement.setInt(11, ownerId);
-            preparedStatement.executeUpdate();
 
+                preparedStatement.setString(1, title);
+                preparedStatement.setString(2, text);
+                preparedStatement.setDouble(3, price);
+                preparedStatement.setString(4, address);
+                preparedStatement.setObject(5, image);
+                preparedStatement.setObject(6, publicationTime);
+                preparedStatement.setObject(7, endTime);
+                preparedStatement.setInt(8, categoryId);
+                preparedStatement.setInt(9, typeId);
+                preparedStatement.setInt(10, statusId);
+                preparedStatement.setInt(11, contactInfoInitial.getId());
+                preparedStatement.executeUpdate();
+                connection.commit();
+                log.info("saved");
+
+            } catch (Exception e) {
+                connection.rollback();
+                log.error("Runtime exception: {}", e.getMessage());
+            }
         } catch (SQLException e) {
-            log.error("Bad request; {}", e.getMessage(), e);
+            log.error("Bad request; {}", e.getMessage());
+
         }
     }
 
