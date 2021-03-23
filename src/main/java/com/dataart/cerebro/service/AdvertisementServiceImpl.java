@@ -51,6 +51,6 @@ public class AdvertisementServiceImpl implements AdvertisementService {
         advertisementDAO.addAdvertisement(advertisementDTO.getTitle(), advertisementDTO.getText(), advertisementDTO.getPrice(),
                 advertisementDTO.getAddress(), image, publicationTime, endTime, advertisementDTO.getCategoryDTO().getId(),
                 advertisementDTO.getTypeDTO().getId(), status.getId(), contactInfoDTO);
-        emailService.sendEmailAboutPublication(advertisementDTO.getText(), contactInfoDTO.getEmail());
+        emailService.sendEmailAboutPublication(advertisementDTO.getTitle(), advertisementDTO.getText(), contactInfoDTO.getEmail());
     }
 }

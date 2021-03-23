@@ -5,6 +5,7 @@ import com.dataart.cerebro.dto.AdvertisementDTO;
 import com.dataart.cerebro.dto.ContactInfoDTO;
 import com.dataart.cerebro.dto.StatusDTO;
 import com.dataart.cerebro.dto.TypeDTO;
+import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
@@ -18,38 +19,26 @@ import java.util.List;
 public class AdvertisementDAOImpl implements AdvertisementDAO {
     final ConnectionData connectionData;
     final CategoryDAO categoryDAO;
-//    final StatusDAO statusDAO;
-//    final TypeDAO typeDAO;
     final ContactInfoDAO contactInfoDAO;
 
 
     public AdvertisementDAOImpl(ConnectionData connectionData, CategoryDAO categoryDAO, ContactInfoDAO contactInfoDAO) {
         this.connectionData = connectionData;
         this.categoryDAO = categoryDAO;
-//        this.statusDAO = statusDAO;
-//        this.typeDAO = typeDAO;
         this.contactInfoDAO = contactInfoDAO;
 
     }
 
     @Override
+    public List<AdvertisementDTO> getExpiringAdvertisements() {
+        String sql = "SELECT * FROM advertisement WHERE current_date = date(end_time) - interval '2 days'";
+        return getAdvertisementsList(sql);
+    }
+
+    @Override
     public List<AdvertisementDTO> getAllAdvertisements() {
         String sql = "SELECT * FROM advertisement ORDER BY publication_time DESC;";
-        List<AdvertisementDTO> advertisementList = new ArrayList<>();
-
-        log.info("Connecting to Data Base and sending request");
-        try (Connection connection = DriverManager.getConnection(connectionData.URL, connectionData.USER, connectionData.PASSWORD);
-             Statement statement = connection.createStatement()) {
-
-            ResultSet resultSet = statement.executeQuery(sql);
-            while (resultSet.next()) {
-                advertisementList.add(createAdvertisementDTO(resultSet));
-            }
-        } catch (SQLException e) {
-            log.error("Bad request");
-        }
-        log.info("Result is received");
-        return advertisementList;
+        return getAdvertisementsList(sql);
     }
 
     @Override
@@ -130,7 +119,8 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
         }
     }
 
-    private AdvertisementDTO createAdvertisementDTO(ResultSet resultSet) throws SQLException {
+
+    private AdvertisementDTO createAdvertisementDTO(ResultSet resultSet) throws SQLException, NotFoundException {
         AdvertisementDTO advertisementDTO = new AdvertisementDTO();
 
         advertisementDTO.setId(resultSet.getInt("id"));
@@ -156,5 +146,22 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
         advertisementDTO.setOwner(contactInfoDAO.getContactInfoById(ownerId));
 
         return advertisementDTO;
+    }
+
+    private List<AdvertisementDTO> getAdvertisementsList(String sql) {
+        List<AdvertisementDTO> advertisementList = new ArrayList<>();
+        log.info("Connecting to Data Base and sending request");
+        try (Connection connection = DriverManager.getConnection(connectionData.URL, connectionData.USER, connectionData.PASSWORD);
+             Statement statement = connection.createStatement()) {
+
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()) {
+                advertisementList.add(createAdvertisementDTO(resultSet));
+            }
+        } catch (SQLException | NotFoundException e) {
+            log.error("Bad request");
+        }
+        log.info("Result is received");
+        return advertisementList;
     }
 }

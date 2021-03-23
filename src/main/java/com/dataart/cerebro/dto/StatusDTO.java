@@ -1,5 +1,6 @@
 package com.dataart.cerebro.dto;
 
+import javassist.NotFoundException;
 import lombok.Getter;
 
 import java.util.HashMap;
@@ -23,7 +24,10 @@ public enum StatusDTO {
             map.put(statusDTO.id, statusDTO);
         }
     }
-    public static StatusDTO getStatusDTOById(int id){
+    public static StatusDTO getStatusDTOById(int id) throws NotFoundException {
+        if (!map.containsKey(id)) {
+            throw new NotFoundException(String.format("Type with %d doesn't exists", id));
+        }
         return (StatusDTO) map.get(id);
     }
 }

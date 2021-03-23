@@ -16,4 +16,6 @@ public interface AdvertisementDAO {
 
     void addAdvertisement(String title, String text, Double price, String address, byte[] image, LocalDateTime publicationTime, LocalDateTime expiredTime,
                           int categoryId, int typeId, int statusId, ContactInfoDTO contactInfoDTO) throws SQLException;
+
+    List<AdvertisementDTO> getExpiringAdvertisements();
 }

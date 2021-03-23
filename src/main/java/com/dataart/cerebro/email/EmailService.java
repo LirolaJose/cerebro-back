@@ -1,6 +1,12 @@
 package com.dataart.cerebro.email;
 
-public interface EmailService {
-    void sendEmailAboutPublication(String text, String email);
+import com.dataart.cerebro.dto.AdvertisementDTO;
 
+import java.util.List;
+import java.util.Map;
+
+public interface EmailService {
+    void sendEmailAboutPublication(String title, String text, String email);
+
+    void sendEmailAboutExpiring(Map<String, List<AdvertisementDTO>> emailAndAds);
 }
