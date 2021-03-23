@@ -1,8 +1,9 @@
 package com.dataart.cerebro.dao;
 
 import com.dataart.cerebro.dto.AdvertisementDTO;
-import org.springframework.web.multipart.MultipartFile;
+import com.dataart.cerebro.dto.ContactInfoDTO;
 
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -14,5 +15,5 @@ public interface AdvertisementDAO {
     byte[] getImageByAdvertisementId(int id);
 
     void addAdvertisement(String title, String text, Double price, String address, byte[] image, LocalDateTime publicationTime, LocalDateTime expiredTime,
-                          int categoryId, int typeId, int statusId, int ownerId);
+                          int categoryId, int typeId, int statusId, ContactInfoDTO contactInfoDTO) throws SQLException;
 }

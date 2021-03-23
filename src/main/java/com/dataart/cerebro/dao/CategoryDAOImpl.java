@@ -1,6 +1,6 @@
 package com.dataart.cerebro.dao;
 
-import com.dataart.cerebro.connection.ConnectionData;
+import com.dataart.cerebro.configuration.ConnectionData;
 import com.dataart.cerebro.dto.CategoryDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
