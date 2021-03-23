@@ -4,6 +4,7 @@ import com.dataart.cerebro.dao.AdvertisementDAO;
 import com.dataart.cerebro.dto.AdvertisementDTO;
 import com.dataart.cerebro.dto.ContactInfoDTO;
 import com.dataart.cerebro.dto.StatusDTO;
+import com.dataart.cerebro.email.EmailService;
 import com.dataart.cerebro.exception.AdvertisementNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -18,11 +19,13 @@ public class AdvertisementServiceImpl implements AdvertisementService {
     final AdvertisementDAO advertisementDAO;
     final CategoryService categoryService;
     final ContactInfoService contactInfoService;
+    final EmailService emailService;
 
-    public AdvertisementServiceImpl(AdvertisementDAO advertisementDAO, CategoryService categoryService, ContactInfoService contactInfoService) {
+    public AdvertisementServiceImpl(AdvertisementDAO advertisementDAO, CategoryService categoryService, ContactInfoService contactInfoService, EmailService emailService) {
         this.advertisementDAO = advertisementDAO;
         this.categoryService = categoryService;
         this.contactInfoService = contactInfoService;
+        this.emailService = emailService;
     }
 
     @Override
@@ -48,5 +51,6 @@ public class AdvertisementServiceImpl implements AdvertisementService {
         advertisementDAO.addAdvertisement(advertisementDTO.getTitle(), advertisementDTO.getText(), advertisementDTO.getPrice(),
                 advertisementDTO.getAddress(), image, publicationTime, endTime, advertisementDTO.getCategoryDTO().getId(),
                 advertisementDTO.getTypeDTO().getId(), status.getId(), contactInfoDTO);
+        emailService.sendEmailAboutPublication(advertisementDTO.getText(), contactInfoDTO.getEmail());
     }
 }

@@ -38,8 +38,8 @@ CREATE TABLE Type (
 CREATE TABLE Contact_Info (
                                 id SERIAL PRIMARY KEY,
                                 name varchar (100) NOT NULL,
-                                phone varchar(20) UNIQUE NOT NULL,
-                                email varchar (100) UNIQUE NOT NULL
+                                phone varchar(20)  NOT NULL,
+                                email varchar (100) NOT NULL
 );
 
 CREATE TABLE AdOrder (
