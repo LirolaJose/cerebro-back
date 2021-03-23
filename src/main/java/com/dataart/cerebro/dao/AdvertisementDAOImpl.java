@@ -3,7 +3,8 @@ package com.dataart.cerebro.dao;
 import com.dataart.cerebro.configuration.ConnectionData;
 import com.dataart.cerebro.dto.AdvertisementDTO;
 import com.dataart.cerebro.dto.ContactInfoDTO;
-import com.sun.jdi.VMDisconnectedException;
+import com.dataart.cerebro.dto.StatusDTO;
+import com.dataart.cerebro.dto.TypeDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
@@ -17,15 +18,15 @@ import java.util.List;
 public class AdvertisementDAOImpl implements AdvertisementDAO {
     final ConnectionData connectionData;
     final CategoryDAO categoryDAO;
-    final StatusDAO statusDAO;
+//    final StatusDAO statusDAO;
     final TypeDAO typeDAO;
     final ContactInfoDAO contactInfoDAO;
 
 
-    public AdvertisementDAOImpl(ConnectionData connectionData, CategoryDAO categoryDAO, StatusDAO statusDAO, TypeDAO typeDAO, ContactInfoDAO contactInfoDAO) {
+    public AdvertisementDAOImpl(ConnectionData connectionData, CategoryDAO categoryDAO, TypeDAO typeDAO, ContactInfoDAO contactInfoDAO) {
         this.connectionData = connectionData;
         this.categoryDAO = categoryDAO;
-        this.statusDAO = statusDAO;
+//        this.statusDAO = statusDAO;
         this.typeDAO = typeDAO;
         this.contactInfoDAO = contactInfoDAO;
 
@@ -146,10 +147,10 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
         advertisementDTO.setCategoryDTO(categoryDAO.getCategoryById(categoryId));
 
         int statusId = resultSet.getInt("status_id");
-        advertisementDTO.setStatusDTO(statusDAO.getStatusById(statusId));
+        advertisementDTO.setStatusDTO(StatusDTO.getStatusDTOById(statusId));
 
         int typeId = resultSet.getInt("type_id");
-        advertisementDTO.setTypeDTO(typeDAO.getTypeById(typeId));
+        advertisementDTO.setTypeDTO(TypeDTO.getTypeDTOById(typeId));
 
         int ownerId = resultSet.getInt("owner_id");
         advertisementDTO.setOwner(contactInfoDAO.getContactInfoById(ownerId));

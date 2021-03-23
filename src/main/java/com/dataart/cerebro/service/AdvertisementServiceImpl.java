@@ -44,7 +44,7 @@ public class AdvertisementServiceImpl implements AdvertisementService {
     public void addAdvertisement(AdvertisementDTO advertisementDTO, ContactInfoDTO contactInfoDTO, byte[] image) throws SQLException {
         LocalDateTime publicationTime = LocalDateTime.now();
         LocalDateTime endTime = publicationTime.plusDays(7);
-        StatusDTO status = StatusDTO.active;
+        StatusDTO status = StatusDTO.ACTIVE;
         advertisementDAO.addAdvertisement(advertisementDTO.getTitle(), advertisementDTO.getText(), advertisementDTO.getPrice(),
                 advertisementDTO.getAddress(), image, publicationTime, endTime, advertisementDTO.getCategoryDTO().getId(),
                 advertisementDTO.getTypeDTO().getId(), status.getId(), contactInfoDTO);
