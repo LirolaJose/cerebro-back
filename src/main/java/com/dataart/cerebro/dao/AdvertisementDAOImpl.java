@@ -19,15 +19,15 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
     final ConnectionData connectionData;
     final CategoryDAO categoryDAO;
 //    final StatusDAO statusDAO;
-    final TypeDAO typeDAO;
+//    final TypeDAO typeDAO;
     final ContactInfoDAO contactInfoDAO;
 
 
-    public AdvertisementDAOImpl(ConnectionData connectionData, CategoryDAO categoryDAO, TypeDAO typeDAO, ContactInfoDAO contactInfoDAO) {
+    public AdvertisementDAOImpl(ConnectionData connectionData, CategoryDAO categoryDAO, ContactInfoDAO contactInfoDAO) {
         this.connectionData = connectionData;
         this.categoryDAO = categoryDAO;
 //        this.statusDAO = statusDAO;
-        this.typeDAO = typeDAO;
+//        this.typeDAO = typeDAO;
         this.contactInfoDAO = contactInfoDAO;
 
     }
@@ -118,7 +118,7 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
                 preparedStatement.setInt(11, contactInfoInitial.getId());
                 preparedStatement.executeUpdate();
                 connection.commit();
-                log.info("saved");
+                log.info("New advertisement is added to data base");
 
             } catch (Exception e) {
                 connection.rollback();
