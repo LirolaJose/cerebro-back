@@ -1,0 +1,1 @@
+SELECT * FROM advertisement WHERE current_date = date(end_time) - interval '1 days';
