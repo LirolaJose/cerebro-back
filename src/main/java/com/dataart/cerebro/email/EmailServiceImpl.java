@@ -16,8 +16,10 @@ import java.util.Map;
 @Slf4j
 public class EmailServiceImpl implements EmailService {
     private final JavaMailSender emailSender;
+
     @Value("${spring.data.rest.page-param-name}")
-    String url;
+    private String url;
+
 
     public EmailServiceImpl(JavaMailSender emailSender) {
         this.emailSender = emailSender;
@@ -53,5 +55,26 @@ public class EmailServiceImpl implements EmailService {
             log.info("Email is sent to {}", email);
         }
         ));
+    }
+
+    @Override
+    public void sendEmailAboutExpired(Map<String, List<AdvertisementDTO>> emailAndAds) {
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+
+        emailAndAds.forEach(((email, advertisementsList) -> {
+            ContactInfoDTO contactInfoDTO = advertisementsList.get(0).getOwner();
+            mailMessage.setTo("lirolaboard@gmail.com"); //contactInfo.getEmail()
+            mailMessage.setSubject("Advertisement is closed");
+            StringBuilder text = new StringBuilder();
+            text.append("Dear ").append(contactInfoDTO.getName()).append(",\n").append("your advertisement(s): \n");
+            int number = 1;
+            for (AdvertisementDTO advertisementDTO : advertisementsList) {
+                text.append(number).append(". ").append(url).append(advertisementDTO.getId()).append(" is closed ").append("\n");
+                number++;
+            }
+            mailMessage.setText(text.toString());
+            emailSender.send(mailMessage);
+            log.info("Email is sent to {}", email);
+        }));
     }
 }

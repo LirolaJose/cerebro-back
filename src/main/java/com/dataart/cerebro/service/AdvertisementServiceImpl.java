@@ -29,8 +29,8 @@ public class AdvertisementServiceImpl implements AdvertisementService {
     }
 
     @Override
-    public List<AdvertisementDTO> getAllAdvertisements() {
-        return advertisementDAO.getAllAdvertisements();
+    public List<AdvertisementDTO> getAllActiveAdvertisements() {
+        return advertisementDAO.getAllActiveAdvertisements();
     }
 
     @Override

@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface AdvertisementDAO {
-    List<AdvertisementDTO> getAllAdvertisements();
+    List<AdvertisementDTO> getAllActiveAdvertisements();
 
     AdvertisementDTO getAdvertisementById(int id);
 
@@ -18,4 +18,8 @@ public interface AdvertisementDAO {
                           int categoryId, int typeId, int statusId, ContactInfoDTO contactInfoDTO) throws SQLException;
 
     List<AdvertisementDTO> getExpiringAdvertisements();
+
+    List<AdvertisementDTO> getExpiredAdvertisements();
+
+    void updateAdvertisementStatus(int statusId, AdvertisementDTO advertisementDTO);
 }

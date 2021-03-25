@@ -2,7 +2,6 @@ package com.dataart.cerebro.controller;
 
 import com.dataart.cerebro.dto.AdvertisementDTO;
 import com.dataart.cerebro.dto.ContactInfoDTO;
-import com.dataart.cerebro.dto.StatusDTO;
 import com.dataart.cerebro.dto.TypeDTO;
 import com.dataart.cerebro.exception.ContactInfoNullPointerException;
 import com.dataart.cerebro.service.AdvertisementService;
@@ -32,7 +31,7 @@ public class AdvertisementController {
 
     @RequestMapping("/advertisementsList")
     public String getAdvertisementList(Model model) {
-        model.addAttribute("advertisementsList", advertisementService.getAllAdvertisements());
+        model.addAttribute("advertisementsList", advertisementService.getAllActiveAdvertisements());
         return "advertisementsList";
     }
 

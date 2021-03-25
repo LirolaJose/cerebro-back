@@ -12,7 +12,7 @@ VALUES ('property'),
        ('vacancies');
 
 insert into status (name)
-VALUES ('actively'),
+VALUES ('active'),
        ('sold');
 
 insert into advertisement (title, text, price, address, publication_time,  category_id, type_id, status_id)

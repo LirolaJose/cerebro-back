@@ -9,4 +9,6 @@ public interface EmailService {
     void sendEmailAboutPublication(String title, String text, String email);
 
     void sendEmailAboutExpiring(Map<String, List<AdvertisementDTO>> emailAndAds);
+
+    void sendEmailAboutExpired(Map<String, List<AdvertisementDTO>> emailAndAds);
 }
