@@ -9,7 +9,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @ControllerAdvice
 public class ControllerAdvisor extends ResponseEntityExceptionHandler {
-    String message;
+    String message = "message";
 
     @ExceptionHandler(AdvertisementNotFoundException.class)
     public String handleNotFoundException(Exception e, Model model) {
