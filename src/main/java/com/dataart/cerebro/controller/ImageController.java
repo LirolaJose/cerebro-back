@@ -19,12 +19,12 @@ public class ImageController {
     public ImageController(AdvertisementDAO advertisementDAO) {
         this.advertisementDAO = advertisementDAO;
     }
+
     @GetMapping(value = "/image",
             produces = MediaType.IMAGE_JPEG_VALUE)
     public ResponseEntity<byte[]> getImage(@RequestParam int id) throws IOException {
-
         byte[] image = advertisementDAO.getImageByAdvertisementId(id);
-        if(image == null || image.length == 0){
+        if (image == null || image.length == 0) {
             var path = new ClassPathResource("image/notFound.jpg");
             image = StreamUtils.copyToByteArray(path.getInputStream());
         }

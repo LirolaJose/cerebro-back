@@ -38,8 +38,8 @@ public class ContactInfoDAOImpl implements ContactInfoDAO {
     public List<ContactInfoDTO> getAllContactsInfo() {
         String sql = "SELECT * FROM contact_info;";
         List<ContactInfoDTO> contactInfoList = new ArrayList<>();
-
         log.info(connecting);
+
         try (Connection connection = DriverManager.getConnection(connectionData.URL, connectionData.USER, connectionData.PASSWORD);
              Statement statement = connection.createStatement()) {
             ResultSet resultSet = statement.executeQuery(sql);
@@ -55,10 +55,10 @@ public class ContactInfoDAOImpl implements ContactInfoDAO {
     @Override
     public ContactInfoDTO getContactInfoByName(String name, Connection connection) {
         String sql = "SELECT * FROM contact_info WHERE name = ?;";
+
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, name);
             ResultSet resultSet = preparedStatement.executeQuery();
-
             if (resultSet.next()) {
                 return createContactInfoDTO(resultSet);
             }
@@ -72,6 +72,7 @@ public class ContactInfoDAOImpl implements ContactInfoDAO {
     public ContactInfoDTO getContactInfoById(int id) {
         String sql = "SELECT * FROM contact_info WHERE id = ?;";
         log.info(connecting);
+
         try (Connection connection = DriverManager.getConnection(connectionData.URL, connectionData.USER, connectionData.PASSWORD);
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, id);
@@ -86,7 +87,6 @@ public class ContactInfoDAOImpl implements ContactInfoDAO {
         }
         return null;
     }
-
 
     private ContactInfoDTO createContactInfoDTO(ResultSet resultSet) throws SQLException {
         ContactInfoDTO contactInfoDTO = new ContactInfoDTO();

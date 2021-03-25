@@ -7,19 +7,19 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import javax.servlet.http.HttpServletRequest;
-
 @ControllerAdvice
 public class ControllerAdvisor extends ResponseEntityExceptionHandler {
+    String message;
 
     @ExceptionHandler(AdvertisementNotFoundException.class)
-    public String handleNotFoundException(HttpServletRequest request, Exception e, Model model) {
-        model.addAttribute("message", e.getMessage());
+    public String handleNotFoundException(Exception e, Model model) {
+        model.addAttribute(message, e.getMessage());
         return "exception";
     }
+
     @ExceptionHandler(ContactInfoNullPointerException.class)
-    public String handleNullPointerException(HttpServletRequest request, Exception e, Model model) {
-        model.addAttribute("message", e.getMessage());
+    public String handleNullPointerException(Exception e, Model model) {
+        model.addAttribute(message, e.getMessage());
         return "contactInfoException";
     }
 }

@@ -9,7 +9,8 @@ import java.util.Map;
 @Getter
 public enum StatusDTO {
     ACTIVE(1, "active"),
-    SOLD(2, "sold");
+    SOLD(2, "sold"),
+    CLOSED(3, "closed");
 
     private Integer id;
     private String name;

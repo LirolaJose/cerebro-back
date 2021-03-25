@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface AdvertisementService {
-    List<AdvertisementDTO> getAllAdvertisements();
+    List<AdvertisementDTO> getAllActiveAdvertisements();
 
     AdvertisementDTO getAdvertisementById(Integer id);
 

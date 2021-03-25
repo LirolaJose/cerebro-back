@@ -22,7 +22,6 @@ public class CategoryDAOImpl implements CategoryDAO {
     @Override
     public CategoryDTO getCategoryById(int categoryId) {
         String sql = "SELECT * FROM category WHERE id = ?;";
-
         log.info("Sending request: get category by id {}", categoryId);
 
         try (Connection connection = DriverManager.getConnection(connectionData.URL, connectionData.USER, connectionData.PASSWORD);
@@ -42,11 +41,10 @@ public class CategoryDAOImpl implements CategoryDAO {
     public Set<CategoryDTO> getAllCategory() {
         String sql = "SELECT * FROM category;";
         Set<CategoryDTO> categorySet = new HashSet<>();
+        log.info("Connecting to Data Base and sending request: {}", sql);
 
-        log.info("Connecting to Data Base and sending request");
         try (Connection connection = DriverManager.getConnection(connectionData.URL, connectionData.USER, connectionData.PASSWORD);
              Statement statement = connection.createStatement()) {
-
             ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
                 categorySet.add(createCategoryDTO(resultSet));
@@ -60,10 +58,8 @@ public class CategoryDAOImpl implements CategoryDAO {
 
     private CategoryDTO createCategoryDTO(ResultSet resultSet) throws SQLException {
         CategoryDTO categoryDTO = new CategoryDTO();
-
         categoryDTO.setId(resultSet.getInt("id"));
         categoryDTO.setName(resultSet.getString("name"));
-
         return categoryDTO;
     }
 }
