@@ -52,6 +52,7 @@
         <th>Type</th>
         <th>Status</th>
         <th>Owner</th>
+        <th></th>
     </tr>
     <tr th="${advertisement}">
         <td th:text="${advertisement.id}"></td>
@@ -66,6 +67,8 @@
         <td th:text="${advertisement.typeDTO.name}"></td>
         <td th:text="${advertisement.statusDTO.name}"></td>
         <td th:utext="|${advertisement.owner.name} <br /> ${advertisement.owner.phone} <br /> ${advertisement.owner.email}|"></td>
+        <th> <span th:if="${advertisement.statusDTO == advertisement.statusDTO.ACTIVE}">
+            <a th:href="@{/ordering(id=${advertisement.id})}"> <input type="submit" value="Order" /> </a> </span> </th>
     </tr>
 </table>
 </body>

@@ -1,1 +1,0 @@
-insert into status (name) VALUES ('closed');

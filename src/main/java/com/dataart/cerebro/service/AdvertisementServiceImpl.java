@@ -48,9 +48,11 @@ public class AdvertisementServiceImpl implements AdvertisementService {
         LocalDateTime publicationTime = LocalDateTime.now();
         LocalDateTime endTime = publicationTime.plusDays(7);
         StatusDTO status = StatusDTO.ACTIVE;
+
         advertisementDAO.addAdvertisement(advertisementDTO.getTitle(), advertisementDTO.getText(), advertisementDTO.getPrice(),
                 advertisementDTO.getAddress(), image, publicationTime, endTime, advertisementDTO.getCategoryDTO().getId(),
                 advertisementDTO.getTypeDTO().getId(), status.getId(), contactInfoDTO);
+
         emailService.sendEmailAboutPublication(advertisementDTO.getTitle(), advertisementDTO.getText(), contactInfoDTO.getEmail());
     }
 }
