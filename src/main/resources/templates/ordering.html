@@ -5,7 +5,7 @@
     <title>Ordering</title>
     <style type="text/css">
         table {
-            font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif,serif;
+            font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif, serif;
             font-size: 14px;
             background: white;
             max-width: 70%;
@@ -31,10 +31,15 @@
             color: #6699ff;
         }
     </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script type="text/javascript" th:src="@{/js/ordering.js}"></script>
+
+
 </head>
 <body>
 <h1>Ordering</h1>
-<form action="#" th:action="@{/ordering}" th:object="${order}" method="post">
+<form th:action="@{/ordering}" th:object="${order}" method="post">
     <table class="table table-striped">
         <caption>Info</caption>
         <tr>
@@ -53,7 +58,7 @@
             <td th:text="${advertisement.id}"></td>
             <td th:text="${advertisement.title}"></td>
             <td th:text="${advertisement.text}"></td>
-            <td th:text="${advertisement.price}"></td>
+            <td th:text="${advertisement.price}" th:value="${advertisement.price}" id="advertisementPrice"></td>
             <td><img th:src="@{/image(id=${advertisement.id})}" alt="Image not load"></td>
             <td th:text="${advertisement.address}"></td>
             <td th:text="${advertisement.categoryDTO.name}"></td>
@@ -63,10 +68,17 @@
         </tr>
     </table>
 
-    <p> <input hidden th:value="${advertisement.price}" th:field="*{totalPrice}"></p>
-    <p> <input hidden th:value="${advertisement.id}" th:field="*{advertisementDTO.id}"></p>
-    <p> <input hidden th:value="${advertisement}" th:field="${advertisement}"></p>
-
+    <p th="${advertisement}"><input hidden th:value="${advertisement.id}" th:field="*{advertisementDTO.id}"></p>
+    <p>
+        <label>Additional services: <br>
+            <input class="totalPrice" type="checkbox" th:field="*{servicesSet}"
+                   th:each="service : ${services}"
+                   th:utext="|${service.name}: ${service.price} <br />|"
+                   th:value="${{service}}"
+                   th:attr="amount=${service.price}"/>
+        </label>
+    <p> Total price: <input type="text" id="total" readonly></p>
+    </p>
 
     <p>Name: <input type="text" th:field="${customer.name}"/></p>
     <p>Phone: <input type="text" th:field="${customer.phone}"/></p>

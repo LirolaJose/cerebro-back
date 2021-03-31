@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @Slf4j
 public class ContactInfoController {
-    final ContactInfoService contactInfoService;
-    final AdvertisementService advertisementService;
+    private final ContactInfoService contactInfoService;
+    private final AdvertisementService advertisementService;
 
     public ContactInfoController(ContactInfoService contactInfoService, AdvertisementService advertisementService) {
         this.contactInfoService = contactInfoService;

@@ -1,4 +1,4 @@
-package com.dataart.cerebro.service;
+package com.dataart.cerebro.service.serviceImpl;
 
 import com.dataart.cerebro.dao.AdvertisementDAO;
 import com.dataart.cerebro.dto.AdvertisementDTO;
@@ -6,6 +6,9 @@ import com.dataart.cerebro.dto.ContactInfoDTO;
 import com.dataart.cerebro.dto.StatusDTO;
 import com.dataart.cerebro.email.EmailService;
 import com.dataart.cerebro.exception.AdvertisementNotFoundException;
+import com.dataart.cerebro.service.AdvertisementService;
+import com.dataart.cerebro.service.CategoryService;
+import com.dataart.cerebro.service.ContactInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -16,10 +19,10 @@ import java.util.List;
 @Service
 @Slf4j
 public class AdvertisementServiceImpl implements AdvertisementService {
-    final AdvertisementDAO advertisementDAO;
-    final CategoryService categoryService;
-    final ContactInfoService contactInfoService;
-    final EmailService emailService;
+    private final AdvertisementDAO advertisementDAO;
+    private final CategoryService categoryService;
+    private final ContactInfoService contactInfoService;
+    private final EmailService emailService;
 
     public AdvertisementServiceImpl(AdvertisementDAO advertisementDAO, CategoryService categoryService, ContactInfoService contactInfoService, EmailService emailService) {
         this.advertisementDAO = advertisementDAO;

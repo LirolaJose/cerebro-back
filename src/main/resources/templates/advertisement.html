@@ -59,7 +59,7 @@
         <td th:text="${advertisement.title}"></td>
         <td th:text="${advertisement.text}"></td>
         <td th:text="${advertisement.price}"></td>
-        <td><img th:src="@{/image(id=${advertisement.id})}" alt="Image not load"></td>
+        <td><img th:src="@{/image(id=${advertisement.id})}" alt="Image not load" ></td>
         <td th:text="${advertisement.address}"></td>
         <td th:text="${#temporals.format(advertisement.publicationTime, 'dd-MM-yyyy HH:mm')}"></td>
         <td th:text="${#temporals.format(advertisement.endTime, 'dd-MM-yyyy HH:mm')}"></td>
@@ -67,7 +67,7 @@
         <td th:text="${advertisement.typeDTO.name}"></td>
         <td th:text="${advertisement.statusDTO.name}"></td>
         <td th:utext="|${advertisement.owner.name} <br /> ${advertisement.owner.phone} <br /> ${advertisement.owner.email}|"></td>
-        <th> <span th:if="${advertisement.statusDTO == advertisement.statusDTO.ACTIVE} and  !${advertisement.categoryDTO.name == 'vacancies'}">
+        <th> <span th:if="${advertisement.statusDTO == advertisement.statusDTO.ACTIVE} and !${advertisement.categoryDTO.name == 'vacancies'}">
             <a th:href="@{/ordering(id=${advertisement.id})}"> <input type="submit" value="Order" /> </a> </span> </th>
     </tr>
 </table>

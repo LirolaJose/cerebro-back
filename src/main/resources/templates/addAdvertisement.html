@@ -5,7 +5,7 @@
     <title>AddAdvertisement</title>
     <style>
         input, textarea, select, button {
-            width : 150px;
+            width: 150px;
             margin: 0;
 
             -webkit-box-sizing: border-box; /* For legacy WebKit based browsers */
@@ -15,25 +15,29 @@
     </style>
 </head>
 <body>
-<h1>Form for advertisement</h1>
+<h1>Advertisement form</h1>
 <div><a th:href="@{/advertisementsList}"> Back to all advertisements </a></div>
 
 <form th:action="@{/addAdvertisement}" enctype="multipart/form-data" th:object="${advertisement}" method="post">
     <p>Title: <input type="text" th:field="*{title}"/></p>
-    <p>Text: <textarea id="text" name="text" placeholder="Write a description" th:field="*{text}" style="height:75px"></textarea></p>
+    <p>Text: <textarea id="text" name="text" placeholder="Write a description" th:field="*{text}"
+                       style="height:75px"></textarea></p>
     <p>Price: <input type="text" th:field="*{price}"/></p>
     <p>Address: <input type="text" th:field="*{address}"/></p>
 
     <p>Image: <input type="file" name="file"></p>
 
-    <p>Category: <select th:field="*{categoryDTO.id}">
+    <p>Category: <select id="categorySelect" th:field="*{categoryDTO.id}">
         <option th:each="category : ${categorySet}"
-                th:value="${category.id}" th:text="${category.name}"></option>
-    </select></p>
+                th:value="${category.id}"
+                th:text="${category.name}"></option>
+    </select>
+    </p>
 
     <p>Type: <select th:field="*{typeDTO}">
         <option th:each="type : ${typeEnum}"
-                th:value="${type}" th:text="${type}" th:field="*{typeDTO}"></option>
+                th:value="${type}"
+                th:text="${type}"></option>
     </select></p>
 
     <p>Name: <input type="text" th:field="${contactInfo.name}"/></p>

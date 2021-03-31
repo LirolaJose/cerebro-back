@@ -13,8 +13,7 @@ import java.io.IOException;
 
 @RestController
 public class ImageController {
-    final
-    AdvertisementDAO advertisementDAO;
+    private final AdvertisementDAO advertisementDAO;
 
     public ImageController(AdvertisementDAO advertisementDAO) {
         this.advertisementDAO = advertisementDAO;

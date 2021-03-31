@@ -1,6 +1,7 @@
-package com.dataart.cerebro.dao;
+package com.dataart.cerebro.dao.daoImpl;
 
 import com.dataart.cerebro.configuration.ConnectionData;
+import com.dataart.cerebro.dao.ContactInfoDAO;
 import com.dataart.cerebro.dto.ContactInfoDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -12,8 +13,8 @@ import java.util.List;
 @Repository
 @Slf4j
 public class ContactInfoDAOImpl implements ContactInfoDAO {
-    String connecting = "Connecting to Data Base and sending request";
-    final ConnectionData connectionData;
+    private static  final String CONNECTING = "Connecting to Data Base and sending request";
+    private final ConnectionData connectionData;
 
     public ContactInfoDAOImpl(ConnectionData connectionData) {
         this.connectionData = connectionData;
@@ -38,7 +39,7 @@ public class ContactInfoDAOImpl implements ContactInfoDAO {
     public List<ContactInfoDTO> getAllContactsInfo() {
         String sql = "SELECT * FROM contact_info;";
         List<ContactInfoDTO> contactInfoList = new ArrayList<>();
-        log.info(connecting);
+        log.info(CONNECTING);
 
         try (Connection connection = DriverManager.getConnection(connectionData.URL, connectionData.USER, connectionData.PASSWORD);
              Statement statement = connection.createStatement()) {
@@ -71,7 +72,7 @@ public class ContactInfoDAOImpl implements ContactInfoDAO {
 
     public ContactInfoDTO getContactInfoById(int id) {
         String sql = "SELECT * FROM contact_info WHERE id = ?;";
-        log.info(connecting);
+        log.info(CONNECTING);
 
         try (Connection connection = DriverManager.getConnection(connectionData.URL, connectionData.USER, connectionData.PASSWORD);
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
