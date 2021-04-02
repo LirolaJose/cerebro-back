@@ -36,6 +36,7 @@ public class EmailServiceImpl implements EmailService {
         mailMessage.setSubject("Your advertisement is added");
         mailMessage.setText(title + "\n" + text);
         emailSender.send(mailMessage);
+        log.info("Email about publication is sent to {}", email);
     }
 
     @Override
@@ -43,11 +44,12 @@ public class EmailServiceImpl implements EmailService {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
 
         emailAndAds.forEach(((email, advertisementsList) -> {
-            ContactInfoDTO contactInfoDTO = advertisementsList.get(0).getOwner();
-            mailMessage.setTo(contactInfoDTO.getEmail());
+            ContactInfoDTO contactInfo = advertisementsList.get(0).getOwner();
+            mailMessage.setTo(contactInfo.getEmail());
             mailMessage.setSubject("Advertisement will be closed soon");
+
             StringBuilder text = new StringBuilder();
-            text.append("Dear ").append(contactInfoDTO.getName()).append(",\n").append("your advertisement(s): \n");
+            text.append("Dear ").append(contactInfo.getName()).append(",\n").append("your advertisement(s): \n");
             int number = 1;
             for (AdvertisementDTO advertisementDTO : advertisementsList) {
                 text.append(number++).append(". ").append(url).append(advertisementDTO.getId()).append(" will be closed ")
@@ -65,11 +67,11 @@ public class EmailServiceImpl implements EmailService {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
 
         emailAndAds.forEach(((email, advertisementsList) -> {
-            ContactInfoDTO contactInfoDTO = advertisementsList.get(0).getOwner();
-            mailMessage.setTo(contactInfoDTO.getEmail());
+            ContactInfoDTO contactInfo = advertisementsList.get(0).getOwner();
+            mailMessage.setTo(contactInfo.getEmail());
             mailMessage.setSubject("Advertisement is closed");
             StringBuilder text = new StringBuilder();
-            text.append("Dear ").append(contactInfoDTO.getName()).append(",\n")
+            text.append("Dear ").append(contactInfo.getName()).append(",\n")
                     .append("your advertisement(s): \n");
             int number = 1;
             for (AdvertisementDTO advertisementDTO : advertisementsList) {
@@ -82,9 +84,9 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public void sendEmailAboutPurchase(AdvertisementDTO advertisementDTO, ContactInfoDTO customer, AdOrderDTO adOrderDTO) {
+    public void sendEmailAboutPurchase(AdvertisementDTO advertisement, ContactInfoDTO customer, AdOrderDTO adOrder) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
-        Set<ServiceDTO> servicesSet = adOrderDTO.getServicesSet();
+        Set<ServiceDTO> servicesSet = adOrder.getServicesSet();
         String services = servicesSet.stream()
                 .map(serviceDTO -> serviceDTO.getName() + ": " + serviceDTO.getPrice())
                 .collect(Collectors.joining(", "));
@@ -94,8 +96,8 @@ public class EmailServiceImpl implements EmailService {
         StringBuilder text = new StringBuilder();
 
         text.append("Dear ").append(customer.getName()).append(",\n")
-                .append("You have done a purchase ").append(url).append(advertisementDTO.getId()).append("\n")
-                .append("Total price: ").append(adOrderDTO.getTotalPrice());
+                .append("You have done a purchase ").append(url).append(advertisement.getId()).append("\n")
+                .append("Total price: ").append(adOrder.getTotalPrice());
         if (!servicesSet.isEmpty()) {
             text.append(" (additional services: ").append(services).append(")").append("\n");
         }
@@ -109,11 +111,11 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public void sendEmailAboutSell(AdvertisementDTO advertisementDTO, ContactInfoDTO customer, AdOrderDTO adOrderDTO) {
+    public void sendEmailAboutSell(AdvertisementDTO advertisement, ContactInfoDTO customer, AdOrderDTO adOrder) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
-        ContactInfoDTO seller = advertisementDTO.getOwner();
+        ContactInfoDTO seller = advertisement.getOwner();
 
-        Set<ServiceDTO> servicesSet = adOrderDTO.getServicesSet();
+        Set<ServiceDTO> servicesSet = adOrder.getServicesSet();
         String services = servicesSet.stream()
                 .map(serviceDTO -> serviceDTO.getName() + ": " + serviceDTO.getPrice())
                 .collect(Collectors.joining(", "));
@@ -123,9 +125,9 @@ public class EmailServiceImpl implements EmailService {
         StringBuilder text = new StringBuilder();
 
         text.append("Dear ").append(seller.getName()).append(",\n")
-                .append("Your advertisement ").append(url).append(advertisementDTO.getId()).append(" is closed,").append("\n")
+                .append("Your advertisement ").append(url).append(advertisement.getId()).append(" is closed,").append("\n")
                 .append("because ").append(customer.getName()).append(" has made the purchase. \n")
-                .append("Total price: ").append(adOrderDTO.getTotalPrice()).append("\n");
+                .append("Total price: ").append(adOrder.getTotalPrice()).append("\n");
         if(!servicesSet.isEmpty()){
             text.append("Additional services were ordered: ").append(services).append("\n");
         }

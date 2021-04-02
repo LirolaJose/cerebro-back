@@ -1,7 +1,6 @@
-package com.dataart.cerebro.service.serviceImpl;
+package com.dataart.cerebro.service.impl;
 
 import com.dataart.cerebro.dao.AdOrderDAO;
-import com.dataart.cerebro.dao.AdvertisementDAO;
 import com.dataart.cerebro.dao.ServiceDAO;
 import com.dataart.cerebro.dto.AdOrderDTO;
 import com.dataart.cerebro.dto.AdvertisementDTO;
@@ -27,14 +26,14 @@ public class AdOrderServiceImpl implements AdOrderService {
     }
 
     @Override
-    public void adAdOrder(AdOrderDTO adOrderDTO, AdvertisementDTO advertisementDTO, ContactInfoDTO customerInfo) {
+    public void adAdOrder(AdOrderDTO adOrder, AdvertisementDTO advertisement, ContactInfoDTO customerInfo) {
         LocalDateTime orderTime = LocalDateTime.now();
-        Double totalPrice = advertisementDTO.getPrice() + serviceDAO.getTotalPriceServices(adOrderDTO.getServicesSet());
+        Double totalPrice = advertisement.getPrice() + serviceDAO.getTotalPriceServices(adOrder.getServicesSet());
 
-        adOrderDTO.setTotalPrice(totalPrice);
-        AdOrderDTO order = adOrderDAO.addAdOrder(adOrderDTO, orderTime, advertisementDTO, customerInfo);
+        adOrder.setTotalPrice(totalPrice);
+        AdOrderDTO order = adOrderDAO.addAdOrder(adOrder, orderTime, advertisement, customerInfo);
 
-        emailService.sendEmailAboutPurchase(advertisementDTO, customerInfo, order);
-        emailService.sendEmailAboutSell(advertisementDTO, customerInfo, order);
+        emailService.sendEmailAboutPurchase(advertisement, customerInfo, order);
+        emailService.sendEmailAboutSell(advertisement, customerInfo, order);
     }
 }

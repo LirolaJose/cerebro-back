@@ -59,9 +59,9 @@
         <td th:text="${ad.address}"></td>
         <td th:text="${#temporals.format(ad.publicationTime, 'dd-MM-yyyy HH:mm')}"></td>
         <td th:text="${#temporals.format(ad.endTime, 'dd-MM-yyyy HH:mm')}"></td>
-        <td th:text="${ad.categoryDTO.name}"></td>
-        <td th:text="${ad.typeDTO.name}"></td>
-        <td th:text="${ad.statusDTO.name}"></td>
+        <td th:text="${ad.category.name}"></td>
+        <td th:text="${ad.type.name}"></td>
+        <td th:text="${ad.status.name}"></td>
         <td th:utext="|${ad.owner.name} <br /> ${ad.owner.phone} <br /> ${ad.owner.email}|"></td>
     </tr>
 </table>

@@ -63,11 +63,11 @@
         <td th:text="${advertisement.address}"></td>
         <td th:text="${#temporals.format(advertisement.publicationTime, 'dd-MM-yyyy HH:mm')}"></td>
         <td th:text="${#temporals.format(advertisement.endTime, 'dd-MM-yyyy HH:mm')}"></td>
-        <td th:text="${advertisement.categoryDTO.name}"></td>
-        <td th:text="${advertisement.typeDTO.name}"></td>
-        <td th:text="${advertisement.statusDTO.name}"></td>
+        <td th:text="${advertisement.category.name}"></td>
+        <td th:text="${advertisement.type.name}"></td>
+        <td th:text="${advertisement.status.name}"></td>
         <td th:utext="|${advertisement.owner.name} <br /> ${advertisement.owner.phone} <br /> ${advertisement.owner.email}|"></td>
-        <th> <span th:if="${advertisement.statusDTO == advertisement.statusDTO.ACTIVE} and !${advertisement.categoryDTO.name == 'vacancies'}">
+        <th> <span th:if="${advertisement.status == advertisement.status.ACTIVE} and !${advertisement.category.name == 'vacancies'}">
             <a th:href="@{/ordering(id=${advertisement.id})}"> <input type="submit" value="Order" /> </a> </span> </th>
     </tr>
 </table>

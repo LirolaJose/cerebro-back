@@ -1,4 +1,4 @@
-package com.dataart.cerebro.dao.daoImpl;
+package com.dataart.cerebro.dao.impl;
 
 import com.dataart.cerebro.configuration.ConnectionData;
 import com.dataart.cerebro.dao.ContactInfoDAO;
@@ -90,11 +90,11 @@ public class ContactInfoDAOImpl implements ContactInfoDAO {
     }
 
     private ContactInfoDTO createContactInfoDTO(ResultSet resultSet) throws SQLException {
-        ContactInfoDTO contactInfoDTO = new ContactInfoDTO();
-        contactInfoDTO.setId(resultSet.getInt("id"));
-        contactInfoDTO.setName(resultSet.getString("name"));
-        contactInfoDTO.setPhone(resultSet.getString("phone"));
-        contactInfoDTO.setEmail((resultSet.getString("email")));
-        return contactInfoDTO;
+        ContactInfoDTO contactInfo = new ContactInfoDTO();
+        contactInfo.setId(resultSet.getInt("id"));
+        contactInfo.setName(resultSet.getString("name"));
+        contactInfo.setPhone(resultSet.getString("phone"));
+        contactInfo.setEmail((resultSet.getString("email")));
+        return contactInfo;
     }
 }

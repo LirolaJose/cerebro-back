@@ -7,5 +7,5 @@ import com.dataart.cerebro.dto.ContactInfoDTO;
 import java.time.LocalDateTime;
 
 public interface AdOrderService {
-    void adAdOrder(AdOrderDTO adOrderDTO, AdvertisementDTO advertisementDTO, ContactInfoDTO customerInfo);
+    void adAdOrder(AdOrderDTO adOrder, AdvertisementDTO advertisement, ContactInfoDTO customerInfo);
 }

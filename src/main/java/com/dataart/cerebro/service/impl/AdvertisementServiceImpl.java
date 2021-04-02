@@ -1,4 +1,4 @@
-package com.dataart.cerebro.service.serviceImpl;
+package com.dataart.cerebro.service.impl;
 
 import com.dataart.cerebro.dao.AdvertisementDAO;
 import com.dataart.cerebro.dto.AdvertisementDTO;
@@ -12,7 +12,6 @@ import com.dataart.cerebro.service.ContactInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -47,15 +46,15 @@ public class AdvertisementServiceImpl implements AdvertisementService {
     }
 
     @Override
-    public void addAdvertisement(AdvertisementDTO advertisementDTO, ContactInfoDTO contactInfoDTO, byte[] image) throws SQLException {
+    public void addAdvertisement(AdvertisementDTO advertisement, ContactInfoDTO contactInfo, byte[] image) {
         LocalDateTime publicationTime = LocalDateTime.now();
         LocalDateTime endTime = publicationTime.plusDays(7);
         StatusDTO status = StatusDTO.ACTIVE;
 
-        advertisementDAO.addAdvertisement(advertisementDTO.getTitle(), advertisementDTO.getText(), advertisementDTO.getPrice(),
-                advertisementDTO.getAddress(), image, publicationTime, endTime, advertisementDTO.getCategoryDTO().getId(),
-                advertisementDTO.getTypeDTO().getId(), status.getId(), contactInfoDTO);
+        advertisementDAO.addAdvertisement(advertisement.getTitle(), advertisement.getText(), advertisement.getPrice(),
+                advertisement.getAddress(), image, publicationTime, endTime, advertisement.getCategory().getId(),
+                advertisement.getType().getId(), status.getId(), contactInfo);
 
-        emailService.sendEmailAboutPublication(advertisementDTO.getTitle(), advertisementDTO.getText(), contactInfoDTO.getEmail());
+        emailService.sendEmailAboutPublication(advertisement.getTitle(), advertisement.getText(), contactInfo.getEmail());
     }
 }

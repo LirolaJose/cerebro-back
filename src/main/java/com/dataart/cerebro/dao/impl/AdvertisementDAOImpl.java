@@ -1,4 +1,4 @@
-package com.dataart.cerebro.dao.daoImpl;
+package com.dataart.cerebro.dao.impl;
 
 import com.dataart.cerebro.configuration.ConnectionData;
 import com.dataart.cerebro.dao.AdvertisementDAO;
@@ -23,7 +23,7 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
     private final ConnectionData connectionData;
     private final CategoryDAO categoryDAO;
     private final ContactInfoDAO contactInfoDAO;
-    String badRequest = "Bad request for ID {}: {}";
+    public static final String BAD_REQUEST = "Bad request for ID {}: {}";
 
     public AdvertisementDAOImpl(ConnectionData connectionData, CategoryDAO categoryDAO, ContactInfoDAO contactInfoDAO) {
         this.connectionData = connectionData;
@@ -33,28 +33,28 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
 
     @Override
     public List<AdvertisementDTO> getExpiringAdvertisements() {
-        String sql = "SELECT * FROM advertisement WHERE current_date = date(end_time) - interval '1 days';";
+        String sql = "SELECT * FROM advertisement WHERE status_id = 1 and current_date = date(end_time) - interval '1 days';";
         return getAdvertisementsList(sql);
     }
 
     @Override
     public List<AdvertisementDTO> getExpiredAdvertisements() {
-        String sql = "SELECT * FROM advertisement WHERE current_date = date(end_time) and status_id = 1;";
+        String sql = "SELECT * FROM advertisement WHERE status_id = 1 and current_date = date(end_time);";
         return getAdvertisementsList(sql);
     }
 
     @Override
-    public void updateAdvertisementStatus(int statusId, AdvertisementDTO advertisementDTO) {
+    public void updateAdvertisementStatus(int statusId, AdvertisementDTO advertisement) {
         String sql = "UPDATE advertisement SET status_id = ? WHERE id = ?;";
-        int id = advertisementDTO.getId();
-        log.info("Updating status of advertisement (id = {}) from {} to {}", id, advertisementDTO.getStatusDTO(), StatusDTO.CLOSED);
+        int id = advertisement.getId();
+        log.info("Updating status of advertisement (id = {}) from {} to {}", id, advertisement.getStatus(), StatusDTO.CLOSED);
         try (Connection connection = DriverManager.getConnection(connectionData.URL, connectionData.USER, connectionData.PASSWORD);
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, statusId);
-            preparedStatement.setInt(2, advertisementDTO.getId());
+            preparedStatement.setInt(2, advertisement.getId());
             preparedStatement.executeUpdate();
         } catch (Exception e) {
-            log.error(badRequest, id, e.getMessage(), e);
+            log.error(BAD_REQUEST, id, e.getMessage(), e);
         }
     }
 
@@ -78,7 +78,7 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
                 return createAdvertisementDTO(resultSet);
             }
         } catch (Exception e) {
-            log.error(badRequest, id, e.getMessage(), e);
+            log.error(BAD_REQUEST, id, e.getMessage(), e);
         }
         return null;
     }
@@ -95,7 +95,7 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
                 return resultSet.getBytes("image");
             }
         } catch (Exception e) {
-            log.error(badRequest, id, e.getMessage(), e);
+            log.error(BAD_REQUEST, id, e.getMessage(), e);
         }
         return new byte[0];
     }
@@ -103,7 +103,7 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
     @Override
     public void addAdvertisement(String title, String text, Double price, String address, byte[] image,
                                  LocalDateTime publicationTime, LocalDateTime endTime,
-                                 int categoryId, int typeId, int statusId, ContactInfoDTO contactInfoDTO) {
+                                 int categoryId, int typeId, int statusId, ContactInfoDTO contactInfo) {
 
         String sql = "INSERT INTO advertisement " +
                 "(title, text, price, address, image, publication_time, end_time, category_id, type_id, status_id, owner_id)" +
@@ -113,8 +113,8 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             try {
                 connection.setAutoCommit(false);
-                ContactInfoDTO contactInfoInitial = contactInfoDAO.addContactInfo(contactInfoDTO.getName(), contactInfoDTO.getPhone(),
-                        contactInfoDTO.getEmail(), connection);
+                ContactInfoDTO contactInfoInitial = contactInfoDAO.addContactInfo(contactInfo.getName(), contactInfo.getPhone(),
+                        contactInfo.getEmail(), connection);
                 preparedStatement.setString(1, title);
                 preparedStatement.setString(2, text);
                 preparedStatement.setDouble(3, price);
@@ -139,31 +139,31 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
     }
 
     private AdvertisementDTO createAdvertisementDTO(ResultSet resultSet) throws SQLException, NotFoundException {
-        AdvertisementDTO advertisementDTO = new AdvertisementDTO();
+        AdvertisementDTO advertisement = new AdvertisementDTO();
 
-        advertisementDTO.setId(resultSet.getInt("id"));
-        advertisementDTO.setTitle(resultSet.getString("title"));
-        advertisementDTO.setText(resultSet.getString("text"));
-        advertisementDTO.setPrice(resultSet.getDouble("price"));
-        advertisementDTO.setImage(resultSet.getBytes("image"));
-        advertisementDTO.setAddress(resultSet.getString("address"));
+        advertisement.setId(resultSet.getInt("id"));
+        advertisement.setTitle(resultSet.getString("title"));
+        advertisement.setText(resultSet.getString("text"));
+        advertisement.setPrice(resultSet.getDouble("price"));
+        advertisement.setImage(resultSet.getBytes("image"));
+        advertisement.setAddress(resultSet.getString("address"));
 
-        advertisementDTO.setPublicationTime(resultSet.getObject("publication_time", LocalDateTime.class));
-        advertisementDTO.setEndTime(resultSet.getObject("end_time", LocalDateTime.class));
+        advertisement.setPublicationTime(resultSet.getObject("publication_time", LocalDateTime.class));
+        advertisement.setEndTime(resultSet.getObject("end_time", LocalDateTime.class));
 
         int categoryId = resultSet.getInt("category_id");
-        advertisementDTO.setCategoryDTO(categoryDAO.getCategoryById(categoryId));
+        advertisement.setCategory(categoryDAO.getCategoryById(categoryId));
 
         int statusId = resultSet.getInt("status_id");
-        advertisementDTO.setStatusDTO(StatusDTO.getStatusDTOById(statusId));
+        advertisement.setStatus(StatusDTO.getStatusDTOById(statusId));
 
         int typeId = resultSet.getInt("type_id");
-        advertisementDTO.setTypeDTO(TypeDTO.getTypeDTOById(typeId));
+        advertisement.setType(TypeDTO.getTypeDTOById(typeId));
 
         int ownerId = resultSet.getInt("owner_id");
-        advertisementDTO.setOwner(contactInfoDAO.getContactInfoById(ownerId));
+        advertisement.setOwner(contactInfoDAO.getContactInfoById(ownerId));
 
-        return advertisementDTO;
+        return advertisement;
     }
 
     private List<AdvertisementDTO> getAdvertisementsList(String sql) {

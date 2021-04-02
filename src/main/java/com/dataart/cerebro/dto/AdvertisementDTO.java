@@ -14,8 +14,8 @@ public class AdvertisementDTO {
     private String address;
     private LocalDateTime publicationTime;
     private LocalDateTime endTime;
-    private CategoryDTO categoryDTO;
-    private TypeDTO typeDTO;
-    private StatusDTO statusDTO;
+    private CategoryDTO category;
+    private TypeDTO type;
+    private StatusDTO status;
     private ContactInfoDTO owner;
 }

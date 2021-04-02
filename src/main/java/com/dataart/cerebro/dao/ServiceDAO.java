@@ -11,5 +11,5 @@ public interface ServiceDAO {
 
     ServiceDTO getServiceById(int id);
 
-    Double getTotalPriceServices (Set<ServiceDTO> servicesSet);
+    Double getTotalPriceServices(Set<ServiceDTO> servicesSet);
 }

@@ -1,4 +1,4 @@
-package com.dataart.cerebro.dao.daoImpl;
+package com.dataart.cerebro.dao.impl;
 
 import com.dataart.cerebro.configuration.ConnectionData;
 import com.dataart.cerebro.dao.AdOrderDAO;
@@ -29,47 +29,46 @@ public class AdOrderDAOImpl implements AdOrderDAO {
     }
 
     @Override
-    public AdOrderDTO addAdOrder(AdOrderDTO adOrderDTO, LocalDateTime orderTime, AdvertisementDTO advertisementDTO, ContactInfoDTO customerInfo) {
+    public AdOrderDTO addAdOrder(AdOrderDTO adOrder, LocalDateTime orderTime, AdvertisementDTO advertisement, ContactInfoDTO customerInfo) {
         String sql = "INSERT INTO adorder(order_time, total_price, advertisement_id, contact_info_id) VALUES (?, ?, ?, ?);";
-        log.info("Creating a new order for advertisement (id = {})", advertisementDTO.getId());
+        log.info("Creating a new order for advertisement (id = {})", advertisement.getId());
 
-        try(Connection connection = DriverManager.getConnection(connectionData.URL, connectionData.USER, connectionData.PASSWORD);
-            PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try (Connection connection = DriverManager.getConnection(connectionData.URL, connectionData.USER, connectionData.PASSWORD);
+             PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             try {
                 connection.setAutoCommit(false);
                 ContactInfoDTO contactInfoInitial = contactInfoDAO.addContactInfo(customerInfo.getName(), customerInfo.getPhone(),
                         customerInfo.getEmail(), connection);
 
                 preparedStatement.setObject(1, orderTime);
-                preparedStatement.setDouble(2, adOrderDTO.getTotalPrice());
-                preparedStatement.setInt(3, advertisementDTO.getId());
+                preparedStatement.setDouble(2, adOrder.getTotalPrice());
+                preparedStatement.setInt(3, advertisement.getId());
                 preparedStatement.setInt(4, contactInfoInitial.getId());
                 preparedStatement.executeUpdate();
                 ResultSet resultSet = preparedStatement.getGeneratedKeys();
 
-                if(resultSet.next())
-                {
+                if (resultSet.next()) {
                     int lastInsertedId = resultSet.getInt(1);
-                    Set<ServiceDTO> servicesSet = adOrderDTO.getServicesSet();
+                    Set<ServiceDTO> servicesSet = adOrder.getServicesSet();
 
                     setOrderServices(lastInsertedId, servicesSet, connection);
 
 
-                    advertisementDAO.updateAdvertisementStatus(StatusDTO.SOLD.getId(), advertisementDTO);
+                    advertisementDAO.updateAdvertisementStatus(StatusDTO.SOLD.getId(), advertisement);
                     connection.commit();
                     log.info("New order is added to data base");
                     return getAdOrderById(lastInsertedId);
 
-                }else {
+                } else {
                     connection.rollback();
                 }
 
-            }catch (Exception e) {
+            } catch (Exception e) {
                 connection.rollback();
                 log.error("Runtime exception: {}", e.getMessage());
             }
-        }catch (SQLException e) {
-            log.error("Bad request; {}", e.getMessage());
+        } catch (SQLException e) {
+            log.error("Bad request: {}", e.getMessage());
         }
         return null;
     }
@@ -86,33 +85,33 @@ public class AdOrderDAOImpl implements AdOrderDAO {
                 return createAdOrder(resultSet);
             }
         } catch (Exception e) {
-            log.error("Bad request", id, e.getMessage(), e);
+            log.error("Bad request: {}", e.getMessage());
         }
         return null;
 
     }
 
     private AdOrderDTO createAdOrder(ResultSet resultSet) throws SQLException {
-        AdOrderDTO adOrderDTO = new AdOrderDTO();
+        AdOrderDTO adOrder = new AdOrderDTO();
 
-        adOrderDTO.setId(resultSet.getInt("id"));
-        adOrderDTO.setOrderTime(resultSet.getObject("order_time", LocalDateTime.class));
-        adOrderDTO.setTotalPrice(resultSet.getDouble("total_price"));
+        adOrder.setId(resultSet.getInt("id"));
+        adOrder.setOrderTime(resultSet.getObject("order_time", LocalDateTime.class));
+        adOrder.setTotalPrice(resultSet.getDouble("total_price"));
 
         int advertisementId = resultSet.getInt("advertisement_id");
-        adOrderDTO.setAdvertisementDTO(advertisementDAO.getAdvertisementById(advertisementId));
+        adOrder.setAdvertisement(advertisementDAO.getAdvertisementById(advertisementId));
 
         int contactInfoId = resultSet.getInt("contact_info_id");
-        adOrderDTO.setContactInfoDTO(contactInfoDAO.getContactInfoById(contactInfoId));
+        adOrder.setContactInfo(contactInfoDAO.getContactInfoById(contactInfoId));
 
-        adOrderDTO.setServicesSet(serviceDAO.getAllServicesByOrderId(resultSet.getInt("id")));
+        adOrder.setServicesSet(serviceDAO.getAllServicesByOrderId(resultSet.getInt("id")));
 
-        return adOrderDTO;
+        return adOrder;
     }
 
-    private void setOrderServices (int lastInsertedId, Set<ServiceDTO> servicesSet, Connection connection) throws SQLException {
+    private void setOrderServices(int lastInsertedId, Set<ServiceDTO> servicesSet, Connection connection) throws SQLException {
         String sqlInsert = "INSERT INTO  services_of_order (services_id, adorder_id) VALUES (?, ?);";
-        try(PreparedStatement prStatement = connection.prepareStatement(sqlInsert)) {
+        try (PreparedStatement prStatement = connection.prepareStatement(sqlInsert)) {
             for (ServiceDTO serviceDTO : servicesSet) {
                 prStatement.setInt(1, serviceDTO.getId());
                 prStatement.setInt(2, lastInsertedId);

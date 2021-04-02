@@ -61,14 +61,14 @@
             <td th:text="${advertisement.price}" th:value="${advertisement.price}" id="advertisementPrice"></td>
             <td><img th:src="@{/image(id=${advertisement.id})}" alt="Image not load"></td>
             <td th:text="${advertisement.address}"></td>
-            <td th:text="${advertisement.categoryDTO.name}"></td>
-            <td th:text="${advertisement.typeDTO.name}"></td>
-            <td th:text="${advertisement.statusDTO.name}"></td>
+            <td th:text="${advertisement.category.name}"></td>
+            <td th:text="${advertisement.type.name}"></td>
+            <td th:text="${advertisement.status.name}"></td>
             <td th:utext="|${advertisement.owner.name} <br /> ${advertisement.owner.phone} <br /> ${advertisement.owner.email}|"></td>
         </tr>
     </table>
 
-    <p th="${advertisement}"><input hidden th:value="${advertisement.id}" th:field="*{advertisementDTO.id}"></p>
+    <p th="${advertisement}"><input hidden th:value="${advertisement.id}" th:field="*{advertisement.id}"></p>
     <p>
         <label>Additional services: <br>
             <input class="totalPrice" type="checkbox" th:field="*{servicesSet}"

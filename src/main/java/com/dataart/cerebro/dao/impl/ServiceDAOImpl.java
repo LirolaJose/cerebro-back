@@ -1,4 +1,4 @@
-package com.dataart.cerebro.dao.daoImpl;
+package com.dataart.cerebro.dao.impl;
 
 import com.dataart.cerebro.configuration.ConnectionData;
 import com.dataart.cerebro.dao.ServiceDAO;
@@ -7,9 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -82,17 +80,15 @@ public class ServiceDAOImpl implements ServiceDAO {
     public Double getTotalPriceServices(Set<ServiceDTO> servicesSet) {
         if (!servicesSet.isEmpty()) {
             log.info("Calculating the total price of additional services");
-            String sql = "SELECT SUM(price) FROM service WHERE id IN (?);";
-            List<Integer> idList = new ArrayList<>();
-            servicesSet.forEach(serviceDTO -> idList.add(serviceDTO.getId()));
+            String sql = "SELECT SUM(price) FROM service WHERE id IN %s;";
 
-            String sqlIN = idList.stream()
+            String sqlIN = servicesSet.stream()
+                    .map(ServiceDTO::getId)
                     .map(String::valueOf)
                     .collect(Collectors.joining(",", "(", ")"));
-            sql = sql.replace("(?)", sqlIN);
 
             try (Connection connection = DriverManager.getConnection(connectionData.URL, connectionData.USER, connectionData.PASSWORD);
-                 PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+                 PreparedStatement preparedStatement = connection.prepareStatement(String.format(sql, sqlIN))) {
                 ResultSet resultSet = preparedStatement.executeQuery();
                 if (resultSet.next()) {
                     return resultSet.getDouble("sum");
@@ -107,10 +103,10 @@ public class ServiceDAOImpl implements ServiceDAO {
     }
 
     private ServiceDTO createServiceDTO(ResultSet resultSet) throws SQLException {
-        ServiceDTO serviceDTO = new ServiceDTO();
-        serviceDTO.setId(resultSet.getInt("id"));
-        serviceDTO.setName(resultSet.getString("name"));
-        serviceDTO.setPrice(resultSet.getDouble("price"));
-        return serviceDTO;
+        ServiceDTO service = new ServiceDTO();
+        service.setId(resultSet.getInt("id"));
+        service.setName(resultSet.getString("name"));
+        service.setPrice(resultSet.getDouble("price"));
+        return service;
     }
 }

@@ -11,5 +11,5 @@ public interface AdvertisementService {
 
     AdvertisementDTO getAdvertisementById(Integer id);
 
-    void addAdvertisement(AdvertisementDTO advertisementDTO, ContactInfoDTO contactInfoDTO, byte[] image) throws SQLException;
+    void addAdvertisement(AdvertisementDTO advertisement, ContactInfoDTO contactInfo, byte[] image);
 }

@@ -1,4 +1,4 @@
-package com.dataart.cerebro.dao.daoImpl;
+package com.dataart.cerebro.dao.impl;
 
 import com.dataart.cerebro.configuration.ConnectionData;
 import com.dataart.cerebro.dao.CategoryDAO;
@@ -61,11 +61,11 @@ public class CategoryDAOImpl implements CategoryDAO {
     }
 
     private CategoryDTO createCategoryDTO(ResultSet resultSet) throws SQLException {
-        CategoryDTO categoryDTO = new CategoryDTO();
+        CategoryDTO category = new CategoryDTO();
         Set<ServiceDTO> servicesSet = serviceDAO.getAllServicesByCategoryId(resultSet.getInt("id"));
-        categoryDTO.setId(resultSet.getInt("id"));
-        categoryDTO.setName(resultSet.getString("name"));
-        categoryDTO.setServicesSet(servicesSet);
-        return categoryDTO;
+        category.setId(resultSet.getInt("id"));
+        category.setName(resultSet.getString("name"));
+        category.setServicesSet(servicesSet);
+        return category;
     }
 }

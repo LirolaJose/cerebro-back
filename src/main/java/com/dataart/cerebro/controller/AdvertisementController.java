@@ -16,7 +16,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.IOException;
-import java.sql.SQLException;
 
 @Controller
 @Slf4j
@@ -32,13 +31,13 @@ public class AdvertisementController {
     }
 
 
-    @RequestMapping("/advertisementsList")
+    @GetMapping("/advertisementsList")
     public String getAdvertisementList(Model model) {
         model.addAttribute("advertisementsList", advertisementService.getAllActiveAdvertisements());
         return "advertisementsList";
     }
 
-    @RequestMapping("/advertisement")
+    @GetMapping("/advertisement")
     public String getAdvertisementById(@RequestParam("id") int id, Model model) {
         model.addAttribute("advertisement", advertisementService.getAdvertisementById(id));
         return "advertisement";
@@ -55,9 +54,9 @@ public class AdvertisementController {
     }
 
     @PostMapping(value = "/addAdvertisement")
-    public String addAdvertisementSubmit(@ModelAttribute AdvertisementDTO advertisementDTO,
-                                         @Valid ContactInfoDTO contactInfoDTO, BindingResult bindingResult,
-                                         MultipartFile file) throws IOException, SQLException {
+    public String addAdvertisementSubmit(@ModelAttribute AdvertisementDTO advertisement,
+                                         @Valid ContactInfoDTO contactInfo, BindingResult bindingResult,
+                                         MultipartFile file) throws IOException {
         if (bindingResult.hasErrors()) {
             log.info("Some parameters are not filled");
             throw new ContactInfoNullPointerException();
@@ -65,10 +64,10 @@ public class AdvertisementController {
         byte[] image = file.getBytes();
 
         log.info("Creating new Advertisement, parameters: title: {}, text: {}, price: {}, address: {}, category: {}," +
-                        "type: {}", advertisementDTO.getTitle(), advertisementDTO.getText(), advertisementDTO.getPrice(),
-                advertisementDTO.getAddress(), advertisementDTO.getCategoryDTO().getId(), advertisementDTO.getTypeDTO().getId());
+                        "type: {}", advertisement.getTitle(), advertisement.getText(), advertisement.getPrice(),
+                advertisement.getAddress(), advertisement.getCategory().getId(), advertisement.getType().getId());
 
-        advertisementService.addAdvertisement(advertisementDTO, contactInfoDTO, image);
+        advertisementService.addAdvertisement(advertisement, contactInfo, image);
         return "redirect:/advertisementsList";
     }
 }

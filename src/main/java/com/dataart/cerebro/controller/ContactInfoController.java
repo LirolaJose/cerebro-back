@@ -11,11 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Slf4j
 public class ContactInfoController {
     private final ContactInfoService contactInfoService;
-    private final AdvertisementService advertisementService;
 
-    public ContactInfoController(ContactInfoService contactInfoService, AdvertisementService advertisementService) {
+    public ContactInfoController(ContactInfoService contactInfoService) {
         this.contactInfoService = contactInfoService;
-        this.advertisementService = advertisementService;
     }
 
     @RequestMapping("/contactsList")

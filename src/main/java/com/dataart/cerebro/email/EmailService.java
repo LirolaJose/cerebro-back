@@ -14,7 +14,7 @@ public interface EmailService {
 
     void sendEmailAboutExpired(Map<String, List<AdvertisementDTO>> emailAndAds);
 
-    void sendEmailAboutPurchase(AdvertisementDTO advertisementDTO, ContactInfoDTO customer, AdOrderDTO adOrderDTO);
+    void sendEmailAboutPurchase(AdvertisementDTO advertisement, ContactInfoDTO customer, AdOrderDTO adOrder);
 
-    void sendEmailAboutSell(AdvertisementDTO advertisementDTO, ContactInfoDTO customer, AdOrderDTO adOrderDTO);
+    void sendEmailAboutSell(AdvertisementDTO advertisement, ContactInfoDTO customer, AdOrderDTO adOrder);
 }

@@ -1,4 +1,4 @@
-package com.dataart.cerebro.service.serviceImpl;
+package com.dataart.cerebro.service.impl;
 
 import com.dataart.cerebro.dao.ContactInfoDAO;
 import com.dataart.cerebro.dto.ContactInfoDTO;
