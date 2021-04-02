@@ -1,6 +1,6 @@
 package com.dataart.cerebro.configuration;
 
-import com.dataart.cerebro.dto.ServiceDTO;
+import com.dataart.cerebro.domain.ServiceDTO;
 import org.springframework.format.Formatter;
 
 import java.util.Locale;

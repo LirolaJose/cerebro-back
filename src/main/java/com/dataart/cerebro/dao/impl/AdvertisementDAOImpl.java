@@ -4,10 +4,7 @@ import com.dataart.cerebro.configuration.ConnectionData;
 import com.dataart.cerebro.dao.AdvertisementDAO;
 import com.dataart.cerebro.dao.CategoryDAO;
 import com.dataart.cerebro.dao.ContactInfoDAO;
-import com.dataart.cerebro.dto.AdvertisementDTO;
-import com.dataart.cerebro.dto.ContactInfoDTO;
-import com.dataart.cerebro.dto.StatusDTO;
-import com.dataart.cerebro.dto.TypeDTO;
+import com.dataart.cerebro.domain.*;
 import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -23,7 +20,7 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
     private final ConnectionData connectionData;
     private final CategoryDAO categoryDAO;
     private final ContactInfoDAO contactInfoDAO;
-    public static final String BAD_REQUEST = "Bad request for ID {}: {}";
+    private static final String BAD_REQUEST = "Bad request for ID {}: {}";
 
     public AdvertisementDAOImpl(ConnectionData connectionData, CategoryDAO categoryDAO, ContactInfoDAO contactInfoDAO) {
         this.connectionData = connectionData;
@@ -33,24 +30,24 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
 
     @Override
     public List<AdvertisementDTO> getExpiringAdvertisements() {
-        String sql = "SELECT * FROM advertisement WHERE status_id = 1 and current_date = date(end_time) - interval '1 days';";
+        String sql = "SELECT * FROM advertisement WHERE status_id = 1 and current_date >= date(end_time) - interval '1 days';";
         return getAdvertisementsList(sql);
     }
 
     @Override
     public List<AdvertisementDTO> getExpiredAdvertisements() {
-        String sql = "SELECT * FROM advertisement WHERE status_id = 1 and current_date = date(end_time);";
+        String sql = "SELECT * FROM advertisement WHERE status_id = 1 and current_date >= date(end_time);";
         return getAdvertisementsList(sql);
     }
 
     @Override
-    public void updateAdvertisementStatus(int statusId, AdvertisementDTO advertisement) {
+    public void updateAdvertisementStatus(AdvertisementDTO advertisement, Status status) {
         String sql = "UPDATE advertisement SET status_id = ? WHERE id = ?;";
         int id = advertisement.getId();
-        log.info("Updating status of advertisement (id = {}) from {} to {}", id, advertisement.getStatus(), StatusDTO.CLOSED);
+        log.info("Updating status of advertisement (id = {}) from {} to {}", id, advertisement.getStatus(), Status.CLOSED);
         try (Connection connection = DriverManager.getConnection(connectionData.URL, connectionData.USER, connectionData.PASSWORD);
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.setInt(1, statusId);
+            preparedStatement.setInt(1, status.getId());
             preparedStatement.setInt(2, advertisement.getId());
             preparedStatement.executeUpdate();
         } catch (Exception e) {
@@ -103,7 +100,7 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
     @Override
     public void addAdvertisement(String title, String text, Double price, String address, byte[] image,
                                  LocalDateTime publicationTime, LocalDateTime endTime,
-                                 int categoryId, int typeId, int statusId, ContactInfoDTO contactInfo) {
+                                 CategoryDTO category, Type type, Status status, ContactInfoDTO contactInfo) {
 
         String sql = "INSERT INTO advertisement " +
                 "(title, text, price, address, image, publication_time, end_time, category_id, type_id, status_id, owner_id)" +
@@ -122,23 +119,23 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
                 preparedStatement.setObject(5, image);
                 preparedStatement.setObject(6, publicationTime);
                 preparedStatement.setObject(7, endTime);
-                preparedStatement.setInt(8, categoryId);
-                preparedStatement.setInt(9, typeId);
-                preparedStatement.setInt(10, statusId);
+                preparedStatement.setInt(8, category.getId());
+                preparedStatement.setInt(9, type.getId());
+                preparedStatement.setInt(10, status.getId());
                 preparedStatement.setInt(11, contactInfoInitial.getId());
                 preparedStatement.executeUpdate();
                 connection.commit();
                 log.info("New advertisement is added to data base");
             } catch (Exception e) {
                 connection.rollback();
-                log.error("Runtime exception: {}", e.getMessage());
+                log.error("Runtime exception: {}", e.getMessage(), e);
             }
         } catch (SQLException e) {
-            log.error("Bad request; {}", e.getMessage());
+            log.error("Bad request; {}", e.getMessage(), e);
         }
     }
 
-    private AdvertisementDTO createAdvertisementDTO(ResultSet resultSet) throws SQLException, NotFoundException {
+    private AdvertisementDTO createAdvertisementDTO(ResultSet resultSet) throws SQLException {
         AdvertisementDTO advertisement = new AdvertisementDTO();
 
         advertisement.setId(resultSet.getInt("id"));
@@ -155,10 +152,10 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
         advertisement.setCategory(categoryDAO.getCategoryById(categoryId));
 
         int statusId = resultSet.getInt("status_id");
-        advertisement.setStatus(StatusDTO.getStatusDTOById(statusId));
+        advertisement.setStatus(Status.getStatusDTOById(statusId));
 
         int typeId = resultSet.getInt("type_id");
-        advertisement.setType(TypeDTO.getTypeDTOById(typeId));
+        advertisement.setType(Type.getTypeDTOById(typeId));
 
         int ownerId = resultSet.getInt("owner_id");
         advertisement.setOwner(contactInfoDAO.getContactInfoById(ownerId));
@@ -176,10 +173,11 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
             while (resultSet.next()) {
                 advertisementList.add(createAdvertisementDTO(resultSet));
             }
-        } catch (SQLException | NotFoundException e) {
-            log.error("Bad request");
+            log.info("Result is received");
+        } catch (SQLException e) {
+            log.error("Bad request; {}", e.getMessage(), e);
+            throw new RuntimeException(e);
         }
-        log.info("Result is received");
         return advertisementList;
     }
 }

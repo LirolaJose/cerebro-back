@@ -1,6 +1,6 @@
 package com.dataart.cerebro.service;
 
-import com.dataart.cerebro.dto.CategoryDTO;
+import com.dataart.cerebro.domain.CategoryDTO;
 
 import java.util.Set;
 

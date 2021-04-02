@@ -1,11 +1,9 @@
 package com.dataart.cerebro.service;
 
-import com.dataart.cerebro.dto.AdOrderDTO;
-import com.dataart.cerebro.dto.AdvertisementDTO;
-import com.dataart.cerebro.dto.ContactInfoDTO;
-
-import java.time.LocalDateTime;
+import com.dataart.cerebro.domain.AdOrderDTO;
+import com.dataart.cerebro.domain.AdvertisementDTO;
+import com.dataart.cerebro.domain.ContactInfoDTO;
 
 public interface AdOrderService {
-    void adAdOrder(AdOrderDTO adOrder, AdvertisementDTO advertisement, ContactInfoDTO customerInfo);
+    void addAdOrder(AdOrderDTO adOrder, AdvertisementDTO advertisement, ContactInfoDTO customerInfo);
 }

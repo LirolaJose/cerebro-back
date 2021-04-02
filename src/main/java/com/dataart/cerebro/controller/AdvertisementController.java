@@ -1,21 +1,27 @@
 package com.dataart.cerebro.controller;
 
 import com.dataart.cerebro.dao.ServiceDAO;
-import com.dataart.cerebro.dto.AdvertisementDTO;
-import com.dataart.cerebro.dto.ContactInfoDTO;
-import com.dataart.cerebro.dto.TypeDTO;
-import com.dataart.cerebro.exception.ContactInfoNullPointerException;
+import com.dataart.cerebro.domain.AdvertisementDTO;
+import com.dataart.cerebro.domain.ContactInfoDTO;
+import com.dataart.cerebro.domain.Type;
+import com.dataart.cerebro.exception.ValidationException;
 import com.dataart.cerebro.service.AdvertisementService;
 import com.dataart.cerebro.service.CategoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @Slf4j
@@ -47,19 +53,27 @@ public class AdvertisementController {
     public String addAdvertisementForm(Model model) {
         model.addAttribute("advertisement", new AdvertisementDTO());
         model.addAttribute("categorySet", categoryService.getAllCategory());
-        model.addAttribute("typeEnum", TypeDTO.values());
+        model.addAttribute("typeEnum", Type.values());
         model.addAttribute("contactInfo", new ContactInfoDTO());
         model.addAttribute("serviceDAO", serviceDAO);
         return "addAdvertisement";
     }
 
     @PostMapping(value = "/addAdvertisement")
-    public String addAdvertisementSubmit(@ModelAttribute AdvertisementDTO advertisement,
-                                         @Valid ContactInfoDTO contactInfo, BindingResult bindingResult,
+    public String addAdvertisementSubmit(@ModelAttribute @Valid AdvertisementDTO advertisement, BindingResult bindingResultAds,
+                                         @Valid ContactInfoDTO contactInfo, BindingResult bindingResultContact,
                                          MultipartFile file) throws IOException {
-        if (bindingResult.hasErrors()) {
-            log.info("Some parameters are not filled");
-            throw new ContactInfoNullPointerException();
+
+        if (bindingResultContact.hasErrors() || bindingResultAds.hasErrors()) {
+            List<FieldError> fieldErrorList = new ArrayList<>();
+            if (bindingResultContact.hasErrors()) {
+                fieldErrorList.addAll(bindingResultContact.getFieldErrors());
+            }
+            if (bindingResultAds.hasErrors()) {
+                fieldErrorList.addAll(bindingResultAds.getFieldErrors());
+            }
+            log.warn("Some parameters are not filled");
+            throw new ValidationException(fieldErrorList);
         }
         byte[] image = file.getBytes();
 

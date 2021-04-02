@@ -2,7 +2,7 @@ package com.dataart.cerebro.dao.impl;
 
 import com.dataart.cerebro.configuration.ConnectionData;
 import com.dataart.cerebro.dao.ContactInfoDAO;
-import com.dataart.cerebro.dto.ContactInfoDTO;
+import com.dataart.cerebro.domain.ContactInfoDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
@@ -13,7 +13,7 @@ import java.util.List;
 @Repository
 @Slf4j
 public class ContactInfoDAOImpl implements ContactInfoDAO {
-    private static  final String CONNECTING = "Connecting to Data Base and sending request";
+    private static final String CONNECTING = "Connecting to Data Base and sending request";
     private final ConnectionData connectionData;
 
     public ContactInfoDAOImpl(ConnectionData connectionData) {
@@ -24,15 +24,26 @@ public class ContactInfoDAOImpl implements ContactInfoDAO {
     public ContactInfoDTO addContactInfo(String name, String phone, String email, Connection connection) {
         String sql = "INSERT INTO contact_info (name, phone, email) VALUES (?,?,?);";
 
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, name);
             preparedStatement.setString(2, phone);
             preparedStatement.setString(3, email);
             preparedStatement.executeUpdate();
+
+            ResultSet resultSet = preparedStatement.getGeneratedKeys();
+            if (resultSet.next()) {
+                int lastInsertedId = resultSet.getInt(1);
+                connection.commit();
+                log.info("New contact is added to data base");
+                return getContactInfoById(lastInsertedId, connection);
+            } else {
+                connection.rollback();
+            }
+
         } catch (SQLException e) {
             log.error("Bad request; {}", e.getMessage(), e);
         }
-        return getContactInfoByName(name, connection);
+        return null;
     }
 
     @Override
@@ -54,28 +65,21 @@ public class ContactInfoDAOImpl implements ContactInfoDAO {
     }
 
     @Override
-    public ContactInfoDTO getContactInfoByName(String name, Connection connection) {
-        String sql = "SELECT * FROM contact_info WHERE name = ?;";
-
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.setString(1, name);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                return createContactInfoDTO(resultSet);
-            }
+    public ContactInfoDTO getContactInfoById(int id) {
+        log.info(CONNECTING);
+        try (Connection connection = DriverManager.getConnection(connectionData.URL, connectionData.USER, connectionData.PASSWORD)) {
+            return getContactInfoById(id, connection);
 
         } catch (Exception e) {
-            log.error("Bad request for ID {}: {}", name, e.getMessage(), e);
+            log.error("Bad request for ID {}: {}", id, e.getMessage(), e);
         }
         return null;
     }
 
-    public ContactInfoDTO getContactInfoById(int id) {
+    private ContactInfoDTO getContactInfoById(int id, Connection connection) {
         String sql = "SELECT * FROM contact_info WHERE id = ?;";
-        log.info(CONNECTING);
 
-        try (Connection connection = DriverManager.getConnection(connectionData.URL, connectionData.USER, connectionData.PASSWORD);
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
 

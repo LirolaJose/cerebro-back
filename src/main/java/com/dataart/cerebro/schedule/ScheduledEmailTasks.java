@@ -1,8 +1,8 @@
 package com.dataart.cerebro.schedule;
 
 import com.dataart.cerebro.dao.AdvertisementDAO;
-import com.dataart.cerebro.dto.AdvertisementDTO;
-import com.dataart.cerebro.dto.StatusDTO;
+import com.dataart.cerebro.domain.AdvertisementDTO;
+import com.dataart.cerebro.domain.Status;
 import com.dataart.cerebro.email.EmailService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -25,7 +25,7 @@ public class ScheduledEmailTasks {
         this.emailService = emailService;
     }
 
-    @Scheduled(cron = "00 10 12 * * ?") // At 12:10:00 am every day
+    @Scheduled(cron = "00 10 12 * * ?") // At 12:10:00 AM every day
     public void findExpiringAdvertisements() {
         log.info("Search for expiring advertisement launched at {}", LocalDateTime.now());
         List<AdvertisementDTO> advertisementsList = advertisementDAO.getExpiringAdvertisements();
@@ -39,15 +39,15 @@ public class ScheduledEmailTasks {
         log.info("Search expiring ads is finished. Letter was sent to {} addresses", emailAndAds.size());
     }
 
-    @Scheduled(cron = "00 12 12 * * ?") // At 12:12:00 am every day
+    @Scheduled(cron = "00 12 12 * * ?") // At 12:12:00 AM every day
 //    @Scheduled (fixedRate = 10000)
     public void findExpiredAdvertisements() {
         log.info("Search for expired advertisement launched at {}", LocalDateTime.now());
         List<AdvertisementDTO> advertisementsList = advertisementDAO.getExpiredAdvertisements();
-        int statusId = StatusDTO.CLOSED.getId();
+
 
         Map<String, List<AdvertisementDTO>> emailAndAds = advertisementsList.stream()
-                .peek(ad -> advertisementDAO.updateAdvertisementStatus(statusId, ad))
+                .peek(ad -> advertisementDAO.updateAdvertisementStatus(ad, Status.CLOSED))
                 .collect(groupingBy(ad -> ad.getOwner().getEmail()));
 
         if (!emailAndAds.isEmpty()) {

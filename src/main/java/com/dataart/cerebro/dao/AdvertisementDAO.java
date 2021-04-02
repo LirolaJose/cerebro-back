@@ -1,7 +1,6 @@
 package com.dataart.cerebro.dao;
 
-import com.dataart.cerebro.dto.AdvertisementDTO;
-import com.dataart.cerebro.dto.ContactInfoDTO;
+import com.dataart.cerebro.domain.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -14,11 +13,11 @@ public interface AdvertisementDAO {
     byte[] getImageByAdvertisementId(int id);
 
     void addAdvertisement(String title, String text, Double price, String address, byte[] image, LocalDateTime publicationTime, LocalDateTime expiredTime,
-                          int categoryId, int typeId, int statusId, ContactInfoDTO contactInfo);
+                          CategoryDTO category, Type type, Status status, ContactInfoDTO contactInfo);
 
     List<AdvertisementDTO> getExpiringAdvertisements();
 
     List<AdvertisementDTO> getExpiredAdvertisements();
 
-    void updateAdvertisementStatus(int statusId, AdvertisementDTO advertisement);
+    void updateAdvertisementStatus(AdvertisementDTO advertisement, Status status);
 }

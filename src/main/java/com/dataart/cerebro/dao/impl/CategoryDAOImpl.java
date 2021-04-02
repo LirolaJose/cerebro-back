@@ -3,8 +3,8 @@ package com.dataart.cerebro.dao.impl;
 import com.dataart.cerebro.configuration.ConnectionData;
 import com.dataart.cerebro.dao.CategoryDAO;
 import com.dataart.cerebro.dao.ServiceDAO;
-import com.dataart.cerebro.dto.CategoryDTO;
-import com.dataart.cerebro.dto.ServiceDTO;
+import com.dataart.cerebro.domain.CategoryDTO;
+import com.dataart.cerebro.domain.ServiceDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
