@@ -1,5 +1,6 @@
 package com.dataart.cerebro.email;
 
+import com.dataart.cerebro.dto.AdOrderDTO;
 import com.dataart.cerebro.dto.AdvertisementDTO;
 import com.dataart.cerebro.dto.ContactInfoDTO;
 
@@ -13,7 +14,7 @@ public interface EmailService {
 
     void sendEmailAboutExpired(Map<String, List<AdvertisementDTO>> emailAndAds);
 
-    void sendEmailAboutPurchase(AdvertisementDTO advertisementDTO, ContactInfoDTO customer);
+    void sendEmailAboutPurchase(AdvertisementDTO advertisementDTO, ContactInfoDTO customer, AdOrderDTO adOrderDTO);
 
-    void sendEmailAboutSell(AdvertisementDTO advertisementDTO, ContactInfoDTO customer);
+    void sendEmailAboutSell(AdvertisementDTO advertisementDTO, ContactInfoDTO customer, AdOrderDTO adOrderDTO);
 }

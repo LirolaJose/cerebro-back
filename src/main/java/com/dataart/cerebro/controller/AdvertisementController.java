@@ -1,5 +1,6 @@
 package com.dataart.cerebro.controller;
 
+import com.dataart.cerebro.dao.ServiceDAO;
 import com.dataart.cerebro.dto.AdvertisementDTO;
 import com.dataart.cerebro.dto.ContactInfoDTO;
 import com.dataart.cerebro.dto.TypeDTO;
@@ -20,12 +21,14 @@ import java.sql.SQLException;
 @Controller
 @Slf4j
 public class AdvertisementController {
-    final AdvertisementService advertisementService;
-    final CategoryService categoryService;
+    private final AdvertisementService advertisementService;
+    private final CategoryService categoryService;
+    private final ServiceDAO serviceDAO;
 
-    public AdvertisementController(AdvertisementService advertisementService, CategoryService categoryService) {
+    public AdvertisementController(AdvertisementService advertisementService, CategoryService categoryService, ServiceDAO serviceDAO) {
         this.advertisementService = advertisementService;
         this.categoryService = categoryService;
+        this.serviceDAO = serviceDAO;
     }
 
 
@@ -47,6 +50,7 @@ public class AdvertisementController {
         model.addAttribute("categorySet", categoryService.getAllCategory());
         model.addAttribute("typeEnum", TypeDTO.values());
         model.addAttribute("contactInfo", new ContactInfoDTO());
+        model.addAttribute("serviceDAO", serviceDAO);
         return "addAdvertisement";
     }
 

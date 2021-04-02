@@ -1,6 +1,9 @@
-package com.dataart.cerebro.dao;
+package com.dataart.cerebro.dao.daoImpl;
 
 import com.dataart.cerebro.configuration.ConnectionData;
+import com.dataart.cerebro.dao.AdvertisementDAO;
+import com.dataart.cerebro.dao.CategoryDAO;
+import com.dataart.cerebro.dao.ContactInfoDAO;
 import com.dataart.cerebro.dto.AdvertisementDTO;
 import com.dataart.cerebro.dto.ContactInfoDTO;
 import com.dataart.cerebro.dto.StatusDTO;
@@ -17,9 +20,9 @@ import java.util.List;
 @Repository
 @Slf4j
 public class AdvertisementDAOImpl implements AdvertisementDAO {
-    final ConnectionData connectionData;
-    final CategoryDAO categoryDAO;
-    final ContactInfoDAO contactInfoDAO;
+    private final ConnectionData connectionData;
+    private final CategoryDAO categoryDAO;
+    private final ContactInfoDAO contactInfoDAO;
     String badRequest = "Bad request for ID {}: {}";
 
     public AdvertisementDAOImpl(ConnectionData connectionData, CategoryDAO categoryDAO, ContactInfoDAO contactInfoDAO) {
@@ -36,7 +39,7 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
 
     @Override
     public List<AdvertisementDTO> getExpiredAdvertisements() {
-        String sql = "SELECT * FROM advertisement WHERE current_date = date(end_time);";
+        String sql = "SELECT * FROM advertisement WHERE current_date = date(end_time) and status_id = 1;";
         return getAdvertisementsList(sql);
     }
 

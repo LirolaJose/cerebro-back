@@ -11,10 +11,13 @@
 <tr>
     <th>Id</th>
     <th>Name</th>
+    <th>Services</th>
 </tr>
 <tr th:each="category : ${categorySet}">
     <td th:text="${category.id}"></td>
     <td th:text="${category.name}"></td>
+    <td th:each="service : ${category.servicesSet}"
+        th:utext="|${service.name} <br/>|"></td>
 </tr>
 </table>
 
