@@ -3,6 +3,7 @@ package com.dataart.cerebro.dao.impl;
 import com.dataart.cerebro.configuration.ConnectionData;
 import com.dataart.cerebro.dao.ContactInfoDAO;
 import com.dataart.cerebro.domain.ContactInfoDTO;
+import com.dataart.cerebro.exception.DataProcessingException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
@@ -39,9 +40,9 @@ public class ContactInfoDAOImpl implements ContactInfoDAO {
             } else {
                 connection.rollback();
             }
-
         } catch (SQLException e) {
             log.error("Bad request; {}", e.getMessage(), e);
+            throw new DataProcessingException(e);
         }
         return null;
     }
@@ -60,6 +61,7 @@ public class ContactInfoDAOImpl implements ContactInfoDAO {
             }
         } catch (SQLException e) {
             log.error("Bad request; {}", e.getMessage(), e);
+            throw new DataProcessingException(e);
         }
         return contactInfoList;
     }
@@ -70,10 +72,10 @@ public class ContactInfoDAOImpl implements ContactInfoDAO {
         try (Connection connection = DriverManager.getConnection(connectionData.URL, connectionData.USER, connectionData.PASSWORD)) {
             return getContactInfoById(id, connection);
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
             log.error("Bad request for ID {}: {}", id, e.getMessage(), e);
+            throw new DataProcessingException(e);
         }
-        return null;
     }
 
     private ContactInfoDTO getContactInfoById(int id, Connection connection) {
@@ -89,6 +91,7 @@ public class ContactInfoDAOImpl implements ContactInfoDAO {
 
         } catch (Exception e) {
             log.error("Bad request for ID {}: {}", id, e.getMessage(), e);
+            throw new DataProcessingException(e);
         }
         return null;
     }

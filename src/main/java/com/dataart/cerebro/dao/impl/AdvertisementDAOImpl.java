@@ -5,6 +5,7 @@ import com.dataart.cerebro.dao.AdvertisementDAO;
 import com.dataart.cerebro.dao.CategoryDAO;
 import com.dataart.cerebro.dao.ContactInfoDAO;
 import com.dataart.cerebro.domain.*;
+import com.dataart.cerebro.exception.DataProcessingException;
 import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -50,8 +51,9 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
             preparedStatement.setInt(1, status.getId());
             preparedStatement.setInt(2, advertisement.getId());
             preparedStatement.executeUpdate();
-        } catch (Exception e) {
+        } catch (SQLException e) {
             log.error(BAD_REQUEST, id, e.getMessage(), e);
+            throw new DataProcessingException(e);
         }
     }
 
@@ -74,8 +76,9 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
             if (resultSet.next()) {
                 return createAdvertisementDTO(resultSet);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             log.error(BAD_REQUEST, id, e.getMessage(), e);
+            throw new DataProcessingException(e);
         }
         return null;
     }
@@ -91,8 +94,9 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
             if (resultSet.next()) {
                 return resultSet.getBytes("image");
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             log.error(BAD_REQUEST, id, e.getMessage(), e);
+            throw new DataProcessingException(e);
         }
         return new byte[0];
     }
@@ -129,9 +133,11 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
             } catch (Exception e) {
                 connection.rollback();
                 log.error("Runtime exception: {}", e.getMessage(), e);
+                throw new DataProcessingException(e);
             }
         } catch (SQLException e) {
-            log.error("Bad request; {}", e.getMessage(), e);
+            log.error("Bad request: {}", e.getMessage(), e);
+            throw new DataProcessingException(e);
         }
     }
 
@@ -176,7 +182,7 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
             log.info("Result is received");
         } catch (SQLException e) {
             log.error("Bad request; {}", e.getMessage(), e);
-            throw new RuntimeException(e);
+            throw new DataProcessingException(e);
         }
         return advertisementList;
     }

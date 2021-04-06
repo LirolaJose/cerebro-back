@@ -3,6 +3,7 @@ package com.dataart.cerebro.dao.impl;
 import com.dataart.cerebro.configuration.ConnectionData;
 import com.dataart.cerebro.dao.ServiceDAO;
 import com.dataart.cerebro.domain.ServiceDTO;
+import com.dataart.cerebro.exception.DataProcessingException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
@@ -52,6 +53,7 @@ public class ServiceDAOImpl implements ServiceDAO {
                 }
             } catch (SQLException e) {
                 log.info("Bad request; {}", e.getMessage(), e);
+                throw new DataProcessingException(e);
             }
         }
         log.info("The order without additional services");
@@ -79,7 +81,7 @@ public class ServiceDAOImpl implements ServiceDAO {
             }
         } catch (SQLException e) {
             log.error("Bad request {}", e.getMessage(), e);
-            throw new RuntimeException(e);
+            throw new DataProcessingException(e);
         }
         log.info("Result is received");
         return servicesSet;

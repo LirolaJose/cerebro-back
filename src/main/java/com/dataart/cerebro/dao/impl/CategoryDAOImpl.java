@@ -5,6 +5,7 @@ import com.dataart.cerebro.dao.CategoryDAO;
 import com.dataart.cerebro.dao.ServiceDAO;
 import com.dataart.cerebro.domain.CategoryDTO;
 import com.dataart.cerebro.domain.ServiceDTO;
+import com.dataart.cerebro.exception.DataProcessingException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
@@ -37,6 +38,7 @@ public class CategoryDAOImpl implements CategoryDAO {
             }
         } catch (SQLException e) {
             log.error("Bad request for ID {}: {}", categoryId, e.getMessage(), e);
+            throw new DataProcessingException(e);
         }
         return null;
     }
@@ -54,7 +56,8 @@ public class CategoryDAOImpl implements CategoryDAO {
                 categorySet.add(createCategoryDTO(resultSet));
             }
         } catch (SQLException e) {
-            log.error("Bad request");
+            log.error("Bad request: {}", e.getMessage(), e);
+            throw new DataProcessingException(e);
         }
         log.info("Result is received");
         return categorySet;

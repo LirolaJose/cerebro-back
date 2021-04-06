@@ -6,6 +6,7 @@ import com.dataart.cerebro.dao.AdvertisementDAO;
 import com.dataart.cerebro.dao.ContactInfoDAO;
 import com.dataart.cerebro.dao.ServiceDAO;
 import com.dataart.cerebro.domain.*;
+import com.dataart.cerebro.exception.DataProcessingException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
@@ -64,9 +65,11 @@ public class AdOrderDAOImpl implements AdOrderDAO {
             } catch (Exception e) {
                 connection.rollback();
                 log.error("Runtime exception: {}", e.getMessage(), e);
+                throw new DataProcessingException(e);
             }
         } catch (SQLException e) {
             log.error("Bad request: {}", e.getMessage(), e);
+            throw new DataProcessingException(e);
         }
         return null;
     }
@@ -83,6 +86,7 @@ public class AdOrderDAOImpl implements AdOrderDAO {
             }
         } catch (Exception e) {
             log.error("Bad request: {}", e.getMessage(), e);
+            throw new DataProcessingException(e);
         }
         return null;
 
@@ -106,7 +110,7 @@ public class AdOrderDAOImpl implements AdOrderDAO {
         return adOrder;
     }
 
-    private void setOrderServices(int orderId, Set<ServiceDTO> servicesSet, Connection connection) throws SQLException {
+    private void setOrderServices(int orderId, Set<ServiceDTO> servicesSet, Connection connection) {
         String sqlInsert = "INSERT INTO  services_of_order (services_id, adorder_id) VALUES (?, ?);";
         try (PreparedStatement prStatement = connection.prepareStatement(sqlInsert)) {
             for (ServiceDTO serviceDTO : servicesSet) {
@@ -114,6 +118,9 @@ public class AdOrderDAOImpl implements AdOrderDAO {
                 prStatement.setInt(2, orderId);
                 prStatement.executeUpdate();
             }
+        } catch (SQLException e) {
+            log.error("Bad request: {}", e.getMessage(), e);
+            throw new DataProcessingException(e);
         }
     }
 }
