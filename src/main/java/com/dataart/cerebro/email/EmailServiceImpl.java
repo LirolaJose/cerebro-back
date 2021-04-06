@@ -1,9 +1,9 @@
 package com.dataart.cerebro.email;
 
-import com.dataart.cerebro.dto.AdOrderDTO;
-import com.dataart.cerebro.dto.AdvertisementDTO;
-import com.dataart.cerebro.dto.ContactInfoDTO;
-import com.dataart.cerebro.dto.ServiceDTO;
+import com.dataart.cerebro.domain.AdOrderDTO;
+import com.dataart.cerebro.domain.AdvertisementDTO;
+import com.dataart.cerebro.domain.ContactInfoDTO;
+import com.dataart.cerebro.domain.ServiceDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
@@ -24,17 +24,25 @@ public class EmailServiceImpl implements EmailService {
     @Value("${spring.data.rest.page-param-name}")
     private String url;
 
+    private static final String SIGNATURE = "CEREBRO: \n +7 (222) 555-77-99 \n lirolaboard@gmail.com";
+
 
     public EmailServiceImpl(JavaMailSender emailSender) {
         this.emailSender = emailSender;
     }
 
     @Override
-    public void sendEmailAboutPublication(String title, String text, String email) {
+    public void sendEmailAboutPublication(AdvertisementDTO advertisement, ContactInfoDTO contactInfo) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
+        String email = contactInfo.getEmail();
+        StringBuilder text = new StringBuilder();
+
         mailMessage.setTo(email);
         mailMessage.setSubject("Your advertisement is added");
-        mailMessage.setText(title + "\n" + text);
+        text.append(advertisement.getTitle()).append("\n")
+                .append(advertisement.getText()).append("\n \n")
+                .append(SIGNATURE);
+        mailMessage.setText(text.toString());
         emailSender.send(mailMessage);
         log.info("Email about publication is sent to {}", email);
     }
@@ -53,7 +61,8 @@ public class EmailServiceImpl implements EmailService {
             int number = 1;
             for (AdvertisementDTO advertisementDTO : advertisementsList) {
                 text.append(number++).append(". ").append(url).append(advertisementDTO.getId()).append(" will be closed ")
-                        .append(advertisementDTO.getEndTime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm"))).append("\n");
+                        .append(advertisementDTO.getEndTime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm"))).append("\n \n")
+                        .append(SIGNATURE);
             }
             mailMessage.setText(text.toString());
             emailSender.send(mailMessage);
@@ -75,7 +84,8 @@ public class EmailServiceImpl implements EmailService {
                     .append("your advertisement(s): \n");
             int number = 1;
             for (AdvertisementDTO advertisementDTO : advertisementsList) {
-                text.append(number++).append(". ").append(url).append(advertisementDTO.getId()).append(" is closed ").append("\n");
+                text.append(number++).append(". ").append(url).append(advertisementDTO.getId()).append(" is closed ").append("\n \n")
+                        .append(SIGNATURE);
             }
             mailMessage.setText(text.toString());
             emailSender.send(mailMessage);
@@ -101,10 +111,9 @@ public class EmailServiceImpl implements EmailService {
         if (!servicesSet.isEmpty()) {
             text.append(" (additional services: ").append(services).append(")").append("\n");
         }
-        text.append("\n \n").append("CEREBRO:").append("\n")
-                .append("if you haven't made this purchase, call or email us").append("\n \n")
-                .append("+7 (222) 555-77-99").append("\n")
-                .append("lirolaboard@gmail.com");
+        text.append("\n \n").append("If you haven't made this purchase, call or email us").append("\n \n")
+                .append(SIGNATURE);
+
         mailMessage.setText(text.toString());
         emailSender.send(mailMessage);
         log.info("Email is sent to {}", customer.getEmail());
@@ -132,10 +141,9 @@ public class EmailServiceImpl implements EmailService {
             text.append("Additional services were ordered: ").append(services).append("\n");
         }
         text.append("Contact information: ").append("tel: ").append(customer.getPhone())
-                .append(", email: ").append(customer.getEmail()).append("\n")
-                .append("\n \n").append("CEREBRO:").append("\n")
-                .append("+7 (222) 555-77-99").append("\n")
-                .append("lirolaboard@gmail.com");
+                .append(", email: ").append(customer.getEmail()).append("\n \n")
+                .append(SIGNATURE);
+
         mailMessage.setText(text.toString());
         emailSender.send(mailMessage);
         log.info("Email is sent to {}", customer.getEmail());

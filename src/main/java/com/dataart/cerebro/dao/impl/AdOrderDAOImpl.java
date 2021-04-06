@@ -5,7 +5,7 @@ import com.dataart.cerebro.dao.AdOrderDAO;
 import com.dataart.cerebro.dao.AdvertisementDAO;
 import com.dataart.cerebro.dao.ContactInfoDAO;
 import com.dataart.cerebro.dao.ServiceDAO;
-import com.dataart.cerebro.dto.*;
+import com.dataart.cerebro.domain.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
@@ -45,16 +45,14 @@ public class AdOrderDAOImpl implements AdOrderDAO {
                 preparedStatement.setInt(3, advertisement.getId());
                 preparedStatement.setInt(4, contactInfoInitial.getId());
                 preparedStatement.executeUpdate();
-                ResultSet resultSet = preparedStatement.getGeneratedKeys();
 
+                ResultSet resultSet = preparedStatement.getGeneratedKeys();
                 if (resultSet.next()) {
                     int lastInsertedId = resultSet.getInt(1);
                     Set<ServiceDTO> servicesSet = adOrder.getServicesSet();
 
                     setOrderServices(lastInsertedId, servicesSet, connection);
-
-
-                    advertisementDAO.updateAdvertisementStatus(StatusDTO.SOLD.getId(), advertisement);
+                    advertisementDAO.updateAdvertisementStatus(advertisement, Status.SOLD);
                     connection.commit();
                     log.info("New order is added to data base");
                     return getAdOrderById(lastInsertedId);
@@ -65,16 +63,15 @@ public class AdOrderDAOImpl implements AdOrderDAO {
 
             } catch (Exception e) {
                 connection.rollback();
-                log.error("Runtime exception: {}", e.getMessage());
+                log.error("Runtime exception: {}", e.getMessage(), e);
             }
         } catch (SQLException e) {
-            log.error("Bad request: {}", e.getMessage());
+            log.error("Bad request: {}", e.getMessage(), e);
         }
         return null;
     }
 
-    @Override
-    public AdOrderDTO getAdOrderById(int id) {
+    private AdOrderDTO getAdOrderById(int id) {
         String sql = "SELECT * FROM adorder WHERE id = ?;";
 
         try (Connection connection = DriverManager.getConnection(connectionData.URL, connectionData.USER, connectionData.PASSWORD);
@@ -85,7 +82,7 @@ public class AdOrderDAOImpl implements AdOrderDAO {
                 return createAdOrder(resultSet);
             }
         } catch (Exception e) {
-            log.error("Bad request: {}", e.getMessage());
+            log.error("Bad request: {}", e.getMessage(), e);
         }
         return null;
 
@@ -109,12 +106,12 @@ public class AdOrderDAOImpl implements AdOrderDAO {
         return adOrder;
     }
 
-    private void setOrderServices(int lastInsertedId, Set<ServiceDTO> servicesSet, Connection connection) throws SQLException {
+    private void setOrderServices(int orderId, Set<ServiceDTO> servicesSet, Connection connection) throws SQLException {
         String sqlInsert = "INSERT INTO  services_of_order (services_id, adorder_id) VALUES (?, ?);";
         try (PreparedStatement prStatement = connection.prepareStatement(sqlInsert)) {
             for (ServiceDTO serviceDTO : servicesSet) {
                 prStatement.setInt(1, serviceDTO.getId());
-                prStatement.setInt(2, lastInsertedId);
+                prStatement.setInt(2, orderId);
                 prStatement.executeUpdate();
             }
         }

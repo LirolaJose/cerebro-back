@@ -1,4 +1,4 @@
-package com.dataart.cerebro.dto;
+package com.dataart.cerebro.domain;
 
 import lombok.Data;
 

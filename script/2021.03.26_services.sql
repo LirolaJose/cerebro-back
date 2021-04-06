@@ -1,8 +1,5 @@
 ALTER TABLE service ALTER COLUMN  price DROP NOT NULL ;
 
-insert into category (name)
-VALUES ('personal things');
-
 INSERT INTO service  (name)
 VALUES ('Delivery'),
        ('Packing'),

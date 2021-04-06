@@ -1,7 +1,7 @@
 package com.dataart.cerebro.controller;
 
 import com.dataart.cerebro.dao.ServiceDAO;
-import com.dataart.cerebro.dto.ServiceDTO;
+import com.dataart.cerebro.domain.ServiceDTO;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;

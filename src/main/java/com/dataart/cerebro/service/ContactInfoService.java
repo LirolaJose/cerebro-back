@@ -1,6 +1,6 @@
 package com.dataart.cerebro.service;
 
-import com.dataart.cerebro.dto.ContactInfoDTO;
+import com.dataart.cerebro.domain.ContactInfoDTO;
 
 import java.util.List;
 

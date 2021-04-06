@@ -1,7 +1,8 @@
 package com.dataart.cerebro.service.impl;
 
 import com.dataart.cerebro.dao.CategoryDAO;
-import com.dataart.cerebro.dto.CategoryDTO;
+import com.dataart.cerebro.domain.CategoryDTO;
+import com.dataart.cerebro.exception.NotFoundException;
 import com.dataart.cerebro.service.CategoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -22,7 +23,12 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryDTO getCategoryById(Integer categoryId) {
-        return categoryDAO.getCategoryById(categoryId);
+    public CategoryDTO getCategoryById(Integer id) {
+        CategoryDTO category = categoryDAO.getCategoryById(id);
+        if (category == null) {
+            log.info("Bad request for ID({}), this id doesn't exist", id);
+            throw new NotFoundException("Category", id);
+        }
+        return category;
     }
 }

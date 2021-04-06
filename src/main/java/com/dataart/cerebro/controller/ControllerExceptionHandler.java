@@ -1,7 +1,7 @@
 package com.dataart.cerebro.controller;
 
-import com.dataart.cerebro.exception.AdvertisementNotFoundException;
-import com.dataart.cerebro.exception.ContactInfoNullPointerException;
+import com.dataart.cerebro.exception.NotFoundException;
+import com.dataart.cerebro.exception.ValidationException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -11,16 +11,22 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
     private static final String MESSAGE = "message";
 
-    @ExceptionHandler(AdvertisementNotFoundException.class)
+    @ExceptionHandler(NotFoundException.class)
     public String handleNotFoundException(Exception e, Model model) {
         model.addAttribute(MESSAGE, e.getMessage());
         return "exception";
     }
 
-    @ExceptionHandler(ContactInfoNullPointerException.class)
-    public String handleNullPointerException(Exception e, Model model) {
-        model.addAttribute(MESSAGE, e.getMessage());
-        return "contactInfoException";
+    @ExceptionHandler(ValidationException.class)
+    public String handleValidationException(Exception e, Model model) {
+        model.addAttribute(MESSAGE, "Validation exception: " + e.getMessage());
+        return "exception";
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    public String handleRuntimeException(Exception e, Model model) {
+        model.addAttribute(MESSAGE, "Unexpected exception: " + e.getMessage());
+        return "exception";
     }
 }
 

@@ -1,9 +1,8 @@
 package com.dataart.cerebro.service;
 
-import com.dataart.cerebro.dto.AdvertisementDTO;
-import com.dataart.cerebro.dto.ContactInfoDTO;
+import com.dataart.cerebro.domain.AdvertisementDTO;
+import com.dataart.cerebro.domain.ContactInfoDTO;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public interface AdvertisementService {

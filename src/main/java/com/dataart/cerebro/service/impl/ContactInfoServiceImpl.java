@@ -1,7 +1,7 @@
 package com.dataart.cerebro.service.impl;
 
 import com.dataart.cerebro.dao.ContactInfoDAO;
-import com.dataart.cerebro.dto.ContactInfoDTO;
+import com.dataart.cerebro.domain.ContactInfoDTO;
 import com.dataart.cerebro.service.ContactInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
