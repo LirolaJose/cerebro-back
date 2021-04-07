@@ -14,18 +14,21 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(NotFoundException.class)
     public String handleNotFoundException(Exception e, Model model) {
         model.addAttribute(MESSAGE, e.getMessage());
+        model.addAttribute("title", "Your request is not found:");
         return "exception";
     }
 
     @ExceptionHandler(ValidationException.class)
     public String handleValidationException(Exception e, Model model) {
         model.addAttribute(MESSAGE, "Validation exception: " + e.getMessage());
+        model.addAttribute("title", "Fill the all required fields");
         return "exception";
     }
 
     @ExceptionHandler(RuntimeException.class)
     public String handleRuntimeException(Exception e, Model model) {
         model.addAttribute(MESSAGE, "Unexpected exception: " + e.getMessage());
+        model.addAttribute("title", "Something wrong:");
         return "exception";
     }
 }

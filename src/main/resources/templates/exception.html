@@ -5,7 +5,7 @@
     <title>Error!</title>
 </head>
 <body>
-<h2>Fill the all required fields</h2>
+<h2 th:text="${title}"></h2>
 <h2 th:text="${message}"></h2>
 <div>  <a th:href="@{/advertisementsList}"> Return to homepage </a> </div>
 </body>

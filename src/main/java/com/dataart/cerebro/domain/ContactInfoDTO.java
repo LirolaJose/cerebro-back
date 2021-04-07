@@ -10,6 +10,7 @@ import javax.validation.constraints.Size;
 @Data
 public class ContactInfoDTO {
     private Integer id;
+    @NotEmpty
     @Size(max = 100)
     private String name;
 

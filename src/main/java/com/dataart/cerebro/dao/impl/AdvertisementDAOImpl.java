@@ -6,7 +6,6 @@ import com.dataart.cerebro.dao.CategoryDAO;
 import com.dataart.cerebro.dao.ContactInfoDAO;
 import com.dataart.cerebro.domain.*;
 import com.dataart.cerebro.exception.DataProcessingException;
-import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
@@ -45,11 +44,11 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
     public void updateAdvertisementStatus(AdvertisementDTO advertisement, Status status) {
         String sql = "UPDATE advertisement SET status_id = ? WHERE id = ?;";
         int id = advertisement.getId();
-        log.info("Updating status of advertisement (id = {}) from {} to {}", id, advertisement.getStatus(), Status.CLOSED);
+        log.info("Updating status of advertisement (id = {}) from {} to {}", id, advertisement.getStatus(), status);
         try (Connection connection = DriverManager.getConnection(connectionData.URL, connectionData.USER, connectionData.PASSWORD);
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, status.getId());
-            preparedStatement.setInt(2, advertisement.getId());
+            preparedStatement.setInt(2, id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             log.error(BAD_REQUEST, id, e.getMessage(), e);
@@ -66,7 +65,6 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
     @Override
     public AdvertisementDTO getAdvertisementById(int id) {
         String sql = "SELECT * FROM advertisement WHERE id = ?;";
-        log.info("Connecting to Data Base and sending request");
         log.info("Sending request: get advertisement by id {}", id);
 
         try (Connection connection = DriverManager.getConnection(connectionData.URL, connectionData.USER, connectionData.PASSWORD);
@@ -105,6 +103,8 @@ public class AdvertisementDAOImpl implements AdvertisementDAO {
     public void addAdvertisement(String title, String text, Double price, String address, byte[] image,
                                  LocalDateTime publicationTime, LocalDateTime endTime,
                                  CategoryDTO category, Type type, Status status, ContactInfoDTO contactInfo) {
+        log.info("Creating new advertisement, parameters: title: {}, text: {}, price: {}, address: {}, category: {},type: {}",
+                title, text, price, address, category.getName(), type.getName());
 
         String sql = "INSERT INTO advertisement " +
                 "(title, text, price, address, image, publication_time, end_time, category_id, type_id, status_id, owner_id)" +

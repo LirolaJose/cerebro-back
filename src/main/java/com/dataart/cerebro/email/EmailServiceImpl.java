@@ -69,12 +69,13 @@ public class EmailServiceImpl implements EmailService {
                 int number = 1;
                 for (AdvertisementDTO advertisementDTO : advertisementsList) {
                     text.append(number++).append(". ").append(url).append(advertisementDTO.getId()).append(" will be closed ")
-                            .append(advertisementDTO.getEndTime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm"))).append("\n \n")
-                            .append(SIGNATURE);
+                            .append(advertisementDTO.getEndTime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm"))).append("\n \n");
+
                 }
+                text.append(SIGNATURE);
                 mailMessage.setText(text.toString());
                 emailSender.send(mailMessage);
-                log.info("Email is sent to {} at {}", email, LocalDateTime.now());
+                log.info("Email about expiring is sent to {} at {}", email, LocalDateTime.now());
             }
             ));
         });
@@ -95,12 +96,12 @@ public class EmailServiceImpl implements EmailService {
                         .append("your advertisement(s): \n");
                 int number = 1;
                 for (AdvertisementDTO advertisementDTO : advertisementsList) {
-                    text.append(number++).append(". ").append(url).append(advertisementDTO.getId()).append(" is closed ").append("\n \n")
-                            .append(SIGNATURE);
+                    text.append(number++).append(". ").append(url).append(advertisementDTO.getId()).append(" is closed ").append("\n \n");
                 }
+                text.append(SIGNATURE);
                 mailMessage.setText(text.toString());
                 emailSender.send(mailMessage);
-                log.info("Email is sent to {} at {}", email, LocalDateTime.now());
+                log.info("Email about expired is sent to {} at {}", email, LocalDateTime.now());
             }));
         });
     }
@@ -108,32 +109,32 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public void sendEmailAboutPurchase(AdvertisementDTO advertisement, ContactInfoDTO customer, AdOrderDTO adOrder) {
         executor.execute(() -> {
-                log.info("Sending email about purchase is started at {}", LocalDateTime.now());
-                SimpleMailMessage mailMessage = new SimpleMailMessage();
-                Set<ServiceDTO> servicesSet = adOrder.getServicesSet();
+            log.info("Sending email about purchase is started at {}", LocalDateTime.now());
+            SimpleMailMessage mailMessage = new SimpleMailMessage();
+            Set<ServiceDTO> servicesSet = adOrder.getServicesSet();
 
-                String services = servicesSet.stream()
-                        .map(serviceDTO -> serviceDTO.getName() + ": " + serviceDTO.getPrice())
-                        .collect(Collectors.joining(", "));
+            String services = servicesSet.stream()
+                    .map(serviceDTO -> serviceDTO.getName() + ": " + serviceDTO.getPrice())
+                    .collect(Collectors.joining(", "));
 
-                mailMessage.setTo(customer.getEmail());
-                mailMessage.setSubject("You have done a purchase on \"CEREBRO\"");
-                StringBuilder text = new StringBuilder();
+            mailMessage.setTo(customer.getEmail());
+            mailMessage.setSubject("You have done a purchase on \"CEREBRO\"");
+            StringBuilder text = new StringBuilder();
 
-                text.append("Dear ").append(customer.getName()).append(",\n")
-                        .append("You have done a purchase ").append(url).append(advertisement.getId()).append("\n")
-                        .append("Total price: ").append(adOrder.getTotalPrice());
-                if (!servicesSet.isEmpty()) {
-                    text.append(" (additional services: ").append(services).append(")").append("\n");
-                }
-                text.append("\n \n").append("If you haven't made this purchase, call or email us").append("\n \n")
-                        .append(SIGNATURE);
+            text.append("Dear ").append(customer.getName()).append(",\n")
+                    .append("You have done a purchase ").append(url).append(advertisement.getId()).append("\n")
+                    .append("Total price: ").append(adOrder.getTotalPrice());
+            if (!servicesSet.isEmpty()) {
+                text.append(" (additional services: ").append(services).append(")").append("\n");
+            }
+            text.append("\n").append("If you haven't made this purchase, call or email us").append("\n \n")
+                    .append(SIGNATURE);
 
-                mailMessage.setText(text.toString());
-                emailSender.send(mailMessage);
-                log.info("Email is sent to {} at {}", customer.getEmail(), LocalDateTime.now());
-            });
-        }
+            mailMessage.setText(text.toString());
+            emailSender.send(mailMessage);
+            log.info("Email about purchase is sent to {} at {}", customer.getEmail(), LocalDateTime.now());
+        });
+    }
 
     @Override
     public void sendEmailAboutSell(AdvertisementDTO advertisement, ContactInfoDTO customer, AdOrderDTO adOrder) {
@@ -164,7 +165,7 @@ public class EmailServiceImpl implements EmailService {
 
             mailMessage.setText(text.toString());
             emailSender.send(mailMessage);
-            log.info("Email is sent to {} at {}", customer.getEmail(), LocalDateTime.now());
+            log.info("Email about sell is sent to {} at {}", customer.getEmail(), LocalDateTime.now());
         });
     }
 }

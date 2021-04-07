@@ -77,10 +77,6 @@ public class AdvertisementController {
         }
         byte[] image = file.getBytes();
 
-        log.info("Creating new Advertisement, parameters: title: {}, text: {}, price: {}, address: {}, category: {}," +
-                        "type: {}", advertisement.getTitle(), advertisement.getText(), advertisement.getPrice(),
-                advertisement.getAddress(), advertisement.getCategory().getId(), advertisement.getType().getId());
-
         advertisementService.addAdvertisement(advertisement, contactInfo, image);
         return "redirect:/advertisementsList";
     }

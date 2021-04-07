@@ -36,11 +36,10 @@ public class ScheduledEmailTasks {
         if (!emailAndAds.isEmpty()) {
             emailService.sendEmailAboutExpiring(emailAndAds);
         }
-        log.info("Search expiring ads is finished. Letter was sent to {} addresses", emailAndAds.size());
+        log.info("Search expiring advertisement is finished. Letter was sent to {} addresses", emailAndAds.size());
     }
 
-    @Scheduled(cron = "00 12 12 * * ?") // At 12:12:00 AM every day
-//    @Scheduled (fixedRate = 10000)
+    @Scheduled(cron = "00 05 12 * * ?") // At 12:05:00 AM every day
     public void findExpiredAdvertisements() {
         log.info("Search for expired advertisement launched at {}", LocalDateTime.now());
         List<AdvertisementDTO> advertisementsList = advertisementDAO.getExpiredAdvertisements();
@@ -53,7 +52,7 @@ public class ScheduledEmailTasks {
         if (!emailAndAds.isEmpty()) {
             emailService.sendEmailAboutExpired(emailAndAds);
         }
-        log.info("Search expired ads is finished. Letter was sent to {} addresses", emailAndAds.size());
+        log.info("Search expired advertisement is finished. Letter was sent to {} addresses", emailAndAds.size());
     }
 }
 
