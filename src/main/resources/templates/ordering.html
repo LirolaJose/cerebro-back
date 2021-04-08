@@ -30,6 +30,10 @@
         tr:hover td {
             color: #6699ff;
         }
+        .required-field::before {
+            content: "*";
+            color: red;
+        }
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
@@ -80,9 +84,9 @@
     <p> Total price: <input type="text" id="total" readonly></p>
     </p>
 
-    <p>Name: <input type="text" th:field="${customer.name}"/></p>
-    <p>Phone: <input type="text" th:field="${customer.phone}"/></p>
-    <p>Email: <input type="text" th:field="${customer.email}"/></p>
+    <p>Name <span class="required-field"/> <input type="text" th:field="${customer.name}"/></p>
+    <p>Phone <span class="required-field"/> <input type="text" th:field="${customer.phone}"/></p>
+    <p>Email <span class="required-field"/> <input type="text" th:field="${customer.email}"/></p>
     <p><input type="submit" value="Confirm the order"/>
 </form>
 </body>

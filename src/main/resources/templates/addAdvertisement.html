@@ -12,6 +12,11 @@
             -moz-box-sizing: border-box; /* For legacy (Firefox <29) Gecko based browsers */
             box-sizing: border-box;
         }
+
+        .required-field::before {
+            content: "*";
+            color: red;
+        }
     </style>
 </head>
 <body>
@@ -19,15 +24,15 @@
 <div><a th:href="@{/advertisementsList}"> Back to all advertisements </a></div>
 
 <form th:action="@{/addAdvertisement}" enctype="multipart/form-data" th:object="${advertisement}" method="post">
-    <p>Title: <input type="text" th:field="*{title}"/></p>
-    <p>Text: <textarea id="text" name="text" placeholder="Write a description" th:field="*{text}"
+    <p>Title <span class="required-field"/> <input type="text" th:field="*{title}"/></p>
+    <p>Text <textarea id="text" name="text" placeholder="Write a description" th:field="*{text}"
                        style="height:75px"></textarea></p>
-    <p>Price: <input type="text" th:field="*{price}"/></p>
-    <p>Address: <input type="text" th:field="*{address}"/></p>
+    <p>Price <span class="required-field"/> <input type="text" th:field="*{price}"/></p>
+    <p>Address <input type="text" th:field="*{address}"/></p>
 
-    <p>Image: <input type="file" name="file"></p>
+    <p>Image <input type="file" name="file"></p>
 
-    <p>Category:
+    <p>Category
         <select id="categorySelect" th:field="*{category.id}">
             <option th:each="category : ${categorySet}"
                     th:value="${category.id}"
@@ -35,16 +40,16 @@
         </select>
     </p>
 
-    <p>Type:
+    <p>Type
         <select th:field="*{type}">
             <option th:each="type : ${typeEnum}"
                     th:value="${type}"
                     th:text="${type}"></option>
         </select></p>
 
-    <p>Name: <input type="text" th:field="${contactInfo.name}"/></p>
-    <p>Phone: <input type="text" th:field="${contactInfo.phone}"/></p>
-    <p>Email: <input type="text" th:field="${contactInfo.email}"/></p>
+    <p>Name <span class="required-field"/> <input type="text" th:field="${contactInfo.name}"/></p>
+    <p>Phone <span class="required-field"/> <input type="text" th:field="${contactInfo.phone}"/></p>
+    <p>Email <span class="required-field"/> <input type="text" th:field="${contactInfo.email}"/></p>
 
     <p><input type="submit" value="Submit"/> <input type="reset" value="Reset"/></p>
 </form>
