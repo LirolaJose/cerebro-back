@@ -28,10 +28,10 @@ public class AdOrderServiceTest {
         ContactInfoDTO customerInfoMock = mock(ContactInfoDTO.class);
         AdOrderService adOrderService = new AdOrderServiceImpl(adOrderDAOMock, emailServiceMock, serviceDAOMock);
 
+        AdOrderDTO adOrder = new AdOrderDTO();
         AdvertisementDTO ad = new AdvertisementDTO();
         ad.setPrice(20.0);
-        AdOrderDTO adOrderDTO = new AdOrderDTO();
-        adOrderDTO.setAdvertisement(ad);
+        adOrder.setAdvertisement(ad);
 
         AdOrderDTO exceptedOrder = new AdOrderDTO();
         AdvertisementDTO ad1 = new AdvertisementDTO();
@@ -41,7 +41,7 @@ public class AdOrderServiceTest {
         when(adOrderDAOMock.addAdOrder(any(), any(), any(), any())).thenReturn(exceptedOrder);
 
         //when
-        adOrderService.addAdOrder(adOrderDTO, ad, customerInfoMock);
+        adOrderService.addAdOrder(adOrder, ad, customerInfoMock);
 
         //then
         verify(emailServiceMock, times(1)).sendEmailAboutPurchase(ad, customerInfoMock, exceptedOrder);

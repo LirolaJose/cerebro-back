@@ -4,7 +4,6 @@ import lombok.Data;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Data
@@ -20,6 +19,6 @@ public class ContactInfoDTO {
 
     @NotEmpty
     @Size(max = 100)
-    @Email (message = "Wrong email")
+    @Email(message = "Wrong email")
     private String email;
 }

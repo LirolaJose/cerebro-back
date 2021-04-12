@@ -36,27 +36,28 @@ public class ServiceDAOImpl implements ServiceDAO {
 
     @Override
     public Double getTotalPriceServices(Set<ServiceDTO> servicesSet) {
-        if (!servicesSet.isEmpty()) {
-            log.info("Calculating the total price of additional services");
-            String sql = "SELECT SUM(price) FROM service WHERE id IN %s;";
-
-            String sqlIN = servicesSet.stream()
-                    .map(ServiceDTO::getId)
-                    .map(String::valueOf)
-                    .collect(Collectors.joining(",", "(", ")"));
-
-            try (Connection connection = DriverManager.getConnection(connectionData.URL, connectionData.USER, connectionData.PASSWORD);
-                 PreparedStatement preparedStatement = connection.prepareStatement(String.format(sql, sqlIN))) {
-                ResultSet resultSet = preparedStatement.executeQuery();
-                if (resultSet.next()) {
-                    return resultSet.getDouble("sum");
-                }
-            } catch (SQLException e) {
-                log.info("Bad request; {}", e.getMessage(), e);
-                throw new DataProcessingException(e);
-            }
+        if (servicesSet.isEmpty()) {
+            log.info("The order without additional services");
+            return 0.0;
         }
-        log.info("The order without additional services");
+        log.info("Calculating the total price of additional services");
+        String sql = "SELECT SUM(price) FROM service WHERE id IN %s;";
+
+        String sqlIN = servicesSet.stream()
+                .map(ServiceDTO::getId)
+                .map(String::valueOf)
+                .collect(Collectors.joining(",", "(", ")"));
+
+        try (Connection connection = DriverManager.getConnection(connectionData.URL, connectionData.USER, connectionData.PASSWORD);
+             PreparedStatement preparedStatement = connection.prepareStatement(String.format(sql, sqlIN))) {
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getDouble("sum");
+            }
+        } catch (SQLException e) {
+            log.info("Bad request; {}", e.getMessage(), e);
+            throw new DataProcessingException(e);
+        }
         return 0.0;
     }
 
@@ -68,7 +69,7 @@ public class ServiceDAOImpl implements ServiceDAO {
         return service;
     }
 
-    private Set<ServiceDTO> getServicesSet(String sql, int id){
+    private Set<ServiceDTO> getServicesSet(String sql, int id) {
         Set<ServiceDTO> servicesSet = new HashSet<>();
         log.info("Sending request: {}", sql);
 

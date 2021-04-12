@@ -20,7 +20,7 @@ public class ImageController {
     }
 
     @GetMapping(value = "/image",
-            produces = MediaType.IMAGE_JPEG_VALUE)
+            produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
     public ResponseEntity<byte[]> getImage(@RequestParam int id) throws IOException {
         byte[] image = advertisementDAO.getImageByAdvertisementId(id);
         if (image == null || image.length == 0) {
@@ -29,7 +29,6 @@ public class ImageController {
         }
         return ResponseEntity
                 .ok()
-                .contentType(MediaType.IMAGE_JPEG)
                 .body(image);
     }
 }

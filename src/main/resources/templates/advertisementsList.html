@@ -37,7 +37,7 @@
 <table class="table table-striped">
     <caption>ADVERTISEMENTS</caption>
     <tr>
-        <th>Id</th>
+        <th>№</th>
         <th>Title</th>
         <th>Text</th>
         <th>Price</th>
@@ -57,8 +57,8 @@
         <td th:text="${ad.price}" ></td>
         <td><img th:src="@{/image(id=${ad.id})}" alt="Image not load"/></td>
         <td th:text="${ad.address}"></td>
-        <td th:text="${#temporals.format(ad.publicationTime, 'dd-MM-yyyy HH:mm')}"></td>
-        <td th:text="${#temporals.format(ad.endTime, 'dd-MM-yyyy HH:mm')}"></td>
+        <td th:text="${#temporals.format(ad.publicationTime, 'dd-MM-yyyy')}"></td>
+        <td th:text="${#temporals.format(ad.endTime, 'dd-MM-yyyy')}"></td>
         <td th:text="${ad.category.name}"></td>
         <td th:text="${ad.type.name}"></td>
         <td th:text="${ad.status.name}"></td>

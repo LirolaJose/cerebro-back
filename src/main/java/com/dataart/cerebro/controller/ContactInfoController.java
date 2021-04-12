@@ -1,6 +1,5 @@
 package com.dataart.cerebro.controller;
 
-import com.dataart.cerebro.service.AdvertisementService;
 import com.dataart.cerebro.service.ContactInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;

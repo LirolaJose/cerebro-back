@@ -18,7 +18,7 @@ public class AdvertisementServiceTest {
     @Test
     void whenGetAllAdsThenAllAdsIsActive() {
         //given
-        AdvertisementService advertisementService = mock(AdvertisementService.class);
+        AdvertisementService advertisementServiceMock = mock(AdvertisementService.class);
         List<AdvertisementDTO> list = new ArrayList<>();
 
         AdvertisementDTO ad1 = new AdvertisementDTO();
@@ -28,10 +28,10 @@ public class AdvertisementServiceTest {
         list.add(ad1);
         list.add(ad2);
 
-        when(advertisementService.getAllActiveAdvertisements()).thenReturn(list);
+        when(advertisementServiceMock.getAllActiveAdvertisements()).thenReturn(list);
 
         //when
-        List<AdvertisementDTO> advertisementDTOList = advertisementService.getAllActiveAdvertisements();
+        List<AdvertisementDTO> advertisementDTOList = advertisementServiceMock.getAllActiveAdvertisements();
 
         //then
         advertisementDTOList.forEach(advertisementDTO -> assertEquals(Status.ACTIVE, advertisementDTO.getStatus()));

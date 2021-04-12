@@ -20,7 +20,7 @@ import static org.mockito.Mockito.*;
 public class ScheduledEmailTasksTest {
 
     @Test
-    void whenFindExpiringAdsThenGroupingByEmail() {
+    void whenScheduledSendingExpiringLettersThenProperGroupingByEmail() {
         //given
         AdvertisementDAO advertisementDAOMock = mock(AdvertisementDAO.class);
         EmailService emailServiceMock = mock(EmailService.class);
@@ -46,15 +46,16 @@ public class ScheduledEmailTasksTest {
         list.add(ad2);
         list.add(ad3);
 
+        when(advertisementDAOMock.getExpiringAdvertisements()).thenReturn(list);
+
+        //when
+        scheduledEmailTasks.findExpiringAdvertisements();
+
+        //then
         Map<String, List<AdvertisementDTO>> expectedMap = new HashMap<>();
         expectedMap.put("email1", List.of(ad1, ad3));
         expectedMap.put("email2", List.of(ad2));
 
-
-        when(advertisementDAOMock.getExpiringAdvertisements()).thenReturn(list);
-        //when
-        scheduledEmailTasks.findExpiringAdvertisements();
-        //then
         verify(emailServiceMock).sendEmailAboutExpiring(expectedMap);
     }
 }

@@ -34,7 +34,6 @@ public class ContactInfoDAOImpl implements ContactInfoDAO {
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
             if (resultSet.next()) {
                 int lastInsertedId = resultSet.getInt(1);
-                connection.commit();
                 log.info("New contact is added to data base");
                 return getContactInfoById(lastInsertedId, connection);
             } else {

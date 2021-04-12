@@ -28,12 +28,10 @@ import java.util.List;
 public class AdvertisementController {
     private final AdvertisementService advertisementService;
     private final CategoryService categoryService;
-    private final ServiceDAO serviceDAO;
 
-    public AdvertisementController(AdvertisementService advertisementService, CategoryService categoryService, ServiceDAO serviceDAO) {
+    public AdvertisementController(AdvertisementService advertisementService, CategoryService categoryService) {
         this.advertisementService = advertisementService;
         this.categoryService = categoryService;
-        this.serviceDAO = serviceDAO;
     }
 
 
@@ -55,7 +53,6 @@ public class AdvertisementController {
         model.addAttribute("categorySet", categoryService.getAllCategory());
         model.addAttribute("typeEnum", Type.values());
         model.addAttribute("contactInfo", new ContactInfoDTO());
-        model.addAttribute("serviceDAO", serviceDAO);
         return "addAdvertisement";
     }
 
