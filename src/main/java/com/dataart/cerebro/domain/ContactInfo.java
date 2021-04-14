@@ -1,14 +1,20 @@
 package com.dataart.cerebro.domain;
 
 import lombok.Data;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
+import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
-@Data
-public class ContactInfoDTO {
-    private Integer id;
+@Data@Entity
+@Table(name = "contact_info")
+public class ContactInfo {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     @NotEmpty
     @Size(max = 100)
     private String name;

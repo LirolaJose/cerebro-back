@@ -10,17 +10,17 @@ public class StatusTest {
 
     @Test
     void whenIdIs1ThenActiveStatusReturned() {
-        Status status = Status.getStatusDTOById(1);
+        Status status = Status.getStatusById(1L);
         assertEquals(Status.ACTIVE, status);
     }
 
     @Test
     void whenIdDoesNotExistThenThrowException() {
         //given
-        int id = 55;
+       Long id = 55L;
 
         Assertions.assertThrows(NotFoundException.class, () -> {
-            Status.getStatusDTOById(id);
+            Status.getStatusById(id);
         });
     }
 }

@@ -33,7 +33,7 @@
 <body>
 <h1>CEREBRO</h1>
 <br/><br/>
-<div><a th:href="@{/addAdvertisement}"> New advertisement </a></div>
+<div><a th:href="@{/addAdvertisement}"> New advertisementRepository </a></div>
 <table class="table table-striped">
     <caption>ADVERTISEMENTS</caption>
     <tr>
@@ -52,7 +52,7 @@
     </tr>
     <tr th:each="ad : ${advertisementsList}">
         <td th:text="${ad.id}"></td>
-        <td> <a th:href="@{/advertisement(id=${ad.id})}"> <span th:text="${ad.title}"></span> </a></td>
+        <td> <a th:href="@{/advertisementRepository(id=${ad.id})}"> <span th:text="${ad.title}"></span> </a></td>
         <td th:text="${ad.text}"></td>
         <td th:text="${ad.price}" ></td>
         <td><img th:src="@{/image(id=${ad.id})}" alt="Image not load"/></td>

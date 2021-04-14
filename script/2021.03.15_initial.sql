@@ -91,12 +91,12 @@ ALTER TABLE Services_of_category
     ADD FOREIGN KEY (category_id) REFERENCES Category (id);
 
 ALTER TABLE Services_of_category
-    ADD FOREIGN KEY (services_id) REFERENCES Service (id);
+    ADD FOREIGN KEY (service_id) REFERENCES Service (id);
 
 ALTER TABLE Services_of_order
     ADD FOREIGN KEY (adOrder_id) REFERENCES AdOrder (id);
 
 ALTER TABLE Services_of_order
-    ADD FOREIGN KEY (services_id) REFERENCES Service (id);
+    ADD FOREIGN KEY (service_id) REFERENCES Service (id);
 
 

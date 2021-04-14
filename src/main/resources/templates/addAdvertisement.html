@@ -23,7 +23,7 @@
 <h1>Advertisement form</h1>
 <div><a th:href="@{/advertisementsList}"> Back to all advertisements </a></div>
 
-<form th:action="@{/addAdvertisement}" enctype="multipart/form-data" th:object="${advertisement}" method="post">
+<form th:action="@{/addAdvertisement}" enctype="multipart/form-data" th:object="${advertisementRepository}" method="post">
     <p>Title <span class="required-field"/> <input type="text" th:field="*{title}"/></p>
     <p>Text <textarea id="text" name="text" placeholder="Write a description" th:field="*{text}"
                        style="height:75px"></textarea></p>

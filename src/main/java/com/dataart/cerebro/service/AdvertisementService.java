@@ -1,14 +1,19 @@
 package com.dataart.cerebro.service;
 
-import com.dataart.cerebro.domain.AdvertisementDTO;
-import com.dataart.cerebro.domain.ContactInfoDTO;
+import com.dataart.cerebro.domain.Advertisement;
+import com.dataart.cerebro.domain.ContactInfo;
+import com.dataart.cerebro.domain.Status;
 
 import java.util.List;
 
 public interface AdvertisementService {
-    List<AdvertisementDTO> getAllActiveAdvertisements();
+    List<Advertisement> findAllAdvertisements();
 
-    AdvertisementDTO getAdvertisementById(Integer id);
+    List<Advertisement> findActiveAdvertisements();
 
-    void addAdvertisement(AdvertisementDTO advertisement, ContactInfoDTO contactInfo, byte[] image);
+    List<Advertisement> getAllActiveAdvertisements();
+
+    Advertisement getAdvertisementById(Long id);
+
+    void addAdvertisement(Advertisement advertisement, ContactInfo contactInfo, byte[] image);
 }

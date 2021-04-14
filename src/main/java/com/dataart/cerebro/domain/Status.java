@@ -8,15 +8,15 @@ import java.util.Map;
 
 @Getter
 public enum Status {
-    ACTIVE(1, "active"),
-    SOLD(2, "sold"),
-    CLOSED(3, "closed");
+    ACTIVE(1L, "active"),
+    SOLD(2L, "sold"),
+    CLOSED(3L, "closed");
 
-    private final Integer id;
+    private final Long id;
     private final String name;
-    private static final Map<Integer, Status> STATUS_MAP = new HashMap<>();
+    private static final Map<Long, Status> STATUS_MAP = new HashMap<>();
 
-    Status(int id, String name) {
+    Status(Long id, String name) {
         this.id = id;
         this.name = name;
     }
@@ -27,7 +27,7 @@ public enum Status {
         }
     }
 
-    public static Status getStatusDTOById(int id) {
+    public static Status getStatusById(Long id) {
         if (!STATUS_MAP.containsKey(id)) {
             throw new NotFoundException("Status", id);
         }

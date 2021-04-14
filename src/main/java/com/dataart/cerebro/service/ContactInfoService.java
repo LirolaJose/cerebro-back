@@ -1,9 +1,9 @@
 package com.dataart.cerebro.service;
 
-import com.dataart.cerebro.domain.ContactInfoDTO;
+import com.dataart.cerebro.domain.ContactInfo;
 
 import java.util.List;
 
 public interface ContactInfoService {
-    List<ContactInfoDTO> getAllContactsInfo();
+    List<ContactInfo> getAllContactsInfo();
 }

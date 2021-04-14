@@ -8,18 +8,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Getter
-@Slf4j
 public enum Type {
-    BUY(1, "buy"),
-    SALE(2, "sale"),
-    SERVICE(3, "service"),
-    WORK(4, "work");
+    BUY(1L, "buy"),
+    SALE(2L, "sale"),
+    SERVICE(3L, "service"),
+    WORK(4L, "work");
 
-    private final Integer id;
+    private final Long id;
     private final String name;
-    private static final Map<Integer, Type> TYPE_MAP = new HashMap<>();
+    private static final Map<Long, Type> TYPE_MAP = new HashMap<>();
 
-    Type(Integer id, String name) {
+    Type(Long id, String name) {
         this.id = id;
         this.name = name;
     }
@@ -30,7 +29,7 @@ public enum Type {
         }
     }
 
-    public static Type getTypeDTOById(int id){
+    public static Type getTypeById(Long id){
         if (!TYPE_MAP.containsKey(id)) {
             throw new NotFoundException("Type", id);
         }

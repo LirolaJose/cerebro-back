@@ -36,7 +36,7 @@
 <body>
 <h1>CEREBRO</h1>
 <br/><br/>
-<div><a th:href="@{/advertisementsList}"> Show all advertisement </a></div>
+<div><a th:href="@{/advertisementsList}"> Show all advertisementRepository </a></div>
 <table class="table table-striped">
     <caption>Info</caption>
     <tr>
@@ -54,21 +54,21 @@
         <th>Owner</th>
         <th></th>
     </tr>
-    <tr th="${advertisement}">
-        <td th:text="${advertisement.id}"></td>
-        <td th:text="${advertisement.title}"></td>
-        <td th:text="${advertisement.text}"></td>
-        <td th:text="${advertisement.price}"></td>
-        <td><img th:src="@{/image(id=${advertisement.id})}" alt="Image not load" ></td>
-        <td th:text="${advertisement.address}"></td>
-        <td th:text="${#temporals.format(advertisement.publicationTime, 'dd-MM-yyyy')}"></td>
-        <td th:text="${#temporals.format(advertisement.endTime, 'dd-MM-yyyy')}"></td>
-        <td th:text="${advertisement.category.name}"></td>
-        <td th:text="${advertisement.type.name}"></td>
-        <td th:text="${advertisement.status.name}"></td>
-        <td th:utext="|${advertisement.owner.name} <br /> ${advertisement.owner.phone} <br /> ${advertisement.owner.email}|"></td>
-        <th> <span th:if="${advertisement.status == advertisement.status.ACTIVE} and !${advertisement.category.name == 'vacancies'}">
-            <a th:href="@{/ordering(id=${advertisement.id})}"> <input type="submit" value="Order" /> </a> </span> </th>
+    <tr th="${advertisementRepository}">
+        <td th:text="${advertisementRepository.id}"></td>
+        <td th:text="${advertisementRepository.title}"></td>
+        <td th:text="${advertisementRepository.text}"></td>
+        <td th:text="${advertisementRepository.price}"></td>
+        <td><img th:src="@{/image(id=${advertisementRepository.id})}" alt="Image not load" ></td>
+        <td th:text="${advertisementRepository.address}"></td>
+        <td th:text="${#temporals.format(advertisementRepository.publicationTime, 'dd-MM-yyyy')}"></td>
+        <td th:text="${#temporals.format(advertisementRepository.endTime, 'dd-MM-yyyy')}"></td>
+        <td th:text="${advertisementRepository.category.name}"></td>
+        <td th:text="${advertisementRepository.type.name}"></td>
+        <td th:text="${advertisementRepository.status.name}"></td>
+        <td th:utext="|${advertisementRepository.owner.name} <br /> ${advertisementRepository.owner.phone} <br /> ${advertisementRepository.owner.email}|"></td>
+        <th> <span th:if="${advertisementRepository.status == advertisementRepository.status.ACTIVE} and !${advertisementRepository.category.name == 'vacancies'}">
+            <a th:href="@{/ordering(id=${advertisementRepository.id})}"> <input type="submit" value="Order" /> </a> </span> </th>
     </tr>
 </table>
 </body>

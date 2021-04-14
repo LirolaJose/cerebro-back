@@ -8,7 +8,7 @@ VALUES ('Delivery'),
        ('Test drive'),
        ('Insurance');
 
-INSERT INTO services_of_category(category_id, services_id)
+INSERT INTO services_of_category(category_id, service_id)
 VALUES (1, 3),
        (1, 4),
        (2, 4),
