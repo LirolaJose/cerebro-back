@@ -16,16 +16,16 @@ public class Category {
 
     private Boolean orderable;
 
-//    @ManyToMany(fetch = FetchType.EAGER)
-//    @JoinTable(name = "services_of_category",
-//    joinColumns = @JoinColumn(name = "category_id"),
-//    inverseJoinColumns = @JoinColumn(name = "service_id"))
-//    private Set<Service> services;
-//
-//    @ManyToMany(fetch = FetchType.EAGER)
-//    @JoinTable(name = "category_of_types",
-//    joinColumns = @JoinColumn(name = "category_id"),
-//    inverseJoinColumns = @JoinColumn(name = "type_id"))
-//    private Set<Service> types;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "services_of_category",
+    joinColumns = @JoinColumn(name = "category_id"),
+    inverseJoinColumns = @JoinColumn(name = "service_id"))
+    private Set<Service> services;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "category_of_types",
+    joinColumns = @JoinColumn(name = "category_id"),
+    inverseJoinColumns = @JoinColumn(name = "type_id"))
+    private Set<Service> types;
 
 }

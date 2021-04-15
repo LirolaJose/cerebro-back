@@ -10,8 +10,6 @@ import java.util.Set;
 
 @Data
 @Entity
-@DynamicInsert
-@DynamicUpdate
 @Table(name = "advertisement_order")
 public class AdvertisementOrder {
     @Id
@@ -24,6 +22,7 @@ public class AdvertisementOrder {
     @OneToOne
     @JoinColumn (name = "advertisement_id")
     private Advertisement advertisement;
+
     @OneToOne
     @JoinColumn (name = "seller_id")
     private UserInfo seller;

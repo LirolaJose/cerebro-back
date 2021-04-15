@@ -7,6 +7,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.util.Set;
 
 @Data
 @Entity
@@ -37,9 +38,9 @@ public class UserInfo {
     @Column(name = "role_id")
     private Role role;
 
-//    @ManyToMany(fetch = FetchType.EAGER)
-//    @JoinTable(name = "user_favourites_advertisements",
-//            joinColumns = @JoinColumn(name = "user_id"),
-//            inverseJoinColumns = @JoinColumn(name = "advertisement_id"))
-//    private Set<Advertisement> advertisements;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_favourites_advertisements",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "advertisement_id"))
+    private Set<Advertisement> favouritesAdvertisements;
 }

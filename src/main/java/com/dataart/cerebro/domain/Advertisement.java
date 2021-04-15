@@ -9,6 +9,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Data
 @Entity
@@ -46,9 +47,9 @@ public class Advertisement {
     @JoinColumn(name = "owner_id")
     private UserInfo owner;
 
-//    @ManyToMany(fetch = FetchType.EAGER)
-//    @JoinTable(name = "services_of_advertisement",
-//            joinColumns = @JoinColumn(name = "advertisement_id"),
-//            inverseJoinColumns = @JoinColumn(name = "service_id"))
-//    private Set<Service> services;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "services_of_advertisement",
+            joinColumns = @JoinColumn(name = "advertisement_id"),
+            inverseJoinColumns = @JoinColumn(name = "service_id"))
+    private Set<Service> services;
 }
