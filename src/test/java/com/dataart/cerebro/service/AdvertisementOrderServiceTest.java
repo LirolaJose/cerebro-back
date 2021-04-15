@@ -1,13 +1,11 @@
-package com.dataart.cerebro.service.impl;
+package com.dataart.cerebro.service;
 
-import com.dataart.cerebro.dao.AdvertisementOrderRepository;
-import com.dataart.cerebro.dao.ServiceRepository;
+import com.dataart.cerebro.repository.AdvertisementOrderRepository;
+import com.dataart.cerebro.repository.ServiceRepository;
 import com.dataart.cerebro.domain.AdvertisementOrder;
 import com.dataart.cerebro.domain.Advertisement;
 import com.dataart.cerebro.domain.ContactInfo;
-import com.dataart.cerebro.domain.Status;
 import com.dataart.cerebro.email.EmailService;
-import com.dataart.cerebro.service.AdvertisementOrderService;
 import org.junit.jupiter.api.Test;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -22,7 +20,7 @@ public class AdvertisementOrderServiceTest {
         EmailService emailServiceMock= mock(EmailService.class);
         ServiceRepository serviceRepositoryMock = mock(ServiceRepository.class);
         ContactInfo customerInfoMock = mock(ContactInfo.class);
-        AdvertisementOrderService advertisementOrderService = new AdvertisementOrderServiceImpl(advertisementOrderRepositoryMock, emailServiceMock, serviceRepositoryMock);
+        AdvertisementOrderService advertisementOrderService = new AdvertisementOrderService(advertisementOrderRepositoryMock, emailServiceMock, serviceRepositoryMock);
 
         AdvertisementOrder adOrder = new AdvertisementOrder();
         Advertisement ad = new Advertisement();

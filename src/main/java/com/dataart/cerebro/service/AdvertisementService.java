@@ -1,19 +1,60 @@
 package com.dataart.cerebro.service;
 
+import com.dataart.cerebro.repository.AdvertisementRepository;
 import com.dataart.cerebro.domain.Advertisement;
 import com.dataart.cerebro.domain.ContactInfo;
 import com.dataart.cerebro.domain.Status;
+import com.dataart.cerebro.email.EmailService;
+import com.dataart.cerebro.exception.NotFoundException;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-public interface AdvertisementService {
-    List<Advertisement> findAllAdvertisements();
+@Service
+@Slf4j
+public class AdvertisementService {
+    private final AdvertisementRepository advertisementRepository;
+    private final EmailService emailService;
 
-    List<Advertisement> findActiveAdvertisements();
+    public AdvertisementService(AdvertisementRepository advertisementRepository, EmailService emailService) {
+        this.advertisementRepository = advertisementRepository;
+        this.emailService = emailService;
+    }
 
-    List<Advertisement> getAllActiveAdvertisements();
 
-    Advertisement getAdvertisementById(Long id);
+    public List<Advertisement> findAllAdvertisements() {
+        return advertisementRepository.findAll();
+    }
 
-    void addAdvertisement(Advertisement advertisement, ContactInfo contactInfo, byte[] image);
+
+    public List<Advertisement> findActiveAdvertisements() {
+        return advertisementRepository.findAdvertisementsByStatus(Status.ACTIVE);
+    }
+
+
+    public List<com.dataart.cerebro.domain.Advertisement> getAllActiveAdvertisements() {
+        return advertisementRepository.getAllActiveAdvertisements();
+    }
+
+
+    public Advertisement getAdvertisementById(Long id) {
+        Advertisement advertisement = advertisementRepository.getAdvertisementById(id);
+        if (advertisement == null) {
+            log.info("Bad request for ID({}), this id doesn't exist", id);
+            throw new NotFoundException("Advertisement", id);
+        }
+        return advertisement;
+    }
+
+    public void addAdvertisement(com.dataart.cerebro.domain.Advertisement advertisement, ContactInfo contactInfo, byte[] image) {
+//        LocalDateTime publicationTime = LocalDateTime.now();
+//        LocalDateTime endTime = publicationTime.plusDays(7);
+//
+//        this.advertisementRepository.addAdvertisement(advertisement.getTitle(), advertisement.getText(), advertisement.getPrice(),
+//                image, publicationTime, endTime, advertisement.getCategory(),
+//                advertisement.getType(), Status.ACTIVE, contactInfo);
+//
+//        emailService.sendEmailAboutPublication(advertisement, contactInfo);
+    }
 }

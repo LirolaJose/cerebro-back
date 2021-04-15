@@ -16,9 +16,8 @@ public class AdvertisementController {
         this.advertisementService = advertisementService;
     }
 
-    @RequestMapping("/allAdvertisements")
+    @RequestMapping("/advertisements")
     public List<Advertisement> getActiveAdvertisements() {
         return advertisementService.findActiveAdvertisements();
     }
-
 }

@@ -1,6 +1,6 @@
 package com.dataart.cerebro.controller;
 
-import com.dataart.cerebro.dao.AdvertisementRepository;
+import com.dataart.cerebro.repository.AdvertisementRepository;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

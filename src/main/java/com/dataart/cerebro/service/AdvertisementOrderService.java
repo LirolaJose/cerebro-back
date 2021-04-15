@@ -1,9 +1,36 @@
 package com.dataart.cerebro.service;
 
-import com.dataart.cerebro.domain.AdvertisementOrder;
+import com.dataart.cerebro.repository.AdvertisementOrderRepository;
+import com.dataart.cerebro.repository.ServiceRepository;
 import com.dataart.cerebro.domain.Advertisement;
+import com.dataart.cerebro.domain.AdvertisementOrder;
 import com.dataart.cerebro.domain.ContactInfo;
+import com.dataart.cerebro.email.EmailService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
-public interface AdvertisementOrderService {
-    void addAdOrder(AdvertisementOrder adOrder, Advertisement advertisement, ContactInfo customerInfo);
+import java.time.LocalDateTime;
+
+@Service
+@Slf4j
+public class AdvertisementOrderService {
+    private final AdvertisementOrderRepository advertisementOrderRepository;
+    private final EmailService emailService;
+    private final ServiceRepository serviceRepository;
+
+    public AdvertisementOrderService(AdvertisementOrderRepository advertisementOrderRepository, EmailService emailService, ServiceRepository serviceRepository) {
+        this.advertisementOrderRepository = advertisementOrderRepository;
+        this.emailService = emailService;
+        this.serviceRepository = serviceRepository;
+    }
+
+    public void addAdOrder(AdvertisementOrder adOrder, Advertisement advertisement, ContactInfo customerInfo) {
+        Double totalPrice = advertisement.getPrice() + serviceRepository.getTotalPriceServices(adOrder.getServices());
+
+        adOrder.setTotalPrice(totalPrice);
+        AdvertisementOrder order = advertisementOrderRepository.addAdOrder(adOrder, LocalDateTime.now(), advertisement, customerInfo);
+
+        emailService.sendEmailAboutPurchase(advertisement, customerInfo, order);
+        emailService.sendEmailAboutSell(advertisement, customerInfo, order);
+    }
 }

@@ -1,8 +1,7 @@
-package com.dataart.cerebro.service.impl;
+package com.dataart.cerebro.service;
 
 import com.dataart.cerebro.domain.Advertisement;
 import com.dataart.cerebro.domain.Status;
-import com.dataart.cerebro.service.AdvertisementService;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

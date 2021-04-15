@@ -1,4 +1,4 @@
-package com.dataart.cerebro.dao;
+package com.dataart.cerebro.repository;
 
 import com.dataart.cerebro.domain.*;
 import org.springframework.data.jpa.repository.JpaRepository;

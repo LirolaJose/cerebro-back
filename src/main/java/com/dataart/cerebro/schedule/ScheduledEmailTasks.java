@@ -1,15 +1,10 @@
 package com.dataart.cerebro.schedule;
 
-import com.dataart.cerebro.dao.AdvertisementRepository;
-import com.dataart.cerebro.domain.Status;
+import com.dataart.cerebro.repository.AdvertisementRepository;
 import com.dataart.cerebro.email.EmailService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
 
 import static java.util.stream.Collectors.groupingBy;
 
