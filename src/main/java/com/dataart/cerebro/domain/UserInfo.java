@@ -32,6 +32,7 @@ public class UserInfo {
     @Size(max = 100)
     @Email(message = "Wrong email")
     private String email;
+    private String password;
 
     private Double moneyAmount;
 

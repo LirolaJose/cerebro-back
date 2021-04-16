@@ -9,8 +9,7 @@ import java.util.Map;
 @Getter
 public enum Role {
     ADMIN (1L, "ADMIN"),
-    USER (2L, "USER"),
-    ANONYMOUS (3L, "ANONYMOUS");
+    USER (2L, "USER");
 
     private final Long id;
     private final String name;

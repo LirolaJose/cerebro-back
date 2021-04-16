@@ -11,6 +11,16 @@ import java.util.List;
 public interface AdvertisementRepository extends JpaRepository<Advertisement, Long> {
     List<Advertisement> findAdvertisementsByStatus(Status status);
 
+    Advertisement findAdvertisementById(Long id);
+
+    List<Advertisement> findAdvertisementsByOwnerId(Long id);
+
+    Boolean deleteAdvertisementById(Long id);
+
+
+
+
+
     @Query(nativeQuery = true, value = "SELECT 1")
     List<Advertisement> getAllActiveAdvertisements();
 

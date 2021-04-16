@@ -19,6 +19,7 @@ ALTER TABLE role ALTER COLUMN id TYPE bigint;
 ALTER TABLE service ALTER COLUMN id TYPE bigint;
 ALTER TABLE status ALTER COLUMN id TYPE bigint;
 ALTER TABLE type ALTER COLUMN id TYPE bigint;
+ALTER TABLE contact_info ALTER COLUMN id TYPE bigint;
 
 ALTER TABLE advertisement ALTER COLUMN category_id TYPE bigint;
 ALTER TABLE advertisement ALTER COLUMN type_id TYPE bigint;

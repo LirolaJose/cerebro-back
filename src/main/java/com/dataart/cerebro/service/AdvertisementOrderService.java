@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -23,6 +24,21 @@ public class AdvertisementOrderService {
         this.emailService = emailService;
         this.serviceRepository = serviceRepository;
     }
+
+    public List<AdvertisementOrder> findAdvertisementOrdersByUserId(Long id){
+        return advertisementOrderRepository.findAdvertisementOrdersByAdvertisement_Owner_Id(id);
+    }
+
+    public AdvertisementOrder findAdvertisementOrderByOrderId(Long id){
+        return advertisementOrderRepository.findAdvertisementOrdersById(id);
+    }
+
+
+
+
+
+
+
 
     public void addAdOrder(AdvertisementOrder adOrder, Advertisement advertisement, ContactInfo customerInfo) {
         Double totalPrice = advertisement.getPrice() + serviceRepository.getTotalPriceServices(adOrder.getServices());

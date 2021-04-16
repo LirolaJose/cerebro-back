@@ -8,9 +8,8 @@ import java.io.Serializable;
 @Data
 @Entity
 @Table(name = "coordinates")
-public class Coordinates implements Serializable {
+public class Coordinates implements Serializable{
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @OneToOne
     @JoinColumn(name = "advertisement_id")
     private Advertisement advertisement;

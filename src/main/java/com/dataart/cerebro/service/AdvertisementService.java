@@ -32,6 +32,23 @@ public class AdvertisementService {
         return advertisementRepository.findAdvertisementsByStatus(Status.ACTIVE);
     }
 
+    public Advertisement findAdvertisementById(Long id){
+        return advertisementRepository.findAdvertisementById(id);
+    }
+
+    public List<Advertisement> findAdvertisementsByUserInfoId(Long id){
+        return advertisementRepository.findAdvertisementsByOwnerId(id);
+    }
+    public boolean deleteAdvertisement(Long id){
+        return advertisementRepository.deleteAdvertisementById(id);
+    }
+
+    public void createNewAdvertisement(Advertisement advertisement){
+        advertisementRepository.save(advertisement);
+    }
+
+
+
 
     public List<com.dataart.cerebro.domain.Advertisement> getAllActiveAdvertisements() {
         return advertisementRepository.getAllActiveAdvertisements();
