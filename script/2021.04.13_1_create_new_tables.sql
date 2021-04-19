@@ -38,7 +38,7 @@ CREATE TABLE Services_of_Advertisement
 );
 
 ALTER TABLE Services_of_Advertisement
-    ADD FOREIGN KEY (service_id) REFERENCES service (id);
+    ADD FOREIGN KEY (service_id) REFERENCES additionalService (id);
 
 ALTER TABLE Services_of_Advertisement
     ADD FOREIGN KEY (advertisement_id) REFERENCES advertisement (id);

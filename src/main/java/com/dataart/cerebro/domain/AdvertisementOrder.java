@@ -1,8 +1,6 @@
 package com.dataart.cerebro.domain;
 
 import lombok.Data;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -31,5 +29,5 @@ public class AdvertisementOrder {
     @JoinTable(name = "services_of_order",
             joinColumns = @JoinColumn(name = "order_id"),
             inverseJoinColumns = @JoinColumn(name = "service_id"))
-    private Set<Service> services;
+    private Set<AdditionalService> additionalServices;
 }

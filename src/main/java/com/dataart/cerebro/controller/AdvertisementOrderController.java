@@ -28,9 +28,9 @@ public class AdvertisementOrderController {
 
     @PostMapping("/")
     public ResponseEntity<?> addOrder(@RequestBody AdvertisementOrder advertisementOrder) {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        UserInfo userInfo = userInfoService.findUserInfoByEmail(authentication.getPrincipal().toString());
-        advertisementOrderService.createNewAdvertisementOrder(advertisementOrder);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserInfo userInfo = userInfoService.findUserInfoByEmail(authentication.getName());
+        advertisementOrderService.createNewAdvertisementOrder(advertisementOrder, userInfo);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }

@@ -1,7 +1,5 @@
 package com.dataart.cerebro.domain;
 
-import com.dataart.cerebro.domain.converter.StatusConverter;
-import com.dataart.cerebro.domain.converter.TypeConverter;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -51,5 +49,5 @@ public class Advertisement {
     @JoinTable(name = "services_of_advertisement",
             joinColumns = @JoinColumn(name = "advertisement_id"),
             inverseJoinColumns = @JoinColumn(name = "service_id"))
-    private Set<Service> services;
+    private Set<AdditionalService> additionalServices;
 }

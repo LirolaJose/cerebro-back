@@ -1,20 +1,20 @@
 package com.dataart.cerebro.configuration;
 
-import com.dataart.cerebro.domain.Service;
+import com.dataart.cerebro.domain.AdditionalService;
 import org.springframework.format.Formatter;
 
 import java.util.Locale;
 
-public class ServiceDTOFormatter implements Formatter<Service> {
+public class ServiceDTOFormatter implements Formatter<AdditionalService> {
     @Override
-    public String print(Service service, Locale locale) {
-        return service.getId().toString();
+    public String print(AdditionalService additionalService, Locale locale) {
+        return additionalService.getId().toString();
     }
 
     @Override
-    public Service parse(String id, Locale locale) {
-        Service service = new Service();
-        service.setId(Long.valueOf(id));
-        return service;
+    public AdditionalService parse(String id, Locale locale) {
+        AdditionalService additionalService = new AdditionalService();
+        additionalService.setId(Long.valueOf(id));
+        return additionalService;
     }
 }

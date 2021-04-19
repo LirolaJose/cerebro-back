@@ -1,10 +1,11 @@
 package com.dataart.cerebro.service;
 
-import com.dataart.cerebro.repository.AdvertisementOrderRepository;
-import com.dataart.cerebro.repository.ServiceRepository;
 import com.dataart.cerebro.domain.Advertisement;
 import com.dataart.cerebro.domain.AdvertisementOrder;
+import com.dataart.cerebro.domain.UserInfo;
 import com.dataart.cerebro.email.EmailService;
+import com.dataart.cerebro.repository.AdvertisementOrderRepository;
+import com.dataart.cerebro.repository.ServiceRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -23,21 +24,15 @@ public class AdvertisementOrderService {
         this.serviceRepository = serviceRepository;
     }
 
-//    public List<AdvertisementOrder> findAdvertisementOrdersByUserId(Long id){
-//        return advertisementOrderRepository.findAdvertisementOrdersByAdvertisementOwnerId(id);
-//    }
-    public void createNewAdvertisementOrder(AdvertisementOrder advertisementOrder){
-        advertisementOrderRepository.save(advertisementOrder);
-//        emailService.sendEmailAboutPurchase(advertisementOrder);
-//        emailService.sendEmailAboutSell(advertisementOrder);
+    public List<AdvertisementOrder> findAdvertisementOrdersByUserId(Long id) {
+        return advertisementOrderRepository.findAdvertisementOrdersByAdvertisementOwnerId(id);
     }
 
-
-
-
-
-
-
+    public void createNewAdvertisementOrder(AdvertisementOrder advertisementOrder, UserInfo customer) {
+        advertisementOrderRepository.save(advertisementOrder);
+        emailService.sendEmailAboutPurchase(advertisementOrder, customer);
+        emailService.sendEmailAboutSell(advertisementOrder, customer);
+    }
 
 
     public void addAdOrder(AdvertisementOrder adOrder, Advertisement advertisement) {
@@ -48,5 +43,5 @@ public class AdvertisementOrderService {
 //
 //        emailService.sendEmailAboutPurchase(advertisement, customerInfo, order);
 //        emailService.sendEmailAboutSell(advertisement, customerInfo, order);
- }
+    }
 }

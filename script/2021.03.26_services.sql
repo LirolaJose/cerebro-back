@@ -1,6 +1,6 @@
-ALTER TABLE service ALTER COLUMN  price DROP NOT NULL ;
+ALTER TABLE additionalService ALTER COLUMN  price DROP NOT NULL ;
 
-INSERT INTO service  (name)
+INSERT INTO additionalService  (name)
 VALUES ('Delivery'),
        ('Packing'),
        ('Furnishings'),

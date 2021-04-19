@@ -39,15 +39,12 @@ public class AdvertisementService {
     public List<Advertisement> findAdvertisementsByUserInfoId(Long id){
         return advertisementRepository.findAdvertisementsByOwnerId(id);
     }
-    public boolean deleteAdvertisement(Long id){
-        return advertisementRepository.deleteAdvertisementById(id);
-    }
 
     public void createNewAdvertisement(Advertisement advertisement){
-//        LocalDateTime publicationTime = LocalDateTime.now();
-//        advertisement.setPublicationTime(publicationTime);
-//        advertisement.setExpiredTime(publicationTime.plusDays(7));
-        advertisementRepository.save(advertisement);
-//        emailService.sendEmailAboutPublication(advertisement);
+        LocalDateTime publicationTime = LocalDateTime.now();
+        advertisement.setPublicationTime(publicationTime);
+        advertisement.setExpiredTime(publicationTime.plusDays(7));
+        Advertisement newAdvertisement = advertisementRepository.save(advertisement);
+        emailService.sendEmailAboutPublication(newAdvertisement);
     }
 }

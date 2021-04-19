@@ -20,12 +20,12 @@ public class Category {
     @JoinTable(name = "services_of_category",
     joinColumns = @JoinColumn(name = "category_id"),
     inverseJoinColumns = @JoinColumn(name = "service_id"))
-    private Set<Service> services;
+    private Set<AdditionalService> additionalServices;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "category_of_types",
     joinColumns = @JoinColumn(name = "category_id"),
     inverseJoinColumns = @JoinColumn(name = "type_id"))
-    private Set<Service> types;
+    private Set<AdditionalService> types;
 
 }

@@ -1,7 +1,7 @@
 insert into type (name)
 VALUES ('buy'),
        ('sale'),
-       ('service'),
+       ('additionalService'),
        ('work');
 
 insert into category (name)

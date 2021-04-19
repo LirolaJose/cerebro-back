@@ -48,12 +48,12 @@ public class UserInfoController {
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-//    @GetMapping("/{id}/orders")
-//    public ResponseEntity<?> getUsersOrdersByUserId(@PathVariable Long id) {
-//        List<AdvertisementOrder> advertisementOrders = advertisementOrderService.findAdvertisementOrdersByUserId(id);
-//
-//        return advertisementOrders != null && !advertisementOrders.isEmpty()
-//                ? new ResponseEntity<>(advertisementOrders, HttpStatus.OK)
-//                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//    }
+    @GetMapping("/{id}/orders")
+    public ResponseEntity<?> getUsersOrdersByUserId(@PathVariable Long id) {
+        List<AdvertisementOrder> advertisementOrders = advertisementOrderService.findAdvertisementOrdersByUserId(id);
+
+        return advertisementOrders != null && !advertisementOrders.isEmpty()
+                ? new ResponseEntity<>(advertisementOrders, HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
 }

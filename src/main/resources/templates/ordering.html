@@ -76,10 +76,10 @@
     <p>
         <label>Additional services: <br>
             <input class="totalPrice" type="checkbox" th:field="*{servicesSet}"
-                   th:each="service : ${services}"
-                   th:utext="|${service.name}: ${service.price} <br />|"
-                   th:value="${{service}}"
-                   th:attr="amount=${service.price}"/>
+                   th:each="additionalService : ${services}"
+                   th:utext="|${additionalService.name}: ${additionalService.price} <br />|"
+                   th:value="${{additionalService}}"
+                   th:attr="amount=${additionalService.price}"/>
         </label>
     <p> Total price: <input type="text" id="total" readonly></p>
     </p>

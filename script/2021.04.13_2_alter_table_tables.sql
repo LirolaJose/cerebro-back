@@ -16,7 +16,7 @@ ALTER TABLE category ALTER COLUMN id TYPE bigint;
 ALTER TABLE coordinates ALTER COLUMN id TYPE bigint;
 ALTER TABLE image ALTER COLUMN id TYPE bigint;
 ALTER TABLE role ALTER COLUMN id TYPE bigint;
-ALTER TABLE service ALTER COLUMN id TYPE bigint;
+ALTER TABLE additionalService ALTER COLUMN id TYPE bigint;
 ALTER TABLE status ALTER COLUMN id TYPE bigint;
 ALTER TABLE type ALTER COLUMN id TYPE bigint;
 ALTER TABLE contact_info ALTER COLUMN id TYPE bigint;

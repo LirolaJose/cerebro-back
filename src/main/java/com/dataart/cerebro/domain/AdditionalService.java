@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Data
 @Entity
 @Table (name = "service")
-public class Service {
+public class AdditionalService {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

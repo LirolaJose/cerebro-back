@@ -16,8 +16,8 @@
 <tr th:each="category : ${categorySet}">
     <td th:text="${category.id}"></td>
     <td th:text="${category.name}"></td>
-    <td th:each="service : ${category.servicesSet}"
-        th:utext="|${service.name} <br/>|"></td>
+    <td th:each="additionalService : ${category.servicesSet}"
+        th:utext="|${additionalService.name} <br/>|"></td>
 </tr>
 </table>
 
