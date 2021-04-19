@@ -10,9 +10,8 @@ import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 @Configuration
 @EnableSwagger2
@@ -31,30 +30,28 @@ public class SwaggerConfig {
 
     @Bean
     public Docket api() {
+        SecurityReference securityReference = SecurityReference.builder()
+                .reference("basicAuth")
+                .scopes(new AuthorizationScope[0])
+                .build();
+
+        ArrayList<SecurityReference> reference = new ArrayList<>(1);
+        reference.add(securityReference);
+
+        ArrayList<SecurityContext> securityContexts = new ArrayList<>(1);
+        securityContexts.add(SecurityContext.builder().securityReferences(reference).build());
+        ArrayList<SecurityScheme> auth = new ArrayList<>(1);
+        auth.add(new BasicAuth("basicAuth"));
+
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
-                .securityContexts(Arrays.asList(securityContext()))
-                .securitySchemes(Arrays.asList(apiKey()))
+                .securityContexts(securityContexts)
+                .securitySchemes(auth)
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.dataart.cerebro.controller"))
                 .paths(PathSelectors.any())
                 .build();
 
-    }
-
-    private ApiKey apiKey() {
-        return new ApiKey("JWT", "Authorization", "header");
-    }
-
-    private SecurityContext securityContext() {
-        return SecurityContext.builder().securityReferences(defaultAuth()).build();
-    }
-
-    private List<SecurityReference> defaultAuth() {
-        AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
-        AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
-        authorizationScopes[0] = authorizationScope;
-        return Arrays.asList(new SecurityReference("JWT", authorizationScopes));
     }
 }
 

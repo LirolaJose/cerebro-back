@@ -15,4 +15,6 @@ public class UserInfoService {
     public UserInfo findUserInfoById(Long id){
         return userInfoRepository.findUserInfoById(id);
     }
+
+    public UserInfo findUserInfoByEmail(String email){ return userInfoRepository.findUserInfoByEmail(email); }
 }

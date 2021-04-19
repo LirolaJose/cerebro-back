@@ -2,13 +2,13 @@ package com.dataart.cerebro.service;
 
 import com.dataart.cerebro.repository.AdvertisementRepository;
 import com.dataart.cerebro.domain.Advertisement;
-import com.dataart.cerebro.domain.ContactInfo;
 import com.dataart.cerebro.domain.Status;
 import com.dataart.cerebro.email.EmailService;
 import com.dataart.cerebro.exception.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -44,34 +44,10 @@ public class AdvertisementService {
     }
 
     public void createNewAdvertisement(Advertisement advertisement){
-        advertisementRepository.save(advertisement);
-    }
-
-
-
-
-    public List<com.dataart.cerebro.domain.Advertisement> getAllActiveAdvertisements() {
-        return advertisementRepository.getAllActiveAdvertisements();
-    }
-
-
-    public Advertisement getAdvertisementById(Long id) {
-        Advertisement advertisement = advertisementRepository.getAdvertisementById(id);
-        if (advertisement == null) {
-            log.info("Bad request for ID({}), this id doesn't exist", id);
-            throw new NotFoundException("Advertisement", id);
-        }
-        return advertisement;
-    }
-
-    public void addAdvertisement(com.dataart.cerebro.domain.Advertisement advertisement, ContactInfo contactInfo, byte[] image) {
 //        LocalDateTime publicationTime = LocalDateTime.now();
-//        LocalDateTime endTime = publicationTime.plusDays(7);
-//
-//        this.advertisementRepository.addAdvertisement(advertisement.getTitle(), advertisement.getText(), advertisement.getPrice(),
-//                image, publicationTime, endTime, advertisement.getCategory(),
-//                advertisement.getType(), Status.ACTIVE, contactInfo);
-//
-//        emailService.sendEmailAboutPublication(advertisement, contactInfo);
+//        advertisement.setPublicationTime(publicationTime);
+//        advertisement.setExpiredTime(publicationTime.plusDays(7));
+        advertisementRepository.save(advertisement);
+//        emailService.sendEmailAboutPublication(advertisement);
     }
 }

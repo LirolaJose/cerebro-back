@@ -24,26 +24,32 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-    @Override
-    public void configure(WebSecurity web) {
-        web.ignoring()
-                .antMatchers(
-                        "/webjars/**", "/v2/api-docs/**", "/configuration/ui/**", "/swagger-resources/**",
-                        "/configuration/security/**", "/swagger-ui.html/**", "/swagger-ui.html#/**");
-    }
 
     @Override
-    protected void configure(HttpSecurity http) throws Exception {
+    public void configure(HttpSecurity http) throws Exception {
+        http
+                .cors().disable()
+                .csrf().disable();
+
         http.authorizeRequests()
-                .antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/cerebro/**").hasAnyRole("USER", "ADMIN")
-
-                .and().formLogin();
+                .antMatchers("/api/admin/**").hasRole("ADMIN")
+                .antMatchers("/api/**").authenticated()
+                .and().formLogin()
+                .and().httpBasic();
     }
 
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(customAuthenticationProvider);
+    }
+
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/v2/api-docs/**");
+        web.ignoring().antMatchers("/swagger.json");
+        web.ignoring().antMatchers("/swagger-ui.html");
+        web.ignoring().antMatchers("/swagger-resources/**");
+        web.ignoring().antMatchers("/webjars/**");
     }
 
 }

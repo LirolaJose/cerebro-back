@@ -6,8 +6,4 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.Set;
 public interface CategoryRepository extends JpaRepository<Category, Long> {
-//    Category getCategoryById(int categoryId);
-
-    @Query(nativeQuery = true, value = "SELECT 1")
-    Set<Category> getAllCategories();
 }

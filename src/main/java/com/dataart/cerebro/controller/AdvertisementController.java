@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/cerebro/api")
-@Api(tags = "Advertisements")
+@RequestMapping("/api/advertisement")
+@Api(tags = "Advertisement")
 public class AdvertisementController {
     private final AdvertisementService advertisementService;
 
@@ -19,26 +19,30 @@ public class AdvertisementController {
         this.advertisementService = advertisementService;
     }
 
-    @GetMapping("/GET/advertisements")
-    public List<Advertisement> getActiveAdvertisements() {
-        return advertisementService.findActiveAdvertisements();
+
+    @GetMapping("/")
+    public ResponseEntity<?> getActiveAdvertisements() {
+        final List<Advertisement> advertisements = advertisementService.findActiveAdvertisements();
+        return advertisements != null && !advertisements.isEmpty()
+                ? new ResponseEntity<>(advertisements, HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping("GET/advertisement/{id}")
-    public Advertisement getAdvertisementById(@PathVariable Long id) {
-        return advertisementService.findAdvertisementById(id);
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getAdvertisementById(@PathVariable Long id) {
+        Advertisement advertisement = advertisementService.findAdvertisementById(id);
+        return advertisement != null
+                ? new ResponseEntity<>(advertisement, HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PostMapping("/POST/creation_advertisement")
-    public ResponseEntity<Advertisement> addAdvertisement(@RequestBody Advertisement advertisement) {
+    @PostMapping("/")
+    public ResponseEntity<?> addAdvertisement(@RequestBody Advertisement advertisement) {
         advertisementService.createNewAdvertisement(advertisement);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
-    @DeleteMapping("/DELETE/advertisement/{id}")
-    public ResponseEntity<Advertisement> deleteAdvertisement(@PathVariable Long id){
-        final boolean deleted = advertisementService.deleteAdvertisement(id);
-        return deleted
-                ? new ResponseEntity<>(HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
-    }
+//    @PostMapping("/")
+//    public void addAdvertisement(@RequestBody Advertisement advertisement) {
+//        advertisementService.createNewAdvertisement(advertisement);
+//    }
 }

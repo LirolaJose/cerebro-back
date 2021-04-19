@@ -11,7 +11,6 @@ import java.util.Map;
 public enum Type {
     BUY(1L, "buy"),
     SALE(2L, "sale"),
-    SERVICE(3L, "service"),
     WORK(4L, "work");
 
     private final Long id;
