@@ -1,6 +1,7 @@
 package com.dataart.cerebro.controller;
 
 import com.dataart.cerebro.domain.Advertisement;
+import com.dataart.cerebro.exception.NotFoundException;
 import com.dataart.cerebro.service.AdvertisementService;
 import io.swagger.annotations.Api;
 import org.springframework.http.HttpStatus;
@@ -29,11 +30,9 @@ public class AdvertisementController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getAdvertisementById(@PathVariable Long id) {
+    public ResponseEntity<?> getAdvertisementById(@PathVariable Long id) throws NotFoundException {
         Advertisement advertisement = advertisementService.findAdvertisementById(id);
-        return advertisement != null
-                ? new ResponseEntity<>(advertisement, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(advertisement, HttpStatus.OK);
     }
 
     @PostMapping("/")

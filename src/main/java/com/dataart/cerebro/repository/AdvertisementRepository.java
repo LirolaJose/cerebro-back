@@ -15,8 +15,6 @@ public interface AdvertisementRepository extends JpaRepository<Advertisement, Lo
 
     List<Advertisement> findAdvertisementsByOwnerId(Long id);
 
-    Advertisement save(Advertisement advertisement);
-
     @Query(value = "SELECT * FROM advertisement WHERE status_id = 1 and current_date >= date(expired_time) - interval '1 days';",
             nativeQuery = true)
     List<Advertisement> getExpiringAdvertisements();

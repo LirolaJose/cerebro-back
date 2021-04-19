@@ -42,7 +42,7 @@ public class EmailService {
             mailMessage.setSubject("Your advertisement is added");
             text.append(advertisement.getTitle()).append("\n")
                     .append(advertisement.getText()).append("\n")
-                    .append(url).append("{").append(advertisement.getId()).append("}").append("\n \n")
+                    .append(url).append(advertisement.getId()).append("\n \n")
                     .append(SIGNATURE);
             mailMessage.setText(text.toString());
             emailSender.send(mailMessage);
@@ -66,7 +66,7 @@ public class EmailService {
                         .append("your advertisement(s): \n");
                 int number = 1;
                 for (Advertisement advertisement : advertisementsList) {
-                    text.append(number++).append(". ").append(url).append("{").append(advertisement.getId()).append("}").append(" will be closed ")
+                    text.append(number++).append(". ").append(url).append(advertisement.getId()).append(" will be closed ")
                             .append(advertisement.getExpiredTime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))).append("\n \n");
 
                 }
@@ -94,7 +94,7 @@ public class EmailService {
                         .append("your advertisement(s): \n");
                 int number = 1;
                 for (Advertisement advertisement : advertisementsList) {
-                    text.append(number++).append(". ").append(url).append("{").append(advertisement.getId()).append("}")
+                    text.append(number++).append(". ").append(url).append(advertisement.getId())
                             .append(" is closed ").append("\n \n");
                 }
                 text.append(SIGNATURE);
@@ -118,7 +118,7 @@ public class EmailService {
             StringBuilder text = new StringBuilder();
 
             text.append("Dear ").append(customer.getFirstName()).append(" ").append(customer.getSecondName()).append(",\n")
-                    .append("You have done a purchase ").append(url).append("{").append(advertisement.getId()).append("}").append("\n")
+                    .append("You have done a purchase ").append(url).append(advertisement.getId()).append("\n")
                     .append("Total price: ").append(order.getTotalPrice());
             if (servicesSet != null && !servicesSet.isEmpty()) {
                 String services = servicesSet.stream()
@@ -150,7 +150,7 @@ public class EmailService {
 
             text.append("Dear ").append(owner.getFirstName()).append(" ").append(owner.getSecondName()).append(",\n")
                     .append("Your advertisement ")
-                    .append(url).append("{").append(advertisement.getId()).append("}").append(" is closed,").append("\n")
+                    .append(url).append(advertisement.getId()).append(" is closed,").append("\n")
                     .append("because ").append(customer.getFirstName()).append(" ").append(customer.getSecondName())
                     .append(" has made the purchase. \n")
                     .append("Total price: ").append(order.getTotalPrice()).append("\n");

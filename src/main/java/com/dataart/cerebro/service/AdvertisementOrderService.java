@@ -29,11 +29,11 @@ public class AdvertisementOrderService {
     }
 
     public void createNewAdvertisementOrder(AdvertisementOrder advertisementOrder, UserInfo customer) {
+
         advertisementOrderRepository.save(advertisementOrder);
         emailService.sendEmailAboutPurchase(advertisementOrder, customer);
         emailService.sendEmailAboutSell(advertisementOrder, customer);
     }
-
 
     public void addAdOrder(AdvertisementOrder adOrder, Advertisement advertisement) {
 //        Double totalPrice = advertisement.getPrice() + serviceRepository.getTotalPriceServices(adOrder.getServices());
