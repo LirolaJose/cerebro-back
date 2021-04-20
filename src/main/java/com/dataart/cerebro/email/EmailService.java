@@ -4,6 +4,7 @@ import com.dataart.cerebro.domain.AdditionalService;
 import com.dataart.cerebro.domain.Advertisement;
 import com.dataart.cerebro.domain.AdvertisementOrder;
 import com.dataart.cerebro.domain.UserInfo;
+import com.dataart.cerebro.repository.UserInfoRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
@@ -16,7 +17,7 @@ import org.thymeleaf.spring5.SpringTemplateEngine;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -29,6 +30,7 @@ import java.util.stream.Collectors;
 public class EmailService {
     private final JavaMailSender emailSender;
     private final SpringTemplateEngine templateEngine;
+    private final UserInfoRepository userInfoRepository;
 
     private final Executor executor = Executors.newFixedThreadPool(5);
 
@@ -37,80 +39,57 @@ public class EmailService {
 
     private static final String SIGNATURE = "CEREBRO: \n +7 (222) 555-77-99 \n lirolaboard@gmail.com";
 
-    public EmailService(JavaMailSender emailSender, SpringTemplateEngine templateEngine) {
+    public EmailService(JavaMailSender emailSender, SpringTemplateEngine templateEngine, UserInfoRepository userInfoRepository) {
         this.emailSender = emailSender;
         this.templateEngine = templateEngine;
+        this.userInfoRepository = userInfoRepository;
     }
 
     public void sendEmailAboutPublication(Advertisement advertisement) {
         executor.execute(() -> {
             log.info("Sending email about publication is started at {}", LocalDateTime.now());
-            SimpleMailMessage mailMessage = new SimpleMailMessage();
-            String email = advertisement.getOwner().getEmail();
-            StringBuilder text = new StringBuilder();
-
-            mailMessage.setTo(email);
-            mailMessage.setSubject("Your advertisement is added");
-            text.append(advertisement.getTitle()).append("\n")
-                    .append(advertisement.getText()).append("\n")
-                    .append(url).append(advertisement.getId()).append("\n \n")
-                    .append(SIGNATURE);
-            mailMessage.setText(text.toString());
-            emailSender.send(mailMessage);
-            log.info("Email about publication is sent to {} at {}", email, LocalDateTime.now());
+            String template = "publicationTemplate";
+            UserInfo userInfo = advertisement.getOwner();
+            Map<String, Object> contextMap = new HashMap<>();
+            contextMap.put("userInfo", userInfo);
+            contextMap.put("advertisement", advertisement);
+            contextMap.put("url", url);
+            contextMap.put("signature", SIGNATURE);
+            sendEmail(contextMap, template);
+            log.info("Email about publication has been sent to {} at {}", userInfo.getEmail(), LocalDateTime.now());
         });
     }
 
     public void sendEmailAboutExpiring(Map<String, List<Advertisement>> emailAndAds) {
         executor.execute(() -> {
             log.info("Sending email about expiring is started at {}", LocalDateTime.now());
-            SimpleMailMessage mailMessage = new SimpleMailMessage();
-
+            String template = "scheduleTemplate";
             emailAndAds.forEach(((email, advertisementsList) -> {
-                UserInfo userInfo = advertisementsList.get(0).getOwner();
-                mailMessage.setTo(userInfo.getEmail());
-                mailMessage.setSubject("Advertisement will be closed soon");
-
-                StringBuilder text = new StringBuilder();
-                text.append("Dear ").append(userInfo.getFirstName()).append(" ").append(userInfo.getSecondName()).append(",\n")
-                        .append("your advertisement(s): \n");
-                int number = 1;
-                for (Advertisement advertisement : advertisementsList) {
-                    text.append(number++).append(". ").append(url).append(advertisement.getId()).append(" will be closed ")
-                            .append(advertisement.getExpiredTime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))).append("\n \n");
-
-                }
-                text.append(SIGNATURE);
-                mailMessage.setText(text.toString());
-                emailSender.send(mailMessage);
-                log.info("Email about expiring is sent to {} at {}", email, LocalDateTime.now());
-            }
-            ));
+                Map<String, Object> contextMap = new HashMap<>();
+                contextMap.put("action", "soon");
+                contextMap.put("userInfo", userInfoRepository.findUserInfoByEmail(email));
+                contextMap.put("advertisementList", advertisementsList);
+                contextMap.put("url", url);
+                contextMap.put("signature", SIGNATURE);
+                sendEmail(contextMap, template);
+                log.info("Email about expiring has been sent to {} at {}", email, LocalDateTime.now());
+            }));
         });
     }
-
 
     public void sendEmailAboutExpired(Map<String, List<Advertisement>> emailAndAds) {
         executor.execute(() -> {
             log.info("Sending email about expired is started at {}", LocalDateTime.now());
-            SimpleMailMessage mailMessage = new SimpleMailMessage();
-
+            String template = "scheduleTemplate";
             emailAndAds.forEach(((email, advertisementsList) -> {
-                UserInfo userInfo = advertisementsList.get(0).getOwner();
-                mailMessage.setTo(userInfo.getEmail());
-                mailMessage.setSubject("Advertisement is closed");
-                StringBuilder text = new StringBuilder();
-                text.append("Dear ").append(userInfo.getFirstName()).append(" ").append(userInfo.getSecondName()).append(",\n")
-                        .append("your advertisement(s): \n");
-                int number = 1;
-                for (Advertisement advertisement : advertisementsList) {
-                    text.append(number++).append(". ").append(url).append(advertisement.getId())
-                            .append(" is closed ").append("\n \n");
-                }
-                text.append(SIGNATURE);
-                mailMessage.setText(text.toString());
-                emailSender.send(mailMessage);
-                log.info("Email about expired is sent to {} at {}", email, LocalDateTime.now());
+                Map<String, Object> contextMap = new HashMap<>();
+                contextMap.put("action", "expired");
+                contextMap.put("userInfo", userInfoRepository.findUserInfoByEmail(email));
+                contextMap.put("advertisementList", advertisementsList);
+                contextMap.put("url", url);
+                contextMap.put("signature", SIGNATURE);
+                sendEmail(contextMap, template);
+                log.info("Email about expired has been sent to {} at {}", email, LocalDateTime.now());
             }));
         });
     }
@@ -119,29 +98,18 @@ public class EmailService {
     public void sendEmailAboutPurchase(AdvertisementOrder order, UserInfo customer) {
         executor.execute(() -> {
             log.info("Sending email about purchase is started at {}", LocalDateTime.now());
-            SimpleMailMessage mailMessage = new SimpleMailMessage();
+            String template = "orderTemplate";
             Advertisement advertisement = order.getAdvertisement();
-            Set<AdditionalService> servicesSet = order.getAdditionalServices();
-
-            mailMessage.setTo(customer.getEmail());
-            mailMessage.setSubject("You have done a purchase on \"CEREBRO\"");
-            StringBuilder text = new StringBuilder();
-
-            text.append("Dear ").append(customer.getFirstName()).append(" ").append(customer.getSecondName()).append(",\n")
-                    .append("You have done a purchase ").append(url).append(advertisement.getId()).append("\n")
-                    .append("Total price: ").append(order.getTotalPrice());
-            if (servicesSet != null && !servicesSet.isEmpty()) {
-                String services = servicesSet.stream()
-                        .map(additionalService -> additionalService.getName() + ": " + additionalService.getPrice())
-                        .collect(Collectors.joining(", "));
-                text.append(" (additional services: ").append(services).append(")").append("\n");
-            }
-            text.append("\n").append("If you haven't made this purchase, call or email us").append("\n \n")
-                    .append(SIGNATURE);
-
-            mailMessage.setText(text.toString());
-            emailSender.send(mailMessage);
+            Map<String, Object> contextMap = new HashMap<>();
+            contextMap.put("action", "purchase");
+            contextMap.put("userInfo", customer);
+            contextMap.put("advertisement", advertisement);
+            contextMap.put("order", order);
+            contextMap.put("url", url);
+            contextMap.put("signature", SIGNATURE);
+            sendEmail(contextMap, template);
             log.info("Email about purchase is sent to {} at {}", customer.getEmail(), LocalDateTime.now());
+//            Set<AdditionalService> servicesSet = order.getAdditionalServices();
         });
     }
 
@@ -149,54 +117,43 @@ public class EmailService {
     public void sendEmailAboutSell(AdvertisementOrder order, UserInfo customer) {
         executor.execute(() -> {
             log.info("Sending email about sell is started at {}", LocalDateTime.now());
-            SimpleMailMessage mailMessage = new SimpleMailMessage();
+            String template = "orderTemplate";
             Advertisement advertisement = order.getAdvertisement();
-            UserInfo owner = advertisement.getOwner();
-            Set<AdditionalService> servicesSet = order.getAdditionalServices();
-
-            mailMessage.setTo(owner.getEmail());
-            mailMessage.setSubject("You advertisement is sell on \"CEREBRO\"");
-            StringBuilder text = new StringBuilder();
-
-            text.append("Dear ").append(owner.getFirstName()).append(" ").append(owner.getSecondName()).append(",\n")
-                    .append("Your advertisement ")
-                    .append(url).append(advertisement.getId()).append(" is closed,").append("\n")
-                    .append("because ").append(customer.getFirstName()).append(" ").append(customer.getSecondName())
-                    .append(" has made the purchase. \n")
-                    .append("Total price: ").append(order.getTotalPrice()).append("\n");
-            if (servicesSet != null && !servicesSet.isEmpty()) {
-                String services = servicesSet.stream()
-                        .map(serviceDTO -> serviceDTO.getName() + ": " + serviceDTO.getPrice())
-                        .collect(Collectors.joining(", "));
-                text.append("Additional services were ordered: ").append(services).append("\n");
-            }
-            text.append("Contact information: ").append("tel: ").append(customer.getPhone())
-                    .append(", email: ").append(customer.getEmail()).append("\n \n")
-                    .append(SIGNATURE);
-
-            mailMessage.setText(text.toString());
-            emailSender.send(mailMessage);
-            log.info("Email about sell is sent to {} at {}", owner.getEmail(), LocalDateTime.now());
+            Map<String, Object> contextMap = new HashMap<>();
+            contextMap.put("action", "sell");
+            contextMap.put("userInfo", advertisement.getOwner());
+            contextMap.put("customer", customer);
+            contextMap.put("advertisement", advertisement);
+            contextMap.put("order", order);
+            contextMap.put("url", url);
+            contextMap.put("signature", SIGNATURE);
+            sendEmail(contextMap, template);
+            log.info("Email about sell is sent to {} at {}", advertisement.getOwner().getEmail(), LocalDateTime.now());
+            //            Set<AdditionalService> servicesSet = order.getAdditionalServices();
         });
     }
 
 
-    public void sendEmail(Advertisement advertisement) {
+    private void sendEmail(Map<String, Object> contextMap, String template) {
+//        executor.execute(() -> {
         Context context = new Context();
-        context.setVariable("userInfo", advertisement.getOwner());
+        context.setVariables(contextMap);
+        UserInfo userInfo = (UserInfo) contextMap.get("userInfo");
 
-        String process = templateEngine.process("emailTemplate", context);
+        String process = templateEngine.process("email.templates/" + template, context);
         MimeMessage mimeMessage = emailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage);
         try {
-            helper.setSubject("Welcome " + advertisement.getOwner().getFirstName());
+            helper.setSubject("CEREBRO");
             helper.setText(process, true);
-            helper.setTo(advertisement.getOwner().getEmail());
+            helper.setTo(userInfo.getEmail());
             emailSender.send(mimeMessage);
         } catch (MessagingException e) {
             e.printStackTrace();
         }
+//        });
     }
 
-
 }
+
+

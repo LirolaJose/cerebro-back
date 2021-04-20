@@ -2,8 +2,8 @@ package com.dataart.cerebro.schedule;
 
 import com.dataart.cerebro.domain.Advertisement;
 import com.dataart.cerebro.domain.Status;
-import com.dataart.cerebro.repository.AdvertisementRepository;
 import com.dataart.cerebro.email.EmailService;
+import com.dataart.cerebro.repository.AdvertisementRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -25,7 +25,8 @@ public class ScheduledEmailTasks {
         this.emailService = emailService;
     }
 
-    @Scheduled(cron = "00 31 12 * * ?") // At 12:31:00 AM every day
+//    @Scheduled(cron = "00 31 12 * * ?") // At 12:31:00 AM every day
+    @Scheduled(fixedRate = 500000)
     public void findExpiringAdvertisements() {
         log.info("Search for expiring advertisement launched at {}", LocalDateTime.now());
         List<Advertisement> advertisementsList = advertisementRepository.findAdvertisementsByDate(Status.ACTIVE.getId(), 1);
@@ -39,11 +40,11 @@ public class ScheduledEmailTasks {
         log.info("Search expiring advertisement is finished. Letter was sent to {} addresses", emailAndAds.size());
     }
 
-    @Scheduled(cron = "00 30 12 * * ?") // At 12:30:00 AM every day
+//    @Scheduled(cron = "00 30 12 * * ?") // At 12:30:00 AM every day
+        @Scheduled(fixedRate = 500000)
     public void findExpiredAdvertisements() {
         log.info("Search for expired advertisement launched at {}", LocalDateTime.now());
-        List<com.dataart.cerebro.domain.Advertisement> advertisementsList = advertisementRepository.findAdvertisementsByDate(Status.ACTIVE.getId(),0);
-
+        List<Advertisement> advertisementsList = advertisementRepository.findAdvertisementsByDate(Status.ACTIVE.getId(), 0);
 
         Map<String, List<Advertisement>> emailAndAds = advertisementsList.stream()
                 .peek(advertisement -> advertisement.setStatus(Status.CLOSED))

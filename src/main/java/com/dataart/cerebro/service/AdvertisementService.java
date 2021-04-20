@@ -58,7 +58,7 @@ public class AdvertisementService {
         advertisement.setExpiredTime(publicationTime.plusDays(7));
         Advertisement newAdvertisement = advertisementRepository.save(advertisement);
 //        emailService.sendEmailAboutPublication(newAdvertisement);
-        emailService.sendEmail(newAdvertisement);
+        emailService.sendEmailAboutPublication(newAdvertisement);
 
 
     }
