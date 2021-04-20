@@ -1,12 +1,20 @@
 package com.dataart.cerebro.email;
 
-import com.dataart.cerebro.domain.*;
+import com.dataart.cerebro.domain.AdditionalService;
+import com.dataart.cerebro.domain.Advertisement;
+import com.dataart.cerebro.domain.AdvertisementOrder;
+import com.dataart.cerebro.domain.UserInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring5.SpringTemplateEngine;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -20,6 +28,8 @@ import java.util.stream.Collectors;
 @Slf4j
 public class EmailService {
     private final JavaMailSender emailSender;
+    private final SpringTemplateEngine templateEngine;
+
     private final Executor executor = Executors.newFixedThreadPool(5);
 
     @Value("${spring.data.rest.page-param-name}")
@@ -27,10 +37,11 @@ public class EmailService {
 
     private static final String SIGNATURE = "CEREBRO: \n +7 (222) 555-77-99 \n lirolaboard@gmail.com";
 
-    public EmailService(JavaMailSender emailSender) {
+    public EmailService(JavaMailSender emailSender, SpringTemplateEngine templateEngine) {
         this.emailSender = emailSender;
+        this.templateEngine = templateEngine;
     }
-    
+
     public void sendEmailAboutPublication(Advertisement advertisement) {
         executor.execute(() -> {
             log.info("Sending email about publication is started at {}", LocalDateTime.now());
@@ -50,7 +61,6 @@ public class EmailService {
         });
     }
 
-    
     public void sendEmailAboutExpiring(Map<String, List<Advertisement>> emailAndAds) {
         executor.execute(() -> {
             log.info("Sending email about expiring is started at {}", LocalDateTime.now());
@@ -79,7 +89,7 @@ public class EmailService {
         });
     }
 
-    
+
     public void sendEmailAboutExpired(Map<String, List<Advertisement>> emailAndAds) {
         executor.execute(() -> {
             log.info("Sending email about expired is started at {}", LocalDateTime.now());
@@ -105,7 +115,7 @@ public class EmailService {
         });
     }
 
-    
+
     public void sendEmailAboutPurchase(AdvertisementOrder order, UserInfo customer) {
         executor.execute(() -> {
             log.info("Sending email about purchase is started at {}", LocalDateTime.now());
@@ -135,7 +145,7 @@ public class EmailService {
         });
     }
 
-    
+
     public void sendEmailAboutSell(AdvertisementOrder order, UserInfo customer) {
         executor.execute(() -> {
             log.info("Sending email about sell is started at {}", LocalDateTime.now());
@@ -145,7 +155,7 @@ public class EmailService {
             Set<AdditionalService> servicesSet = order.getAdditionalServices();
 
             mailMessage.setTo(owner.getEmail());
-            mailMessage.setSubject("You advertisement is closed on \"CEREBRO\"");
+            mailMessage.setSubject("You advertisement is sell on \"CEREBRO\"");
             StringBuilder text = new StringBuilder();
 
             text.append("Dear ").append(owner.getFirstName()).append(" ").append(owner.getSecondName()).append(",\n")
@@ -169,4 +179,24 @@ public class EmailService {
             log.info("Email about sell is sent to {} at {}", owner.getEmail(), LocalDateTime.now());
         });
     }
+
+
+    public void sendEmail(Advertisement advertisement) {
+        Context context = new Context();
+        context.setVariable("userInfo", advertisement.getOwner());
+
+        String process = templateEngine.process("emailTemplate", context);
+        MimeMessage mimeMessage = emailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage);
+        try {
+            helper.setSubject("Welcome " + advertisement.getOwner().getFirstName());
+            helper.setText(process, true);
+            helper.setTo(advertisement.getOwner().getEmail());
+            emailSender.send(mimeMessage);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }

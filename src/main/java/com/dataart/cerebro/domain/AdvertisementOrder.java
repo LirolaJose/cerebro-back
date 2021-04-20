@@ -22,8 +22,8 @@ public class AdvertisementOrder {
     private Advertisement advertisement;
 
     @OneToOne
-    @JoinColumn (name = "seller_id")
-    private UserInfo seller;
+    @JoinColumn (name = "customer_id")
+    private UserInfo customer;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "services_of_order",

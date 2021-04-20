@@ -1,0 +1,1 @@
+ALTER TABLE advertisement_order RENAME seller_id TO customer_id;

@@ -31,10 +31,10 @@ public class ControllerExceptionHandler {
     }
 
     @ExceptionHandler(ValidationException.class)
-    public String handleValidationException(Exception e, Model model) {
-        model.addAttribute(MESSAGE, "Validation exception: " + e.getMessage());
-        model.addAttribute("title", "Fill the all required fields");
-        return "exception";
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public ErrorDto handleValidationException(ValidationException ex) {
+        return new ErrorDto(ex.getMessage());
     }
 
 
@@ -42,13 +42,7 @@ public class ControllerExceptionHandler {
     @ResponseBody
     public ResponseEntity<?> handleRuntimeException(Exception e) {
 
-        return new ResponseEntity<>(e.getMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(EntityNotFoundException.class)
-    @ResponseBody
-    public ResponseEntity<?> handleEntityNotFoundException(Exception e) {
-        return new ResponseEntity<>("Your request is not found:", new HttpHeaders(), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>("Server error. Please contact the administrator", new HttpHeaders(), HttpStatus.NOT_FOUND);
     }
 
     @Data
