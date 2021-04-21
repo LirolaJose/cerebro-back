@@ -10,9 +10,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+
+import static java.util.stream.Collectors.groupingBy;
 
 @Service
 @Slf4j
@@ -49,6 +53,7 @@ public class AdvertisementService {
         return advertisementRepository.findAdvertisementsByOwnerId(id);
     }
 
+    @Transactional
     public void createNewAdvertisement(Advertisement advertisement) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserInfo owner = userInfoService.findUserInfoByEmail(authentication.getName());
@@ -57,9 +62,29 @@ public class AdvertisementService {
         advertisement.setPublicationTime(publicationTime);
         advertisement.setExpiredTime(publicationTime.plusDays(7));
         Advertisement newAdvertisement = advertisementRepository.save(advertisement);
-//        emailService.sendEmailAboutPublication(newAdvertisement);
         emailService.sendEmailAboutPublication(newAdvertisement);
+    }
 
-
+    public void findAdvertisementsByExpiringDate(Long statusId, Integer lookbackDays){
+        List<Advertisement> advertisementsList = advertisementRepository.findAdvertisementsByDate(statusId, lookbackDays);
+        Map<String, List<Advertisement>> emailAndAds = advertisementsList.stream()
+                .collect(groupingBy(ad -> ad.getOwner().getEmail()));
+        if (!emailAndAds.isEmpty()) {
+            emailService.sendEmailAboutExpiring(emailAndAds);
+            log.info("Letter was sent to {} addresses", emailAndAds.size());
+        }
+    }
+    public void findAdvertisementsByExpiredDate(Long statusId, Integer lookbackDays){
+        List<Advertisement> advertisementsList = advertisementRepository.findAdvertisementsByDate(Status.ACTIVE.getId(), 0);
+        Map<String, List<Advertisement>> emailAndAds = advertisementsList.stream()
+                .peek(advertisement -> {
+                    advertisement.setStatus(Status.CLOSED);
+                    advertisementRepository.save(advertisement);
+                })
+                .collect(groupingBy(ad -> ad.getOwner().getEmail()));
+        if (!emailAndAds.isEmpty()) {
+            emailService.sendEmailAboutExpired(emailAndAds);
+            log.info("Letter was sent to {} addresses", emailAndAds.size());
+        }
     }
 }

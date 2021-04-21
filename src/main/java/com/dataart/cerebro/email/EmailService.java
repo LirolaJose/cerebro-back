@@ -1,13 +1,11 @@
 package com.dataart.cerebro.email;
 
-import com.dataart.cerebro.domain.AdditionalService;
 import com.dataart.cerebro.domain.Advertisement;
 import com.dataart.cerebro.domain.AdvertisementOrder;
 import com.dataart.cerebro.domain.UserInfo;
 import com.dataart.cerebro.repository.UserInfoRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -20,10 +18,8 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -32,12 +28,10 @@ public class EmailService {
     private final SpringTemplateEngine templateEngine;
     private final UserInfoRepository userInfoRepository;
 
-    private final Executor executor = Executors.newFixedThreadPool(5);
+    private final Executor executor = Executors.newFixedThreadPool(10);
 
     @Value("${spring.data.rest.page-param-name}")
     private String url;
-
-    private static final String SIGNATURE = "CEREBRO: \n +7 (222) 555-77-99 \n lirolaboard@gmail.com";
 
     public EmailService(JavaMailSender emailSender, SpringTemplateEngine templateEngine, UserInfoRepository userInfoRepository) {
         this.emailSender = emailSender;
@@ -54,7 +48,6 @@ public class EmailService {
             contextMap.put("userInfo", userInfo);
             contextMap.put("advertisement", advertisement);
             contextMap.put("url", url);
-            contextMap.put("signature", SIGNATURE);
             sendEmail(contextMap, template);
             log.info("Email about publication has been sent to {} at {}", userInfo.getEmail(), LocalDateTime.now());
         });
@@ -70,7 +63,6 @@ public class EmailService {
                 contextMap.put("userInfo", userInfoRepository.findUserInfoByEmail(email));
                 contextMap.put("advertisementList", advertisementsList);
                 contextMap.put("url", url);
-                contextMap.put("signature", SIGNATURE);
                 sendEmail(contextMap, template);
                 log.info("Email about expiring has been sent to {} at {}", email, LocalDateTime.now());
             }));
@@ -87,7 +79,6 @@ public class EmailService {
                 contextMap.put("userInfo", userInfoRepository.findUserInfoByEmail(email));
                 contextMap.put("advertisementList", advertisementsList);
                 contextMap.put("url", url);
-                contextMap.put("signature", SIGNATURE);
                 sendEmail(contextMap, template);
                 log.info("Email about expired has been sent to {} at {}", email, LocalDateTime.now());
             }));
@@ -106,7 +97,6 @@ public class EmailService {
             contextMap.put("advertisement", advertisement);
             contextMap.put("order", order);
             contextMap.put("url", url);
-            contextMap.put("signature", SIGNATURE);
             sendEmail(contextMap, template);
             log.info("Email about purchase is sent to {} at {}", customer.getEmail(), LocalDateTime.now());
 //            Set<AdditionalService> servicesSet = order.getAdditionalServices();
@@ -126,7 +116,6 @@ public class EmailService {
             contextMap.put("advertisement", advertisement);
             contextMap.put("order", order);
             contextMap.put("url", url);
-            contextMap.put("signature", SIGNATURE);
             sendEmail(contextMap, template);
             log.info("Email about sell is sent to {} at {}", advertisement.getOwner().getEmail(), LocalDateTime.now());
             //            Set<AdditionalService> servicesSet = order.getAdditionalServices();

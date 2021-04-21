@@ -1,6 +1,5 @@
 package com.dataart.cerebro.controller;
 
-import com.dataart.cerebro.exception.EntityNotFoundException;
 import com.dataart.cerebro.exception.NotFoundException;
 import com.dataart.cerebro.exception.ValidationException;
 import lombok.AllArgsConstructor;
@@ -10,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -19,7 +17,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import java.io.Serializable;
 
 @ControllerAdvice
-@Slf4j
 public class ControllerExceptionHandler {
     private static final String MESSAGE = "message";
 

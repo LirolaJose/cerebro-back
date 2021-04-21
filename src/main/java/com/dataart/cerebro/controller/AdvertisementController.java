@@ -41,8 +41,4 @@ public class AdvertisementController {
         advertisementService.createNewAdvertisement(advertisement);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
-//    @PostMapping("/")
-//    public void addAdvertisement(@RequestBody Advertisement advertisement) {
-//        advertisementService.createNewAdvertisement(advertisement);
-//    }
 }

@@ -51,14 +51,4 @@ public class AdvertisementOrderService {
         emailService.sendEmailAboutPurchase(advertisementOrder, customer);
         emailService.sendEmailAboutSell(advertisementOrder, customer);
     }
-
-    public void addAdOrder(AdvertisementOrder adOrder, Advertisement advertisement) {
-//        Double totalPrice = advertisement.getPrice() + serviceRepository.getTotalPriceServices(adOrder.getServices());
-//
-//        adOrder.setTotalPrice(totalPrice);
-//        AdvertisementOrder order = advertisementOrderRepository.addAdOrder(adOrder, LocalDateTime.now(), advertisement, customerInfo);
-//
-//        emailService.sendEmailAboutPurchase(advertisement, customerInfo, order);
-//        emailService.sendEmailAboutSell(advertisement, customerInfo, order);
-    }
 }
