@@ -11,7 +11,7 @@
 <body>
 <div>Dear <b th:utext="|${userInfo.firstName} ${userInfo.secondName}, |"></b></div>
 <div th:switch=${action}>
-    <p th:case="soon">your advertisement(s) will be close soon: <br>
+    <p th:case="soon">your advertisement(s) will be closed soon: <br>
         <span th:each="ad : ${advertisementList}">
             <span th:utext="|${url}${ad.id} will be closed ${#temporals.format(ad.expiredTime, 'dd-MM-yyyy')} <br />|"></span>
         </span></p>
@@ -21,6 +21,6 @@
             <span th:utext="|${url}${ad.id} <br />|"></span>
         </span></p>
 </div>
-<div><b th:text="${signature}"></b></div>
+<div><b th:utext="|CEREBRO: <br /> +7 (222) 555-77-99 <br /> lirolaboard@gmail.com|"></b> </div>
 </body>
 </html>

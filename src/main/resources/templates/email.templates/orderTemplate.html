@@ -14,11 +14,11 @@
         <span>If you haven't made this purchase, call or email us</span>
     </p>
 
-    <p th:case="sell">your advertisement(s) has been sold:
+    <p th:case="sell">Your advertisement(s) has been sold:
         <span th:utext="|${url}${advertisement.id} <br> Total price: ${order.totalPrice} <br>|"></span>
         <span th:utext="|Customer contact info: ${customer.firstName} ${customer.secondName}|"></span>
     </p>
 </div>
-<div><b th:text="${signature}"></b> </div>
+<div><b th:utext="|CEREBRO: <br /> +7 (222) 555-77-99 <br /> lirolaboard@gmail.com|"></b> </div>
 </body>
 </html>
