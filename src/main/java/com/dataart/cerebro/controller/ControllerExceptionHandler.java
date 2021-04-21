@@ -1,11 +1,11 @@
 package com.dataart.cerebro.controller;
 
+import com.dataart.cerebro.exception.EmailExistsException;
 import com.dataart.cerebro.exception.NotFoundException;
 import com.dataart.cerebro.exception.ValidationException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,15 +23,22 @@ public class ControllerExceptionHandler {
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ResponseBody
-    public ErrorDto handleNotFoundException(NotFoundException ex) {
-        return new ErrorDto(ex.getMessage());
+    public ErrorDTO handleNotFoundException(NotFoundException ex) {
+        return new ErrorDTO(ex.getMessage());
     }
 
     @ExceptionHandler(ValidationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
-    public ErrorDto handleValidationException(ValidationException ex) {
-        return new ErrorDto(ex.getMessage());
+    public ErrorDTO handleValidationException(ValidationException ex) {
+        return new ErrorDTO(ex.getMessage());
+    }
+
+    @ExceptionHandler(EmailExistsException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public ErrorDTO handlerEmailExistsException(EmailExistsException ex){
+        return new ErrorDTO((ex.getMessage()));
     }
 
 
@@ -45,7 +52,7 @@ public class ControllerExceptionHandler {
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
-    private static class ErrorDto implements Serializable {
+    private static class ErrorDTO implements Serializable {
         private static final long serialVersionUID = 1L;
         private String message;
     }

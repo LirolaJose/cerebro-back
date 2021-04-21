@@ -30,7 +30,7 @@ public class UserInfo {
 
     @NotEmpty
     @Size(max = 100)
-    @Email(message = "Wrong email")
+    @Email(message = "Incorrect email")
     private String email;
     private String password;
 

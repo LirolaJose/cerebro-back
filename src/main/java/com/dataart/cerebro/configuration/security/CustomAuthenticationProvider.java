@@ -2,6 +2,7 @@ package com.dataart.cerebro.configuration.security;
 
 import com.dataart.cerebro.domain.UserInfo;
 import com.dataart.cerebro.repository.UserInfoRepository;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.CredentialsExpiredException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,7 +22,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     @Override
     public Authentication authenticate(Authentication authentication) {
         String username = authentication.getName();
-        String password = authentication.getCredentials().toString();
+        String password = DigestUtils.md5Hex(authentication.getCredentials().toString());
 
         UserInfo userInfo = userInfoRepository.findUserInfoByEmail(username);
         if (userInfo == null || !password.equals(userInfo.getPassword())) {
