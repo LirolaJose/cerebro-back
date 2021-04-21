@@ -1,5 +1,6 @@
 package com.dataart.cerebro.service;
 
+import com.dataart.cerebro.domain.Role;
 import com.dataart.cerebro.domain.UserInfo;
 import com.dataart.cerebro.exception.EmailExistsException;
 import com.dataart.cerebro.repository.UserInfoRepository;
@@ -25,12 +26,13 @@ public class UserInfoService {
     }
 
     public void createNewUserInfo(UserInfo userInfo) {
-        if (userInfoRepository.findEmail().contains(userInfo.getEmail())) {
+        if (findUserInfoByEmail(userInfo.getEmail()) != null) {
             log.info("An attempt to create user with exists email: {}", userInfo.getEmail());
             throw new EmailExistsException(userInfo.getEmail());
         }
         String cryptPassword = DigestUtils.md5Hex(userInfo.getPassword());
         userInfo.setPassword(cryptPassword);
+        userInfo.setRole(Role.USER);
         userInfoRepository.save(userInfo);
         log.info("Created new USER: {}, {}, {}, {}, {}", userInfo.getFirstName(), userInfo.getSecondName(),
                 userInfo.getPhone(), userInfo.getEmail(), userInfo.getRole());

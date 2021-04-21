@@ -94,7 +94,11 @@
             <artifactId>commons-codec</artifactId>
             <version>1.15</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <scope>test</scope>
+        </dependency>
 
     </dependencies>
 

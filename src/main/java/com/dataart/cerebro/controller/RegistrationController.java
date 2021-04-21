@@ -18,6 +18,7 @@ public class RegistrationController {
         this.userInfoService = userInfoService;
     }
 
+    @CrossOrigin
     @PostMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> signUp(@RequestBody UserInfo userInfo){
         userInfoService.createNewUserInfo(userInfo);
