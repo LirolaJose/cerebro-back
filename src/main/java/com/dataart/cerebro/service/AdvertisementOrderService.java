@@ -38,17 +38,21 @@ public class AdvertisementOrderService {
     public void createNewAdvertisementOrder(AdvertisementOrder advertisementOrder) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserInfo customer = userInfoService.findUserInfoByEmail(authentication.getName());
+        log.info("User with email: {} creates new order", customer.getEmail());
         try {
             advertisementOrder.setOrderTime(LocalDateTime.now());
 //            advertisementOrder.setTotalPrice();
 //            advertisementOrder.setAdvertisement();
             advertisementOrder.setCustomer(customer);
-            advertisementOrderRepository.save(advertisementOrder);
+            AdvertisementOrder newOrder = advertisementOrderRepository.save(advertisementOrder);
+            log.info("New order added (id = {})", newOrder.getId());
+            emailService.sendEmailAboutPurchase(newOrder, customer);
+            emailService.sendEmailAboutSell(newOrder, customer);
         }catch (Exception exception){
             log.error(exception.getMessage());
             throw new NotFoundException("Incorrect data");
         }
-        emailService.sendEmailAboutPurchase(advertisementOrder, customer);
-        emailService.sendEmailAboutSell(advertisementOrder, customer);
+
+
     }
 }

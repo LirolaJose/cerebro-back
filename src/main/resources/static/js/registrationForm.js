@@ -1,9 +1,4 @@
 function addNewUserInfo() {
-    // let firstName = $('#firstName').val();
-    // let secondName = $('#secondName').val();
-    // let phone = $('#phone').val();
-    // let email = $('#email').val();
-    // let password = $('#password').val();
     let userInfo = {
         firstName: $('#firstName').val(),
         secondName: $('#secondName').val(),
@@ -16,7 +11,6 @@ function addNewUserInfo() {
     $.ajax({
         type: "POST",
         data: JSON.stringify(userInfo),
-        // data: JSON.stringify({firstName: firstName, secondName: secondName, phone: phone, email: email, password: password}),
         dataType: "json",
         url: "http://localhost:8080/registration/",
         contentType: "application/json"

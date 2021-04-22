@@ -33,14 +33,17 @@ public class AdvertisementService {
 
 
     public List<Advertisement> findAllAdvertisements() {
+        log.info("Find all advertisements");
         return advertisementRepository.findAll();
     }
 
     public List<Advertisement> findActiveAdvertisements() {
+        log.info("Find all ACTIVE advertisements");
         return advertisementRepository.findAdvertisementsByStatus(Status.ACTIVE);
     }
 
     public Advertisement findAdvertisementById(Long id) {
+        log.info("Find advertisement by ID {}", id);
         Advertisement advertisement = advertisementRepository.findAdvertisementById(id);
         if (advertisement == null) {
             log.info("Advertisement with id {} not found", id);
@@ -50,11 +53,13 @@ public class AdvertisementService {
     }
 
     public List<Advertisement> findAdvertisementsByUserInfoId(Long id) {
+        log.info("Find advertisements by user id {}", id);
         return advertisementRepository.findAdvertisementsByOwnerId(id);
     }
 
     @Transactional
     public void createNewAdvertisement(Advertisement advertisement) {
+        log.info("Creating new advertisement");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserInfo owner = userInfoService.findUserInfoByEmail(authentication.getName());
         advertisement.setOwner(owner);
@@ -66,6 +71,7 @@ public class AdvertisementService {
     }
 
     public void findAdvertisementsByExpiringDate(Long statusId, Integer lookbackDays){
+        log.info("Searching expiring advertisements");
         List<Advertisement> advertisementsList = advertisementRepository.findAdvertisementsByDate(statusId, lookbackDays);
         Map<String, List<Advertisement>> emailAndAds = advertisementsList.stream()
                 .collect(groupingBy(ad -> ad.getOwner().getEmail()));
@@ -75,7 +81,8 @@ public class AdvertisementService {
         }
     }
     public void findAdvertisementsByExpiredDate(Long statusId, Integer lookbackDays){
-        List<Advertisement> advertisementsList = advertisementRepository.findAdvertisementsByDate(Status.ACTIVE.getId(), 0);
+        log.info("Searching expired advertisements");
+        List<Advertisement> advertisementsList = advertisementRepository.findAdvertisementsByDate(statusId, lookbackDays);
         Map<String, List<Advertisement>> emailAndAds = advertisementsList.stream()
                 .peek(advertisement -> {
                     advertisement.setStatus(Status.CLOSED);

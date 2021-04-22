@@ -3,6 +3,7 @@ package com.dataart.cerebro.service;
 import com.dataart.cerebro.domain.Role;
 import com.dataart.cerebro.domain.UserInfo;
 import com.dataart.cerebro.exception.EmailExistsException;
+import com.dataart.cerebro.exception.NotFoundException;
 import com.dataart.cerebro.repository.UserInfoRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -18,11 +19,23 @@ public class UserInfoService {
     }
 
     public UserInfo findUserInfoById(Long id) {
-        return userInfoRepository.findUserInfoById(id);
+        log.info("Searching User by id {}", id);
+        UserInfo userInfo = userInfoRepository.findUserInfoById(id);
+        if(userInfo == null){
+            log.info("User with id {} not found", id);
+            throw new NotFoundException("User", id);
+        }
+        return userInfo;
     }
 
     public UserInfo findUserInfoByEmail(String email) {
-        return userInfoRepository.findUserInfoByEmail(email);
+        log.info("Searching User by email {}", email);
+        UserInfo userInfo = userInfoRepository.findUserInfoByEmail(email);
+        if(userInfo == null){
+            log.info("User with email {} not found", email);
+            throw new NotFoundException("User", email);
+        }
+        return userInfo;
     }
 
     public void createNewUserInfo(UserInfo userInfo) {
@@ -30,6 +43,7 @@ public class UserInfoService {
             log.info("An attempt to create user with exists email: {}", userInfo.getEmail());
             throw new EmailExistsException(userInfo.getEmail());
         }
+        log.info("Creating new USER");
         String cryptPassword = DigestUtils.md5Hex(userInfo.getPassword());
         userInfo.setPassword(cryptPassword);
         userInfo.setRole(Role.USER);

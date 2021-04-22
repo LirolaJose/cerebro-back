@@ -6,6 +6,10 @@ public class NotFoundException extends RuntimeException {
         super(String.format("%s with ID (%d) doesn't exist", object, id));
     }
 
+    public NotFoundException(String object, String email) {
+        super(String.format("%s with email %s doesn't exist", object, email));
+    }
+
     public NotFoundException(String object) {
         super(object);
     }
