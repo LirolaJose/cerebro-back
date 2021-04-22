@@ -30,12 +30,7 @@ public class UserInfoService {
 
     public UserInfo findUserInfoByEmail(String email) {
         log.info("Searching User by email {}", email);
-        UserInfo userInfo = userInfoRepository.findUserInfoByEmail(email);
-        if(userInfo == null){
-            log.info("User with email {} not found", email);
-            throw new NotFoundException("User", email);
-        }
-        return userInfo;
+        return userInfoRepository.findUserInfoByEmail(email);
     }
 
     public void createNewUserInfo(UserInfo userInfo) {
@@ -44,11 +39,14 @@ public class UserInfoService {
             throw new EmailExistsException(userInfo.getEmail());
         }
         log.info("Creating new USER");
-        String cryptPassword = DigestUtils.md5Hex(userInfo.getPassword());
-        userInfo.setPassword(cryptPassword);
+        String encryptedPassword = encryptPassword(userInfo.getPassword());
+        userInfo.setPassword(encryptedPassword);
         userInfo.setRole(Role.USER);
         userInfoRepository.save(userInfo);
         log.info("Created new USER: {}, {}, {}, {}, {}", userInfo.getFirstName(), userInfo.getSecondName(),
                 userInfo.getPhone(), userInfo.getEmail(), userInfo.getRole());
+    }
+    public String encryptPassword(String password){
+        return DigestUtils.md5Hex(password);
     }
 }

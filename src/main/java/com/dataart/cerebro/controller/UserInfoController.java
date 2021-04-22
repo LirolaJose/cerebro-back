@@ -30,10 +30,7 @@ public class UserInfoController {
     @GetMapping("/{id}")
     public ResponseEntity<?> getUserInfoById(@PathVariable Long id) {
         UserInfo userInfo = userInfoService.findUserInfoById(id);
-
-        return userInfo != null
-                ? new ResponseEntity<>(userInfo, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(userInfo, HttpStatus.OK);
     }
 
     @GetMapping("/{id}/advertisements")

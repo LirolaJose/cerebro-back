@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Advertisement Form</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    </script>
+    <script src="js/advertisementForm.js"></script>
+</head>
+<body>
+<h1>Advertisement form</h1>
+<div id="advertisementForm">
+    <p>Title <input id="title" type="text"></p>
+    <p>Text <input id="text" type="text"></p>
+    <p>Price <input id="price" type="text"></p>
+
+    <p>Type <select id="selectType">
+        <option></option>
+    </select></p>
+
+    <p>Category <select id="selectCategory"></select></p>
+
+    <script type="text/javascript"> getTypesSelect()</script>
+
+    <script>
+        $("#selectType").change(function () {
+            let type = $("#selectType option:selected").attr("value");
+            $.ajax({
+                type: "GET",
+                url: "http://localhost:8080/categories/" + type,
+                dataType: "json",
+                contentType: "application/json"
+            }).done(function (categoriesList) {
+                console.log(categoriesList);
+                $("selectCategory").empty();
+                $("#selectCategory").html('<select id="selectCategory" />');
+                $.each(categoriesList, function (index, category) {
+                    $("#selectCategory").append($("<option></option>")
+                        .attr("value", category.id)
+                        .text(category.name));
+                })
+            })
+        })
+    </script>
+</div>
+</body>
+</html>

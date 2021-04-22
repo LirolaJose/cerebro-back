@@ -1,7 +1,6 @@
 package com.dataart.cerebro.controller;
 
 import com.dataart.cerebro.domain.Advertisement;
-import com.dataart.cerebro.exception.NotFoundException;
 import com.dataart.cerebro.service.AdvertisementService;
 import io.swagger.annotations.Api;
 import org.springframework.http.HttpStatus;
@@ -24,14 +23,14 @@ public class AdvertisementController {
 
     @GetMapping("/")
     public ResponseEntity<?> getActiveAdvertisements() {
-        final List<Advertisement> advertisements = advertisementService.findActiveAdvertisements();
+        List<Advertisement> advertisements = advertisementService.findActiveAdvertisements();
         return advertisements != null && !advertisements.isEmpty()
                 ? new ResponseEntity<>(advertisements, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getAdvertisementById(@PathVariable Long id) throws NotFoundException {
+    public ResponseEntity<?> getAdvertisementById(@PathVariable Long id) {
         Advertisement advertisement = advertisementService.findAdvertisementById(id);
         return new ResponseEntity<>(advertisement, HttpStatus.OK);
     }
