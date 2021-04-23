@@ -1,8 +1,7 @@
 package com.dataart.cerebro.configuration.security;
 
 import com.dataart.cerebro.domain.UserInfo;
-import com.dataart.cerebro.repository.UserInfoRepository;
-import org.apache.commons.codec.digest.DigestUtils;
+import com.dataart.cerebro.service.UserInfoService;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.CredentialsExpiredException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -13,18 +12,18 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class CustomAuthenticationProvider implements AuthenticationProvider {
-    private final UserInfoRepository userInfoRepository;
+    private final UserInfoService userInfoService;
 
-    public CustomAuthenticationProvider(UserInfoRepository userInfoRepository) {
-        this.userInfoRepository = userInfoRepository;
+    public CustomAuthenticationProvider(UserInfoService userInfoService) {
+        this.userInfoService = userInfoService;
     }
 
     @Override
     public Authentication authenticate(Authentication authentication) {
         String username = authentication.getName();
-        String password = DigestUtils.md5Hex(authentication.getCredentials().toString());
+        String password = userInfoService.encryptPassword(authentication.getCredentials().toString());
 
-        UserInfo userInfo = userInfoRepository.findUserInfoByEmail(username);
+        UserInfo userInfo = userInfoService.findUserInfoByEmail(username);
         if (userInfo == null || !password.equals(userInfo.getPassword())) {
             throw new CredentialsExpiredException("Invalid credentials");
         }

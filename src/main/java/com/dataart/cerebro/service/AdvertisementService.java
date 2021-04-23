@@ -60,9 +60,9 @@ public class AdvertisementService {
     @Transactional
     public void createNewAdvertisement(Advertisement advertisement) {
         log.info("Creating new advertisement");
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserInfo owner = userInfoService.findUserInfoByEmail(authentication.getName());
-        advertisement.setOwner(owner);
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        UserInfo owner = userInfoService.findUserInfoByEmail(authentication.getName());
+//        advertisement.setOwner(owner);
         LocalDateTime publicationTime = LocalDateTime.now();
         advertisement.setPublicationTime(publicationTime);
         advertisement.setExpiredTime(publicationTime.plusDays(7));
@@ -75,10 +75,11 @@ public class AdvertisementService {
         List<Advertisement> advertisementsList = advertisementRepository.findAdvertisementsByDate(statusId, lookbackDays);
         Map<String, List<Advertisement>> emailAndAds = advertisementsList.stream()
                 .collect(groupingBy(ad -> ad.getOwner().getEmail()));
+
         if (!emailAndAds.isEmpty()) {
             emailService.sendEmailAboutExpiring(emailAndAds);
             log.info("Letter was sent to {} addresses", emailAndAds.size());
-        }
+        }else{ log.info("No matching advertisements found");}
     }
     public void findAdvertisementsByExpiredDate(Long statusId, Integer lookbackDays){
         log.info("Searching expired advertisements");
@@ -89,9 +90,10 @@ public class AdvertisementService {
                     advertisementRepository.save(advertisement);
                 })
                 .collect(groupingBy(ad -> ad.getOwner().getEmail()));
+
         if (!emailAndAds.isEmpty()) {
             emailService.sendEmailAboutExpired(emailAndAds);
             log.info("Letter was sent to {} addresses", emailAndAds.size());
-        }
+        }else{ log.info("No matching advertisements found");}
     }
 }

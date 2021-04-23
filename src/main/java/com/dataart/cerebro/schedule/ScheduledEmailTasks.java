@@ -28,20 +28,20 @@ public class ScheduledEmailTasks {
         this.emailService = emailService;
     }
 
-    @Scheduled(cron = "00 36 12 * * ?") // At 12:31:00 AM every day
+    @Scheduled(cron = "00 45 12 * * ?") // At 12:31:00 AM every day
 //    @Scheduled(fixedRate = 500000)
     public void findExpiringAdvertisements() {
-        log.info("Search for expiring advertisement launched at {}", LocalDateTime.now());
+        log.info("Expiring advertisements search launched at {}", LocalDateTime.now());
         advertisementService.findAdvertisementsByExpiringDate(Status.ACTIVE.getId(), 1);
-        log.info("Search expiring advertisement is finished");
+        log.info("Expiring advertisements search is finished");
     }
 
-    @Scheduled(cron = "00 35 12 * * ?") // At 12:30:00 AM every day
+    @Scheduled(cron = "00 44 12 * * ?") // At 12:30:00 AM every day
 //        @Scheduled(fixedRate = 500000)
     public void findExpiredAdvertisements() {
-        log.info("Search for expired advertisement launched at {}", LocalDateTime.now());
+        log.info("Expired advertisements search launched at {}", LocalDateTime.now());
         advertisementService.findAdvertisementsByExpiredDate(Status.ACTIVE.getId(), 0);
-        log.info("Search expired advertisement is finished");
+        log.info("Expired advertisements search is finished");
     }
 }
 

@@ -7,7 +7,6 @@ function addNewUserInfo() {
         password: $('#password').val()
     }
 
-
     $.ajax({
         type: "POST",
         data: JSON.stringify(userInfo),
