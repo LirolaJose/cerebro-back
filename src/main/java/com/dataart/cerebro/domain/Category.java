@@ -22,10 +22,10 @@ public class Category {
     inverseJoinColumns = @JoinColumn(name = "service_id"))
     private Set<AdditionalService> additionalServices;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "category_of_types",
-    joinColumns = @JoinColumn(name = "category_id"),
-    inverseJoinColumns = @JoinColumn(name = "type_id"))
-    private Set<AdditionalService> types;
+//    @ManyToMany(fetch = FetchType.EAGER)
+//    @JoinTable(name = "category_of_types",
+//    joinColumns = @JoinColumn(name = "category_id"),
+//    inverseJoinColumns = @JoinColumn(name = "type_id"))
+//    private Set<Type> types;
 
 }

@@ -1,8 +1,7 @@
 package com.dataart.cerebro.service;
 
-import com.dataart.cerebro.domain.Advertisement;
-import com.dataart.cerebro.domain.Status;
-import com.dataart.cerebro.domain.UserInfo;
+import com.dataart.cerebro.controller.dto.AdvertisementDTO;
+import com.dataart.cerebro.domain.*;
 import com.dataart.cerebro.email.EmailService;
 import com.dataart.cerebro.exception.NotFoundException;
 import com.dataart.cerebro.repository.AdvertisementRepository;
@@ -13,8 +12,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.groupingBy;
 
@@ -24,11 +26,16 @@ public class AdvertisementService {
     private final AdvertisementRepository advertisementRepository;
     private final EmailService emailService;
     private final UserInfoService userInfoService;
+    private final CategoryService categoryService;
+    private final AdditionalServiceService additionalServiceService;
 
-    public AdvertisementService(AdvertisementRepository advertisementRepository, EmailService emailService, UserInfoService userInfoService) {
+    public AdvertisementService(AdvertisementRepository advertisementRepository, EmailService emailService, UserInfoService userInfoService, CategoryService categoryService, AdditionalServiceService additionalServiceService) {
         this.advertisementRepository = advertisementRepository;
         this.emailService = emailService;
         this.userInfoService = userInfoService;
+
+        this.categoryService = categoryService;
+        this.additionalServiceService = additionalServiceService;
     }
 
 
@@ -58,14 +65,30 @@ public class AdvertisementService {
     }
 
     @Transactional
-    public void createNewAdvertisement(Advertisement advertisement) {
+    public void createNewAdvertisement(AdvertisementDTO advertisementDTO) {
         log.info("Creating new advertisement");
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        UserInfo owner = userInfoService.findUserInfoByEmail(authentication.getName());
-//        advertisement.setOwner(owner);
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserInfo owner = userInfoService.findUserInfoByEmail(authentication.getName());
+        Category category = categoryService.findCategoryById(advertisementDTO.getCategoryId());
         LocalDateTime publicationTime = LocalDateTime.now();
+        Set<AdditionalService> additionalServices = new HashSet<>();
+        advertisementDTO.getAdditionalServices().stream()
+                .peek(additionalService -> additionalServices.add(additionalServiceService.findAdditionalServiceById(additionalService)))
+                .collect(Collectors.toSet());
+
+        Advertisement advertisement = new Advertisement();
+        advertisement.setTitle(advertisementDTO.getTitle());
+        advertisement.setText(advertisementDTO.getText());
+        advertisement.setPrice(advertisementDTO.getPrice());
+        advertisement.setStatus(Status.ACTIVE);
+        advertisement.setType(advertisementDTO.getType());
+        advertisement.setCategory(category);
+        advertisement.setAdditionalServices(additionalServices);
+        advertisement.setOwner(owner);
         advertisement.setPublicationTime(publicationTime);
         advertisement.setExpiredTime(publicationTime.plusDays(7));
+
         Advertisement newAdvertisement = advertisementRepository.save(advertisement);
         emailService.sendEmailAboutPublication(newAdvertisement);
     }

@@ -1,13 +1,14 @@
 package com.dataart.cerebro.controller;
 
+import com.dataart.cerebro.controller.dto.AdvertisementDTO;
 import com.dataart.cerebro.domain.Advertisement;
 import com.dataart.cerebro.service.AdvertisementService;
 import io.swagger.annotations.Api;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -35,9 +36,9 @@ public class AdvertisementController {
         return new ResponseEntity<>(advertisement, HttpStatus.OK);
     }
 
-    @PostMapping("/")
-    public ResponseEntity<?> addAdvertisement(@RequestBody @Valid Advertisement advertisement) {
-        advertisementService.createNewAdvertisement(advertisement);
+    @PostMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> addAdvertisement(@RequestBody AdvertisementDTO advertisementDTO) {
+        advertisementService.createNewAdvertisement(advertisementDTO);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }

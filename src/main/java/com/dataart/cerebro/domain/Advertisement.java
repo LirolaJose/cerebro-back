@@ -11,7 +11,7 @@ import java.util.Set;
 
 @Data
 @Entity
-@Table (name = "advertisement")
+@Table(name = "advertisement")
 public class Advertisement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,7 +32,7 @@ public class Advertisement {
     private Boolean visible;
 
     @OneToOne
-    @JoinColumn (name = "category_id")
+    @JoinColumn(name = "category_id")
     private Category category;
 
     @Column(name = "type_id")

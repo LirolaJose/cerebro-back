@@ -8,5 +8,4 @@ import java.util.List;
 
 public interface AdvertisementOrderRepository extends JpaRepository<AdvertisementOrder, Long> {
     List<AdvertisementOrder> findAdvertisementOrdersByAdvertisementOwnerId(Long id);
-
 }
