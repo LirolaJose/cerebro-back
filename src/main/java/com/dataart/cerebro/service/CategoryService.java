@@ -17,4 +17,7 @@ public class CategoryService {
     public List<Category> findCategoriesByType(Type type){
         return categoryRepository.findCategoriesByTypeId(type.getId());
     }
+    public Category findCategoryById(Long id){
+        return categoryRepository.findCategoryById(id);
+    }
 }

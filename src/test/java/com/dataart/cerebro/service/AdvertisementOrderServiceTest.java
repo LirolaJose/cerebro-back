@@ -1,14 +1,8 @@
 package com.dataart.cerebro.service;
 
-import com.dataart.cerebro.repository.AdvertisementOrderRepository;
-import com.dataart.cerebro.repository.ServiceRepository;
-import com.dataart.cerebro.domain.AdvertisementOrder;
-import com.dataart.cerebro.domain.Advertisement;
-import com.dataart.cerebro.email.EmailService;
 import org.junit.jupiter.api.Test;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
 public class AdvertisementOrderServiceTest {
 

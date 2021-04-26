@@ -1,18 +1,16 @@
 package com.dataart.cerebro.service;
 
-import com.dataart.cerebro.domain.Advertisement;
 import com.dataart.cerebro.domain.AdvertisementOrder;
 import com.dataart.cerebro.domain.UserInfo;
 import com.dataart.cerebro.email.EmailService;
 import com.dataart.cerebro.exception.NotFoundException;
 import com.dataart.cerebro.repository.AdvertisementOrderRepository;
-import com.dataart.cerebro.repository.ServiceRepository;
+import com.dataart.cerebro.repository.AdditionalServiceRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -21,13 +19,13 @@ import java.util.List;
 public class AdvertisementOrderService {
     private final AdvertisementOrderRepository advertisementOrderRepository;
     private final EmailService emailService;
-    private final ServiceRepository serviceRepository;
+    private final AdditionalServiceRepository additionalServiceRepository;
     private final UserInfoService userInfoService;
 
-    public AdvertisementOrderService(AdvertisementOrderRepository advertisementOrderRepository, EmailService emailService, ServiceRepository serviceRepository, UserInfoService userInfoService) {
+    public AdvertisementOrderService(AdvertisementOrderRepository advertisementOrderRepository, EmailService emailService, AdditionalServiceRepository additionalServiceRepository, UserInfoService userInfoService) {
         this.advertisementOrderRepository = advertisementOrderRepository;
         this.emailService = emailService;
-        this.serviceRepository = serviceRepository;
+        this.additionalServiceRepository = additionalServiceRepository;
         this.userInfoService = userInfoService;
     }
 
