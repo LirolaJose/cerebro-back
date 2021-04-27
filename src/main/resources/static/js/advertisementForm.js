@@ -1,6 +1,6 @@
 function createAdvertisement() {
     let checkboxes = [];
-    $(".cb").each(function (){
+    $(".additionalService").each(function (){
         if(this.checked){
             checkboxes.push($(this).val());
         }
@@ -13,12 +13,25 @@ function createAdvertisement() {
         categoryId: $("#selectCategory option:selected").val(),
         additionalServices: checkboxes
     }
+    let data = new FormData();
+    data.append("advertisementDTO", new Blob([JSON.stringify(advertisement)], {type: "application/json"}));
+
+    let allImages = document.getElementById("image").files.length;
+    for (let index = 0; index < allImages; index ++){
+        data.append("images", document.getElementById("image").files[index])
+    }
+
+
+
+    // data.append(form);
+
     $.ajax({
         type: "POST",
-        data: JSON.stringify(advertisement),
-        dataType: "json",
+        enctype: 'multipart/form-data',
+        data: data,
         url: "http://localhost:8080/api/advertisement/",
-        contentType: "application/json"
+        processData: false,
+        contentType: false
     });
 }
 
