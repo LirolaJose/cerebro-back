@@ -6,11 +6,12 @@ import com.dataart.cerebro.email.EmailService;
 import com.dataart.cerebro.exception.NotFoundException;
 import com.dataart.cerebro.repository.AdvertisementRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.mail.Multipart;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
@@ -28,14 +29,15 @@ public class AdvertisementService {
     private final UserInfoService userInfoService;
     private final CategoryService categoryService;
     private final AdditionalServiceService additionalServiceService;
+    private final ImageService imageService;
 
-    public AdvertisementService(AdvertisementRepository advertisementRepository, EmailService emailService, UserInfoService userInfoService, CategoryService categoryService, AdditionalServiceService additionalServiceService) {
+    public AdvertisementService(AdvertisementRepository advertisementRepository, EmailService emailService, UserInfoService userInfoService, CategoryService categoryService, AdditionalServiceService additionalServiceService, ImageService imageService) {
         this.advertisementRepository = advertisementRepository;
         this.emailService = emailService;
         this.userInfoService = userInfoService;
-
         this.categoryService = categoryService;
         this.additionalServiceService = additionalServiceService;
+        this.imageService = imageService;
     }
 
 
@@ -65,11 +67,11 @@ public class AdvertisementService {
     }
 
     @Transactional
-    public void createNewAdvertisement(AdvertisementDTO advertisementDTO) {
+    public void createNewAdvertisement(AdvertisementDTO advertisementDTO, List<MultipartFile> images) throws IOException {
         log.info("Creating new advertisement");
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserInfo owner = userInfoService.findUserInfoByEmail(authentication.getName());
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        UserInfo owner = userInfoService.findUserInfoByEmail(authentication.getName());
         Category category = categoryService.findCategoryById(advertisementDTO.getCategoryId());
         LocalDateTime publicationTime = LocalDateTime.now();
         Set<AdditionalService> additionalServices = new HashSet<>();
@@ -85,12 +87,15 @@ public class AdvertisementService {
         advertisement.setType(advertisementDTO.getType());
         advertisement.setCategory(category);
         advertisement.setAdditionalServices(additionalServices);
-        advertisement.setOwner(owner);
+//        advertisement.setOwner(owner);
         advertisement.setPublicationTime(publicationTime);
         advertisement.setExpiredTime(publicationTime.plusDays(7));
 
         Advertisement newAdvertisement = advertisementRepository.save(advertisement);
-        emailService.sendEmailAboutPublication(newAdvertisement);
+        log.info("New advertisement created ({})", newAdvertisement);
+
+        imageService.saveImage(images, newAdvertisement);
+//        emailService.sendEmailAboutPublication(newAdvertisement);
     }
 
     public void findAdvertisementsByExpiringDate(Long statusId, Integer lookbackDays){
