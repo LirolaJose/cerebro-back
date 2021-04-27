@@ -17,7 +17,8 @@ $(function () {
             }
             $("#additionalServices").html('<label id="services">Additional services: <br></label>')
             $.each(additionalServicesList, function (index, additionalService) {
-                $("#services").append($('<input class="additionalService" type="checkbox">' + additionalService.name + '<br/>')
+                $("#services").append($('<input class="additionalService" type="checkbox">' + additionalService.name + ", price: " +
+                    + additionalService.price + '<br/>')
                     .attr("value", additionalService.id));
             });
         });
