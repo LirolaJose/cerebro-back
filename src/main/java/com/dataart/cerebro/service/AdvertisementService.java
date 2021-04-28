@@ -88,6 +88,7 @@ public class AdvertisementService {
         advertisement.setCategory(category);
         advertisement.setAdditionalServices(additionalServices);
 //        advertisement.setOwner(owner);
+        advertisement.setVisible(true);
         advertisement.setPublicationTime(publicationTime);
         advertisement.setExpiredTime(publicationTime.plusDays(7));
 

@@ -1,0 +1,1 @@
+ALTER TABLE image RENAME COLUMN image to image_bytes;

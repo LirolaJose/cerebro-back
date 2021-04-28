@@ -5,10 +5,9 @@ $(function () {
 
     $("#selectCategory").change(function () {
         let category = $("#selectCategory option:selected").attr("value");
-        // let category = $("#selectCategory option:selected").attr("id");
         $.ajax({
             type: "GET",
-            url: "http://localhost:8080/additionalServices/" + category
+            url: "http://localhost:8080/additionalServices/category/" + category
         }).done(function (additionalServicesList) {
             console.log(additionalServicesList);
             if (additionalServicesList.length === 0) {

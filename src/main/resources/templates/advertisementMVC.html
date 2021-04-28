@@ -59,7 +59,7 @@
         <td th:text="${advertisementRepository.title}"></td>
         <td th:text="${advertisementRepository.text}"></td>
         <td th:text="${advertisementRepository.price}"></td>
-        <td><img th:src="@{/image(id=${advertisementRepository.id})}" alt="Image not load" ></td>
+        <td><img th:src="@{/image/${advertisementRepository.id})}" alt="Image not load" ></td>
         <td th:text="${advertisementRepository.address}"></td>
         <td th:text="${#temporals.format(advertisementRepository.publicationTime, 'dd-MM-yyyy')}"></td>
         <td th:text="${#temporals.format(advertisementRepository.endTime, 'dd-MM-yyyy')}"></td>

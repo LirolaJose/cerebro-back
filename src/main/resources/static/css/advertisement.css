@@ -1,0 +1,5 @@
+.price, .additional-service{
+    border: 3px solid black;
+    width: 200px;
+    padding: 0 10px;
+}

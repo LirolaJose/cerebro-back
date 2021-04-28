@@ -14,4 +14,8 @@ public interface AdditionalServiceRepository extends JpaRepository<AdditionalSer
     List<AdditionalService> findAdditionalServiceByCategoryId(@Param("categoryId") Long id);
 
     AdditionalService findAdditionalServiceById(Long id);
+
+    @Query(value = "SELECT * FROM service s join services_of_advertisement soa on s.id = soa.service_id " +
+            "WHERE advertisement_id = :advertisementId ;", nativeQuery = true)
+    List<AdditionalService> findAdditionalServicesByAdvertisementId(@Param("advertisementId") Long id);
 }
