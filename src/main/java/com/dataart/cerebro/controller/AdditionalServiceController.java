@@ -1,6 +1,7 @@
 package com.dataart.cerebro.controller;
 
 import com.dataart.cerebro.domain.AdditionalService;
+import com.dataart.cerebro.domain.Advertisement;
 import com.dataart.cerebro.domain.Category;
 import com.dataart.cerebro.service.AdditionalServiceService;
 import org.springframework.http.HttpStatus;
@@ -19,11 +20,16 @@ public class AdditionalServiceController {
         this.additionalServiceService = additionalServiceService;
     }
 
-    @GetMapping("/additionalServices/{category}")
-    public ResponseEntity<?> getAdditionalServicesByCategoryId(@PathVariable Category category) {
+    @GetMapping("/additionalServices/category/{category}")
+    public ResponseEntity<?> getAdditionalServicesByCategory(@PathVariable Category category) {
         List<AdditionalService> additionalServices = additionalServiceService.findAdditionalServicesByCategory(category);
         return new ResponseEntity<>(additionalServices, HttpStatus.OK);
+    }
 
+    @GetMapping("/additionalServices/advertisement/{advertisement}")
+    public ResponseEntity<?> getAdditionalServicesByAdvertisement(@PathVariable Advertisement advertisement) {
+        List<AdditionalService> additionalServices = additionalServiceService.findAdditionalServiceByAdvertisement(advertisement);
+        return new ResponseEntity<>(additionalServices, HttpStatus.OK);
     }
 }
 

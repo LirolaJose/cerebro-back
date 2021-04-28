@@ -1,4 +1,4 @@
-
+$(function () {
     function showActiveAdvertisements() {
         $.ajax({
             type: "GET",
@@ -12,6 +12,7 @@
                 "<th>Title</th>\n" +
                 "<th>Text</th>\n" +
                 "<th>Price</th>\n" +
+                "<th>Image</th>\n" +
                 "<th>Type</th>\n" +
                 "<th>Category</th>\n" +
                 "<th>Owner</th>\n" +
@@ -20,9 +21,12 @@
             $.each(advertisementsList, function (index, advertisement) {
                 table += '<tr>'
                 table += '<td>' + advertisement.id + '</td>';
-                table += '<td>' + advertisement.title + '</td>';
+
+                table += '<td>' + '<a href="http://localhost:63342/cerebro/static/advertisement.html?id=' + advertisement.id +  '">' +  advertisement.title + '</a>' + '</td>';
+
                 table += '<td>' + advertisement.text + '</td>';
                 table += '<td>' + advertisement.price + '</td>';
+                table += '<td>' + '<img src="http://localhost:8080/image/' + advertisement.id + '"/>' + '</td>';
                 table += '<td>' + advertisement.type + '</td>';
                 table += '<td>' + advertisement.category.name + '</td>';
                 table += '<td>' + advertisement.owner.firstName + " " + advertisement.owner.secondName + '</td>';
@@ -30,7 +34,12 @@
             })
             table += "</table>"
             $('#table').append(table)
+            // $.each(advertisementsList, function (index, advertisement) {
+            //     getMainImage(advertisement.id);
+            // })
         }).fail(function (err) {
-            $('#ad').html("<p>Error!</p>");
+            $('#table').html("<p>Error!</p>");
         });
     }
+    showActiveAdvertisements()
+});

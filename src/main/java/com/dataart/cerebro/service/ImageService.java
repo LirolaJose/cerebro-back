@@ -2,14 +2,19 @@ package com.dataart.cerebro.service;
 
 import com.dataart.cerebro.domain.Advertisement;
 import com.dataart.cerebro.domain.Image;
+import com.dataart.cerebro.exception.NotFoundException;
 import com.dataart.cerebro.repository.ImageRepository;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
 
 @Service
+@Slf4j
 public class ImageService {
     private final ImageRepository imageRepository;
 
@@ -21,13 +26,41 @@ public class ImageService {
 
         for (int i = 0; i < images.size(); i++) {
             Image image = new Image();
-            image.setImage(images.get(i).getBytes());
+            image.setImageBytes(images.get(i).getBytes());
             image.setAdvertisement(advertisement);
             if (i == 0) {
                 image.setMainImage(true);
             }
             imageRepository.save(image);
         }
+    }
+
+    public byte[] findImageByAdvertisement(Advertisement advertisement) throws IOException {
+        Image image = imageRepository.findImageByAdvertisement_IdAndMainImageTrue(advertisement.getId());
+        byte[] imageBytes;
+        if (image == null) {
+            var path = new ClassPathResource("image/notFound.jpg");
+            imageBytes = StreamUtils.copyToByteArray(path.getInputStream());
+        } else {
+            imageBytes = image.getImageBytes();
+        }
+        return imageBytes;
+    }
+
+    public byte[] findImageById(Long id){
+        Image image = imageRepository.findImageById(id);
+        byte[] imageBytes;
+        if (image != null) {
+            imageBytes = image.getImageBytes();
+        } else {
+            log.warn("image with ID ({}) not found", id);
+            throw new NotFoundException("Image", id);
+        }
+        return imageBytes;
+    }
+
+    public List<Image> findAllByAdvertisement(Advertisement advertisement){
+        return imageRepository.findAllByAdvertisement_Id(advertisement.getId());
     }
 }
 

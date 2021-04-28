@@ -1,6 +1,7 @@
 package com.dataart.cerebro.service;
 
 import com.dataart.cerebro.domain.AdditionalService;
+import com.dataart.cerebro.domain.Advertisement;
 import com.dataart.cerebro.domain.Category;
 import com.dataart.cerebro.exception.NotFoundException;
 import com.dataart.cerebro.repository.AdditionalServiceRepository;
@@ -31,5 +32,9 @@ public class AdditionalServiceService {
 
     public AdditionalService findAdditionalServiceById(Long id){
         return additionalServiceRepository.findAdditionalServiceById(id);
+    }
+
+    public List<AdditionalService> findAdditionalServiceByAdvertisement(Advertisement advertisement){
+        return additionalServiceRepository.findAdditionalServicesByAdvertisementId(advertisement.getId());
     }
 }
