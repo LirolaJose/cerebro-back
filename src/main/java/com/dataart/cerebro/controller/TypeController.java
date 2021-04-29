@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class TypeController {
-    @GetMapping("/types")
+    @GetMapping("/api/types")
     public ResponseEntity<?> getTypes() {
         return new ResponseEntity<>(Type.values(), HttpStatus.OK);
     }

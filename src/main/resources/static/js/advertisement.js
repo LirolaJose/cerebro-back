@@ -2,7 +2,7 @@ $(function () {
     function getAdvertisementInfoById(advertisementId) {
         $.ajax({
             type: "GET",
-            url: "http://localhost:8080/api/advertisement/" + advertisementId
+            url: API_ADVERTISEMENT + advertisementId
         }).done(function (advertisement) {
             console.log(advertisement);
             $("#title-info").append(advertisement.title);
@@ -12,31 +12,32 @@ $(function () {
             $("#type").append(advertisement.type);
             $("#category").append(advertisement.category.name);
             $("#owner").append(advertisement.owner.firstName + " " + advertisement.owner.secondName);
-            $("#order").append($("<form></form>")
-                .attr("id", "orderButtonForm")
-                .attr("action", "orderForm.html"));
+            if(advertisement.category.orderable === true) {
+                $("#order").append($("<form></form>")
+                    .attr("id", "orderButtonForm")
+                    .attr("action", "orderForm.html"));
 
-            $("#orderButtonForm").append($("<input/>")
-                .attr("type", "hidden")
-                .attr("name", "id")
-                .attr("value", advertisementId))
-            .append($("<input/>")
-                .attr("type", "submit")
-                .attr("value", "ORDER"));
-
+                $("#orderButtonForm").append($("<input/>")
+                    .attr("type", "hidden")
+                    .attr("name", "id")
+                    .attr("value", advertisementId))
+                    .append($("<input/>")
+                        .attr("type", "submit")
+                        .attr("value", "ORDER"));
+            }
         });
     }
 
     function getImagesList(advertisementId) {
         $.ajax({
             type: "GET",
-            url: "http://localhost:8080/imagesList/" + advertisementId
+            url: "http://localhost:8080/api/image/imagesList/" + advertisementId
         }).done(function (imagesList) {
             console.log(imagesList);
             $.each(imagesList, function (index, image) {
                 $("#images")
                     .append($("<img/>")
-                    .attr("src", "http://localhost:8080/api/advertisement/image/" + image.id));
+                    .attr("src", API_ADVERTISEMENT + "image/" + image.id));
             });
         });
     }
@@ -44,7 +45,7 @@ $(function () {
     function getAdditionalServicesByAdvertisementId(advertisementId){
         $.ajax({
             type: "GET",
-            url: "http://localhost:8080/additionalServices/advertisement/" + advertisementId
+            url: API_ADDITIONAL_SERVICES + "advertisement/" + advertisementId
         }).done(function (additionalServicesList){
             console.log(additionalServicesList);
             $.each(additionalServicesList, function(index, additionalService){

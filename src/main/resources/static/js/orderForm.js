@@ -2,7 +2,7 @@ $(function () {
 function fillOrderFormInfo(id) {
     $.ajax({
         type: "GET",
-        url: "http://localhost:8080/api/advertisement/" + id
+        url: API_ADVERTISEMENT + id
     }).done(function (advertisement) {
         console.log(advertisement);
         $("#order-advertisement-title").append($("<a href=advertisement.html?id="
@@ -12,7 +12,7 @@ function fillOrderFormInfo(id) {
             .attr("text", advertisement.price);
 
         $("#order-advertisement-image").append($("<img/>")
-            .attr("src", "http://localhost:8080/image/" + id));
+            .attr("src", "http://localhost:8080/api/image/" + id));
         fillAdditionalServicesInfo(id);
     });
 }
@@ -20,7 +20,7 @@ function fillOrderFormInfo(id) {
 function fillAdditionalServicesInfo(id) {
     $.ajax({
         type: "GET",
-        url: "http://localhost:8080/additionalServices/advertisement/" + id
+        url: API_ADDITIONAL_SERVICES + "advertisement/" + id
     }).done(function (additionalServicesList) {
         console.log(additionalServicesList);
         $.each(additionalServicesList, function (index, additionalService) {

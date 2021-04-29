@@ -4,12 +4,30 @@
     <meta charset="UTF-8">
     <title>Advertisements</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="js/constantParameters.js"></script>
     <script src="js/advertisementsList.js"></script>
     <script src="js/image.js"></script>
     <link rel="stylesheet" href="css/advertisementsList.css">
 </head>
 <body>
 <h1>CEREBRO</h1>
+
+<div class="log-in-button" id="log-in-button">
+<!--    <form class="log-in-button-form" onclick="location.href = LOGIN">-->
+        <input type="button"  value="Log in" onclick="location.href = LOGIN">
+<!--    </form>-->
+</div>
+<div class="registration-button" id="registration-button">
+    <form class="registration-button-form" action="registrationForm.html">
+        <input type="submit" value="Registration">
+    </form>
+</div>
+
+<div class="new-advertisement-button" id="new-advertisement-button">
+    <form class="new-advertisement-button-form" action="advertisementForm.html">
+        <input type="submit" value="New advertisement" >
+    </form>
+</div>
 <div id="table"></div>
 </body>
 </html>

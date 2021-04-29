@@ -8,6 +8,7 @@ import io.swagger.annotations.Api;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,7 +27,6 @@ public class AdvertisementController {
         this.imageService = imageService;
     }
 
-
     @GetMapping("/")
     public ResponseEntity<?> getActiveAdvertisements() {
         List<Advertisement> advertisements = advertisementService.findActiveAdvertisements();
@@ -44,12 +44,10 @@ public class AdvertisementController {
     @GetMapping("/image/{imageId}")
     public ResponseEntity<?> getAdvertisementImageByImageId(@PathVariable Long imageId) {
         byte[] imageBytes = imageService.findImageById(imageId);
-        return ResponseEntity
-                .ok()
-                .body(imageBytes);
+        return new ResponseEntity<>(imageBytes,HttpStatus.OK);
     }
 
-
+    @Secured("USER")
     @PostMapping(value = "/", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> saveAdvertisement(@RequestPart("advertisementDTO") AdvertisementDTO advertisementDTO,
                                                @RequestPart(value = "images") List<MultipartFile> images) throws IOException {

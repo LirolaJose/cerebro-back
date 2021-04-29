@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
+@RequestMapping("/categories")
 public class CategoryController {
     private final CategoryService categoryService;
 
@@ -20,7 +21,7 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
-    @GetMapping("/categories/{type}")
+    @GetMapping("/{type}")
     public ResponseEntity<?> getCategoryByType(@PathVariable Type type) {
         List<Category> categories = categoryService.findCategoriesByType(type);
         return categories != null && !categories.isEmpty()

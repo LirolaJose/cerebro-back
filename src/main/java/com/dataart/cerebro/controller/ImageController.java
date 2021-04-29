@@ -8,12 +8,14 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 import java.util.List;
 
 @RestController
+@RequestMapping("/api/image")
 public class ImageController {
     private final ImageService imageService;
 
@@ -21,14 +23,12 @@ public class ImageController {
         this.imageService = imageService;
     }
 
-    @GetMapping(value = "/image/{advertisementId}",
+    @GetMapping(value = "/{advertisementId}",
             produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
 
     public ResponseEntity<byte[]> getMainImageByAdvertisement(@PathVariable Long advertisementId) throws IOException {
         byte[] imageBytes = imageService.findImageByAdvertisement(advertisementId);
-        return ResponseEntity
-                .ok()
-                .body(imageBytes);
+        return new ResponseEntity<>(imageBytes,HttpStatus.OK);
     }
 
     @GetMapping(value = "/imagesList/{advertisement}")

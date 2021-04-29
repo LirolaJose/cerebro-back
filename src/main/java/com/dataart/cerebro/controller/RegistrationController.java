@@ -29,12 +29,4 @@ public class RegistrationController {
         userInfoService.createNewUserInfo(userInfo);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
-
-    @PostMapping(value = "/ad/", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> addAdvertisement(@RequestBody AdvertisementDTO advertisementDTO) {
-        System.out.println(advertisementDTO);
-//        Advertisement advertisement = new Advertisement();
-//        advertisementService.createNewAdvertisement(advertisement);
-        return new ResponseEntity<>(HttpStatus.CREATED);
-    }
 }

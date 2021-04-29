@@ -2,7 +2,7 @@ $(function () {
     function showActiveAdvertisements() {
         $.ajax({
             type: "GET",
-            url: "http://localhost:8080/api/advertisement/"
+            url: API_ADVERTISEMENT
         }).done(function (advertisementsList) {
             console.log(advertisementsList);
 
@@ -26,7 +26,7 @@ $(function () {
 
                 table += '<td>' + advertisement.text + '</td>';
                 table += '<td>' + advertisement.price + '</td>';
-                table += '<td>' + '<img src="http://localhost:8080/image/' + advertisement.id + '"/>' + '</td>';
+                table += '<td>' + '<img src="http://localhost:8080/api/image/' + advertisement.id + '"/>' + '</td>';
                 table += '<td>' + advertisement.type + '</td>';
                 table += '<td>' + advertisement.category.name + '</td>';
                 table += '<td>' + advertisement.owner.firstName + " " + advertisement.owner.secondName + '</td>';

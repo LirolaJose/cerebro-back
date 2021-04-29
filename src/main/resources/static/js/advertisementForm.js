@@ -25,7 +25,7 @@ function createAdvertisement() {
         type: "POST",
         enctype: 'multipart/form-data',
         data: data,
-        url: "http://localhost:8080/api/advertisement/",
+        url: API_ADVERTISEMENT,
         processData: false,
         contentType: false
     });

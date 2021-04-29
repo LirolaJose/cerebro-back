@@ -7,7 +7,7 @@ $(function () {
         let category = $("#selectCategory option:selected").attr("value");
         $.ajax({
             type: "GET",
-            url: "http://localhost:8080/additionalServices/category/" + category
+            url: API_ADDITIONAL_SERVICES + "category/" + category
         }).done(function (additionalServicesList) {
             console.log(additionalServicesList);
             if (additionalServicesList.length === 0) {
