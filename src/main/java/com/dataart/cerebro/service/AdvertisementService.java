@@ -6,6 +6,8 @@ import com.dataart.cerebro.email.EmailService;
 import com.dataart.cerebro.exception.NotFoundException;
 import com.dataart.cerebro.repository.AdvertisementRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -70,12 +72,11 @@ public class AdvertisementService {
     public void createNewAdvertisement(AdvertisementDTO advertisementDTO, List<MultipartFile> images) throws IOException {
         log.info("Creating new advertisement");
 
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        UserInfo owner = userInfoService.findUserInfoByEmail(authentication.getName());
+        UserInfo owner = userInfoService.getCurrentUser();
         Category category = categoryService.findCategoryById(advertisementDTO.getCategoryId());
         LocalDateTime publicationTime = LocalDateTime.now();
         Set<AdditionalService> additionalServices = new HashSet<>();
-        advertisementDTO.getAdditionalServices().stream()
+        advertisementDTO.getAdditionalServicesId().stream()
                 .peek(additionalService -> additionalServices.add(additionalServiceService.findAdditionalServiceById(additionalService)))
                 .collect(Collectors.toSet());
 
@@ -87,7 +88,7 @@ public class AdvertisementService {
         advertisement.setType(advertisementDTO.getType());
         advertisement.setCategory(category);
         advertisement.setAdditionalServices(additionalServices);
-//        advertisement.setOwner(owner);
+        advertisement.setOwner(owner);
         advertisement.setVisible(true);
         advertisement.setPublicationTime(publicationTime);
         advertisement.setExpiredTime(publicationTime.plusDays(7));
@@ -96,7 +97,7 @@ public class AdvertisementService {
         log.info("New advertisement created ({})", newAdvertisement);
 
         imageService.saveImage(images, newAdvertisement);
-//        emailService.sendEmailAboutPublication(newAdvertisement);
+        emailService.sendEmailAboutPublication(newAdvertisement);
     }
 
     public void findAdvertisementsByExpiringDate(Long statusId, Integer lookbackDays){

@@ -27,24 +27,24 @@ public class UserInfoController {
         this.advertisementOrderService = advertisementOrderService;
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getUserInfoById(@PathVariable Long id) {
-        UserInfo userInfo = userInfoService.findUserInfoById(id);
+    @GetMapping("/{userId}")
+    public ResponseEntity<?> getUserInfoById(@PathVariable Long userId) {
+        UserInfo userInfo = userInfoService.findUserInfoById(userId);
         return new ResponseEntity<>(userInfo, HttpStatus.OK);
     }
 
-    @GetMapping("/{id}/advertisements")
-    public ResponseEntity<?> getUsersAdvertisementsByUserId(@PathVariable Long id) {
-        List<Advertisement> advertisements = advertisementService.findAdvertisementsByUserInfoId(id);
+    @GetMapping("/{userId}/advertisements")
+    public ResponseEntity<?> getUsersAdvertisementsByUserId(@PathVariable Long userId) {
+        List<Advertisement> advertisements = advertisementService.findAdvertisementsByUserInfoId(userId);
 
         return advertisements != null && !advertisements.isEmpty()
                 ? new ResponseEntity<>(advertisements, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping("/{id}/orders")
-    public ResponseEntity<?> getUsersOrdersByUserId(@PathVariable Long id) {
-        List<AdvertisementOrder> advertisementOrders = advertisementOrderService.findAdvertisementOrdersByUserId(id);
+    @GetMapping("/{userId}/orders")
+    public ResponseEntity<?> getUsersOrdersByUserId(@PathVariable Long userId) {
+        List<AdvertisementOrder> advertisementOrders = advertisementOrderService.findAdvertisementOrdersByUserId(userId);
 
         return advertisementOrders != null && !advertisementOrders.isEmpty()
                 ? new ResponseEntity<>(advertisementOrders, HttpStatus.OK)

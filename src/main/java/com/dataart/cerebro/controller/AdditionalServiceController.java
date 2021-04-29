@@ -1,7 +1,6 @@
 package com.dataart.cerebro.controller;
 
 import com.dataart.cerebro.domain.AdditionalService;
-import com.dataart.cerebro.domain.Advertisement;
 import com.dataart.cerebro.domain.Category;
 import com.dataart.cerebro.service.AdditionalServiceService;
 import org.springframework.http.HttpStatus;
@@ -20,15 +19,15 @@ public class AdditionalServiceController {
         this.additionalServiceService = additionalServiceService;
     }
 
-    @GetMapping("/additionalServices/category/{category}")
-    public ResponseEntity<?> getAdditionalServicesByCategory(@PathVariable Category category) {
-        List<AdditionalService> additionalServices = additionalServiceService.findAdditionalServicesByCategory(category);
+    @GetMapping("/additionalServices/category/{categoryId}")
+    public ResponseEntity<?> getAdditionalServicesByCategory(@PathVariable Long categoryId) {
+        List<AdditionalService> additionalServices = additionalServiceService.findAdditionalServicesByCategory(categoryId);
         return new ResponseEntity<>(additionalServices, HttpStatus.OK);
     }
 
-    @GetMapping("/additionalServices/advertisement/{advertisement}")
-    public ResponseEntity<?> getAdditionalServicesByAdvertisement(@PathVariable Advertisement advertisement) {
-        List<AdditionalService> additionalServices = additionalServiceService.findAdditionalServiceByAdvertisement(advertisement);
+    @GetMapping("/additionalServices/advertisement/{advertisementId}")
+    public ResponseEntity<?> getAdditionalServicesByAdvertisement(@PathVariable Long advertisementId) {
+        List<AdditionalService> additionalServices = additionalServiceService.findAdditionalServiceByAdvertisement(advertisementId);
         return new ResponseEntity<>(additionalServices, HttpStatus.OK);
     }
 }

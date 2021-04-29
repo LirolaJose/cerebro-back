@@ -35,8 +35,8 @@ public class ImageService {
         }
     }
 
-    public byte[] findImageByAdvertisement(Advertisement advertisement) throws IOException {
-        Image image = imageRepository.findImageByAdvertisement_IdAndMainImageTrue(advertisement.getId());
+    public byte[] findImageByAdvertisement(Long advertisement) throws IOException {
+        Image image = imageRepository.findImageByAdvertisement_IdAndMainImageTrue(advertisement);
         byte[] imageBytes;
         if (image == null) {
             var path = new ClassPathResource("image/notFound.jpg");

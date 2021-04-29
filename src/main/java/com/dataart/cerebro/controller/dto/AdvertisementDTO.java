@@ -14,5 +14,5 @@ public class AdvertisementDTO {
     private Double price;
     private Type type;
     private Long categoryId;
-    private Set<Long> additionalServices;
+    private Set<Long> additionalServicesId;
 }

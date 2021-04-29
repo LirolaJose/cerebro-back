@@ -1,8 +1,8 @@
 $(function () {
-    function getAdvertisement(id) {
+    function getAdvertisementInfoById(advertisementId) {
         $.ajax({
             type: "GET",
-            url: "http://localhost:8080/api/advertisement/" + id
+            url: "http://localhost:8080/api/advertisement/" + advertisementId
         }).done(function (advertisement) {
             console.log(advertisement);
             $("#title-info").append(advertisement.title);
@@ -12,27 +12,39 @@ $(function () {
             $("#type").append(advertisement.type);
             $("#category").append(advertisement.category.name);
             $("#owner").append(advertisement.owner.firstName + " " + advertisement.owner.secondName);
+            $("#order").append($("<form></form>")
+                .attr("id", "orderButtonForm")
+                .attr("action", "orderForm.html"));
+
+            $("#orderButtonForm").append($("<input/>")
+                .attr("type", "hidden")
+                .attr("name", "id")
+                .attr("value", advertisementId))
+            .append($("<input/>")
+                .attr("type", "submit")
+                .attr("value", "ORDER"));
+
         });
     }
 
-    function getImagesList(id) {
+    function getImagesList(advertisementId) {
         $.ajax({
             type: "GET",
-            url: "http://localhost:8080/imagesList/" + id
+            url: "http://localhost:8080/imagesList/" + advertisementId
         }).done(function (imagesList) {
             console.log(imagesList);
             $.each(imagesList, function (index, image) {
                 $("#images")
                     .append($("<img/>")
-                    .attr("src", "http://localhost:8080/imageIM/" + image.id));
+                    .attr("src", "http://localhost:8080/api/advertisement/image/" + image.id));
             });
         });
     }
 
-    function getAdditionalAdvertisements(id){
+    function getAdditionalServicesByAdvertisementId(advertisementId){
         $.ajax({
             type: "GET",
-            url: "http://localhost:8080/additionalServices/advertisement/" + id
+            url: "http://localhost:8080/additionalServices/advertisement/" + advertisementId
         }).done(function (additionalServicesList){
             console.log(additionalServicesList);
             $.each(additionalServicesList, function(index, additionalService){
@@ -42,11 +54,11 @@ $(function () {
         })
     }
 
-    const queryString = window.location.search;
-    let id = queryString.substring(queryString.lastIndexOf("=") + 1);
-    getAdvertisement(id);
-    getImagesList(id);
-    getAdditionalAdvertisements(id);
+    const urlString = window.location.search;
+    let advertisementId = urlString.substring(urlString.lastIndexOf("=") + 1);
+    getAdvertisementInfoById(advertisementId);
+    getImagesList(advertisementId);
+    getAdditionalServicesByAdvertisementId(advertisementId);
 })
 
 // function getParameterByName(name) {
