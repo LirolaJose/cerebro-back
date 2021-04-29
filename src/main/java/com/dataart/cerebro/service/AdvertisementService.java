@@ -6,6 +6,7 @@ import com.dataart.cerebro.email.EmailService;
 import com.dataart.cerebro.exception.NotFoundException;
 import com.dataart.cerebro.repository.AdvertisementRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -96,7 +97,8 @@ public class AdvertisementService {
         Advertisement newAdvertisement = advertisementRepository.save(advertisement);
         log.info("New advertisement created ({})", newAdvertisement);
 
-        imageService.saveImage(images, newAdvertisement);
+       if(!images.isEmpty()){ imageService.saveImage(images, newAdvertisement);}
+
         emailService.sendEmailAboutPublication(newAdvertisement);
     }
 

@@ -47,10 +47,11 @@ public class AdvertisementController {
         return new ResponseEntity<>(imageBytes,HttpStatus.OK);
     }
 
-    @Secured("USER")
+
+    @Secured("ROLE_USER")
     @PostMapping(value = "/", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> saveAdvertisement(@RequestPart("advertisementDTO") AdvertisementDTO advertisementDTO,
-                                               @RequestPart(value = "images") List<MultipartFile> images) throws IOException {
+                                               @RequestPart(value = "images", required = false) List<MultipartFile> images) throws IOException {
         advertisementService.createNewAdvertisement(advertisementDTO, images);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }

@@ -44,6 +44,7 @@ public class UserInfoService {
         String encryptedPassword = encryptPassword(userInfo.getPassword());
         userInfo.setPassword(encryptedPassword);
         userInfo.setRole(Role.USER);
+        userInfo.setMoneyAmount(0.0);
         userInfoRepository.save(userInfo);
         log.info("Created new USER: {}, {}, {}, {}, {}", userInfo.getFirstName(), userInfo.getSecondName(),
                 userInfo.getPhone(), userInfo.getEmail(), userInfo.getRole());

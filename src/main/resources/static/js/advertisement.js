@@ -12,7 +12,7 @@ $(function () {
             $("#type").append(advertisement.type);
             $("#category").append(advertisement.category.name);
             $("#owner").append(advertisement.owner.firstName + " " + advertisement.owner.secondName);
-            if(advertisement.category.orderable === true) {
+            if (advertisement.category.orderable === true) {
                 $("#order").append($("<form></form>")
                     .attr("id", "orderButtonForm")
                     .attr("action", "orderForm.html"));
@@ -37,18 +37,18 @@ $(function () {
             $.each(imagesList, function (index, image) {
                 $("#images")
                     .append($("<img/>")
-                    .attr("src", API_ADVERTISEMENT + "image/" + image.id));
+                        .attr("src", API_ADVERTISEMENT + "image/" + image.id));
             });
         });
     }
 
-    function getAdditionalServicesByAdvertisementId(advertisementId){
+    function getAdditionalServicesByAdvertisementId(advertisementId) {
         $.ajax({
             type: "GET",
             url: API_ADDITIONAL_SERVICES + "advertisement/" + advertisementId
-        }).done(function (additionalServicesList){
+        }).done(function (additionalServicesList) {
             console.log(additionalServicesList);
-            $.each(additionalServicesList, function(index, additionalService){
+            $.each(additionalServicesList, function (index, additionalService) {
                 $("#additional-services").append($("<li></li>")
                     .text(additionalService.name + ", price: " + additionalService.price));
             })
