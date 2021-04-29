@@ -39,5 +39,8 @@ $(function () {
             $('#table').html("<p>Error!</p>");
         });
     }
+    //get user
+    //.done(
     showActiveAdvertisements()
+    //)
 });

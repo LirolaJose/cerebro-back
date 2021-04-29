@@ -37,30 +37,27 @@ public class ImageService {
 
     public byte[] findImageByAdvertisement(Long advertisement) throws IOException {
         Image image = imageRepository.findImageByAdvertisement_IdAndMainImageTrue(advertisement);
-        byte[] imageBytes;
-        if (image == null) {
-            var path = new ClassPathResource("image/notFound.jpg");
-            imageBytes = StreamUtils.copyToByteArray(path.getInputStream());
-        } else {
-            imageBytes = image.getImageBytes();
-        }
-        return imageBytes;
+        return getImage(image);
     }
 
-    public byte[] findImageById(Long id){
+    public byte[] findImageById(Long id) throws IOException {
         Image image = imageRepository.findImageById(id);
-        byte[] imageBytes;
-        if (image != null) {
-            imageBytes = image.getImageBytes();
-        } else {
-            log.warn("image with ID ({}) not found", id);
-            throw new NotFoundException("Image", id);
-        }
-        return imageBytes;
+        return getImage(image);
     }
 
     public List<Image> findAllByAdvertisement(Advertisement advertisement){
         return imageRepository.findAllByAdvertisement_Id(advertisement.getId());
+    }
+
+    private byte[] getImage(Image image) throws IOException {
+        byte[] imageBytes;
+        if (image != null) {
+            imageBytes = image.getImageBytes();
+        } else {
+            var path = new ClassPathResource("image/notFound.jpg");
+            imageBytes = StreamUtils.copyToByteArray(path.getInputStream());
+        }
+        return imageBytes;
     }
 }
 

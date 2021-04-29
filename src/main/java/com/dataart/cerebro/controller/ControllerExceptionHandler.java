@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import java.io.Serializable;
 
@@ -30,28 +31,28 @@ public class ControllerExceptionHandler {
         return new ErrorDTO(e.getMessage());
     }
 
-    @ExceptionHandler(ValidationException.class)
+    @ExceptionHandler({ValidationException.class, EmailExistsException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
-    public ErrorDTO handleValidationException(ValidationException e) {
+    public ErrorDTO handleExceptions(Exception e) {
         log.error("Error: {}", e.getMessage(), e);
         return new ErrorDTO(e.getMessage());
     }
 
-    @ExceptionHandler(EmailExistsException.class)
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
-    public ErrorDTO handlerEmailExistsException(EmailExistsException e){
+    public ErrorDTO handleMaxUploadSizeExceededExceptionException(MaxUploadSizeExceededException e) {
         log.error("Error: {}", e.getMessage(), e);
-        return new ErrorDTO((e.getMessage()));
+        return new ErrorDTO("Max Upload Size Exceeded");
     }
 
-
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(RuntimeException.class)
     @ResponseBody
-    public ResponseEntity<?> handleRuntimeException(Exception e) {
+    public ErrorDTO handleRuntimeException(Exception e) {
         log.error("Error: {}", e.getMessage(), e);
-        return new ResponseEntity<>("Server error. Please contact the administrator", new HttpHeaders(), HttpStatus.NOT_FOUND);
+        return new ErrorDTO("Server error. Please contact the administrator");
     }
 
     @Data

@@ -42,7 +42,7 @@ public class AdvertisementController {
     }
 
     @GetMapping("/image/{imageId}")
-    public ResponseEntity<?> getAdvertisementImageByImageId(@PathVariable Long imageId) {
+    public ResponseEntity<?> getAdvertisementImageByImageId(@PathVariable Long imageId) throws IOException {
         byte[] imageBytes = imageService.findImageById(imageId);
         return new ResponseEntity<>(imageBytes,HttpStatus.OK);
     }
