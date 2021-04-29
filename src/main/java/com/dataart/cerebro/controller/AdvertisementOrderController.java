@@ -1,8 +1,7 @@
 package com.dataart.cerebro.controller;
 
-import com.dataart.cerebro.domain.AdvertisementOrder;
+import com.dataart.cerebro.controller.dto.AdvertisementOrderDTO;
 import com.dataart.cerebro.service.AdvertisementOrderService;
-import com.dataart.cerebro.service.UserInfoService;
 import io.swagger.annotations.Api;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,16 +15,14 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = "Advertisement Order Controller")
 public class AdvertisementOrderController {
     private final AdvertisementOrderService advertisementOrderService;
-    private final UserInfoService userInfoService;
 
-    public AdvertisementOrderController(AdvertisementOrderService advertisementOrderService, UserInfoService userInfoService) {
+    public AdvertisementOrderController(AdvertisementOrderService advertisementOrderService) {
         this.advertisementOrderService = advertisementOrderService;
-        this.userInfoService = userInfoService;
     }
 
     @PostMapping("/")
-    public ResponseEntity<?> addOrder(@RequestBody AdvertisementOrder advertisementOrder) {
-        advertisementOrderService.createNewAdvertisementOrder(advertisementOrder);
+    public ResponseEntity<?> saveOrder(@RequestBody AdvertisementOrderDTO advertisementOrderDTO) {
+        advertisementOrderService.createNewAdvertisementOrder(advertisementOrderDTO);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }

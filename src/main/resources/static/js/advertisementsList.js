@@ -22,7 +22,7 @@ $(function () {
                 table += '<tr>'
                 table += '<td>' + advertisement.id + '</td>';
 
-                table += '<td>' + '<a href="http://localhost:63342/cerebro/static/advertisement.html?id=' + advertisement.id +  '">' +  advertisement.title + '</a>' + '</td>';
+                table += '<td>' + '<a href="advertisement.html?id=' + advertisement.id +  '">' +  advertisement.title + '</a>' + '</td>';
 
                 table += '<td>' + advertisement.text + '</td>';
                 table += '<td>' + advertisement.price + '</td>';
@@ -34,10 +34,8 @@ $(function () {
             })
             table += "</table>"
             $('#table').append(table)
-            // $.each(advertisementsList, function (index, advertisement) {
-            //     getMainImage(advertisement.id);
-            // })
-        }).fail(function (err) {
+
+        }).fail(function () {
             $('#table').html("<p>Error!</p>");
         });
     }

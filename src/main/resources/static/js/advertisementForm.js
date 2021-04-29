@@ -11,7 +11,7 @@ function createAdvertisement() {
         price: $("#price").val(),
         type: $("#selectType option:selected").val(),
         categoryId: $("#selectCategory option:selected").val(),
-        additionalServices: checkboxes
+        additionalServicesId: checkboxes
     }
     let data = new FormData();
     data.append("advertisementDTO", new Blob([JSON.stringify(advertisement)], {type: "application/json"}));
@@ -20,10 +20,6 @@ function createAdvertisement() {
     for (let index = 0; index < allImages; index ++){
         data.append("images", document.getElementById("image").files[index])
     }
-
-
-
-    // data.append(form);
 
     $.ajax({
         type: "POST",

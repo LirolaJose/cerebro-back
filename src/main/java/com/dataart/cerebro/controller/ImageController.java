@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 public class ImageController {
@@ -22,21 +21,11 @@ public class ImageController {
         this.imageService = imageService;
     }
 
-    @GetMapping(value = "/image/{advertisement}",
+    @GetMapping(value = "/image/{advertisementId}",
             produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
 
-    public ResponseEntity<byte[]> getMainImageByAdvertisement(@PathVariable Advertisement advertisement) throws IOException {
-        byte[] imageBytes = imageService.findImageByAdvertisement(advertisement);
-        return ResponseEntity
-                .ok()
-                .body(imageBytes);
-    }
-
-    @GetMapping(value = "/imageIM/{id}",
-            produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
-
-    public ResponseEntity<byte[]> getMainImageById(@PathVariable Long id) {
-        byte[] imageBytes = imageService.findImageById(id);
+    public ResponseEntity<byte[]> getMainImageByAdvertisement(@PathVariable Long advertisementId) throws IOException {
+        byte[] imageBytes = imageService.findImageByAdvertisement(advertisementId);
         return ResponseEntity
                 .ok()
                 .body(imageBytes);
@@ -46,10 +35,6 @@ public class ImageController {
 
     public ResponseEntity<?> getImagesList(@PathVariable Advertisement advertisement) {
         List<Image> images = imageService.findAllByAdvertisement(advertisement);
-//        List<byte[]> bytesImages = images.stream()
-//                .map(Image::getImageBytes)
-//                .collect(Collectors.toList());
-
         return new ResponseEntity<>(images, HttpStatus.OK);
     }
 

@@ -7,6 +7,8 @@ import com.dataart.cerebro.exception.NotFoundException;
 import com.dataart.cerebro.repository.UserInfoRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -48,5 +50,10 @@ public class UserInfoService {
     }
     public String encryptPassword(String password){
         return DigestUtils.md5Hex(password);
+    }
+
+    public UserInfo getCurrentUser(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return findUserInfoByEmail(authentication.getName());
     }
 }

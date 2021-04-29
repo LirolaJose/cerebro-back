@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Order form</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="js/totalPrice.js"></script>
+    <script src="js/orderForm.js"></script>
+    <script src="js/orderAdvertisement.js"></script>
+
+</head>
+<body>
+<h1>Order form</h1>
+<div class="order-advertisement-info" id="order-advertisement-info">
+    <div class="order-advertisement-title" id="order-advertisement-title"></div>
+    <div class="order-advertisement-price" id="order-advertisement-price"></div>
+</div>
+
+<div id="order-advertisement-image"></div>
+
+<div class="order-additional-services" id="order-additional-services">
+    <label>Additional services: <br></label>
+</div>
+
+<div class="order-total-price" id="order-total-price">
+    Total price: <input type="text" id="total" readonly>
+</div>
+<div class="confirm-order" id="confirm-order">
+    <p><input type="submit" value="Confirm the order" onclick="sendOrder()"/></p>
+</div>
+
+
+
+</body>
+</html>

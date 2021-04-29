@@ -1,5 +1,5 @@
-
-   function fillTypesSelect() {
+$(function () {
+    function fillTypesSelect() {
         $.ajax({
             type: "GET",
             url: "http://localhost:8080/types"
@@ -12,4 +12,6 @@
             });
         });
     }
+    fillTypesSelect()
+})
 
