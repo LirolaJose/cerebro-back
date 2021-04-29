@@ -50,4 +50,7 @@ public class UserInfoController {
                 ? new ResponseEntity<>(advertisementOrders, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+//    public ResponseEntity<?> addMoneyAmountByUserId(@PathVariable Long userId){
+//
+//    }
 }

@@ -6,7 +6,6 @@ import com.dataart.cerebro.domain.AdvertisementOrder;
 import com.dataart.cerebro.domain.Status;
 import com.dataart.cerebro.domain.UserInfo;
 import com.dataart.cerebro.email.EmailService;
-import com.dataart.cerebro.exception.NotFoundException;
 import com.dataart.cerebro.repository.AdditionalServiceRepository;
 import com.dataart.cerebro.repository.AdvertisementOrderRepository;
 import com.dataart.cerebro.repository.AdvertisementRepository;
@@ -46,26 +45,21 @@ public class AdvertisementOrderService {
         log.info("User with email {} creates new order", customer.getEmail());
         AdvertisementOrder advertisementOrder = new AdvertisementOrder();
         Advertisement advertisement = advertisementRepository.findAdvertisementById(advertisementOrderDTO.getAdvertisementId());
-        try {
-            advertisementOrder.setOrderTime(LocalDateTime.now());
-            Double totalPrice = advertisement.getPrice() +
-                    additionalServiceService.getAdditionalServicesTotalPrice(advertisementOrderDTO.getAdditionalServicesId());
-            advertisementOrder.setTotalPrice(totalPrice);
-            advertisementOrder.setAdvertisement(advertisement);
-            advertisementOrder.setCustomer(customer);
-            AdvertisementOrder newOrder = advertisementOrderRepository.save(advertisementOrder);
+        advertisementOrder.setOrderTime(LocalDateTime.now());
+        Double totalPrice = advertisement.getPrice() +
+                additionalServiceService.getAdditionalServicesTotalPrice(advertisementOrderDTO.getAdditionalServicesId());
 
-            advertisement.setStatus(Status.SOLD);
-            advertisementRepository.save(advertisement);
+        userInfoService.changeMoneyAmount(customer, advertisement.getOwner(), totalPrice);
+        advertisementOrder.setTotalPrice(totalPrice);
+        advertisementOrder.setAdvertisement(advertisement);
+        advertisementOrder.setCustomer(customer);
+        AdvertisementOrder newOrder = advertisementOrderRepository.save(advertisementOrder);
 
-            log.info("New order added (id = {})", newOrder.getId());
-            emailService.sendEmailAboutPurchase(newOrder, customer);
-            emailService.sendEmailAboutSell(newOrder, customer);
-        } catch (Exception exception) {
-            log.error(exception.getMessage());
-            throw new NotFoundException("Incorrect data");
-        }
+        advertisement.setStatus(Status.SOLD);
+        advertisementRepository.save(advertisement);
 
-
+        log.info("New order added (id = {})", newOrder.getId());
+        emailService.sendEmailAboutPurchase(newOrder, customer);
+        emailService.sendEmailAboutSell(newOrder, customer);
     }
 }
