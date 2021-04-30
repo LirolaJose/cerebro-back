@@ -1,5 +1,6 @@
 package com.dataart.cerebro.service;
 
+import com.dataart.cerebro.controller.dto.UserInfoDTO;
 import com.dataart.cerebro.domain.Role;
 import com.dataart.cerebro.domain.UserInfo;
 import com.dataart.cerebro.exception.EmailExistsException;
@@ -37,13 +38,19 @@ public class UserInfoService {
     }
 
     @Transactional
-    public void createNewUserInfo(UserInfo userInfo) {
-        if (findUserInfoByEmail(userInfo.getEmail()) != null) {
-            log.info("An attempt to create user with exists email: {}", userInfo.getEmail());
-            throw new EmailExistsException(userInfo.getEmail());
+    public void createNewUserInfo(UserInfoDTO userInfoDTO) {
+        if (findUserInfoByEmail(userInfoDTO.getEmail()) != null) {
+            log.info("An attempt to create user with exists email: {}", userInfoDTO.getEmail());
+            throw new EmailExistsException(userInfoDTO.getEmail());
         }
+        UserInfo userInfo = new UserInfo();
         log.info("Creating new USER");
-        String encryptedPassword = encryptPassword(userInfo.getPassword());
+        userInfo.setFirstName(userInfoDTO.getFirstName());
+        userInfo.setSecondName(userInfoDTO.getSecondName());
+        userInfo.setPhone(userInfoDTO.getPhone());
+        userInfo.setEmail(userInfoDTO.getEmail());
+
+        String encryptedPassword = encryptPassword(userInfoDTO.getPassword());
         userInfo.setPassword(encryptedPassword);
         userInfo.setRole(Role.USER);
         userInfo.setMoneyAmount(0.0);

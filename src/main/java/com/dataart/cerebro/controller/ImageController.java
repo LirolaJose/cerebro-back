@@ -1,6 +1,5 @@
 package com.dataart.cerebro.controller;
 
-import com.dataart.cerebro.domain.Advertisement;
 import com.dataart.cerebro.domain.Image;
 import com.dataart.cerebro.service.ImageService;
 import org.springframework.http.HttpStatus;
@@ -27,14 +26,14 @@ public class ImageController {
             produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
 
     public ResponseEntity<byte[]> getMainImageByAdvertisement(@PathVariable Long advertisementId) throws IOException {
-        byte[] imageBytes = imageService.findImageByAdvertisement(advertisementId);
+        byte[] imageBytes = imageService.findImageByAdvertisementId(advertisementId);
         return new ResponseEntity<>(imageBytes,HttpStatus.OK);
     }
 
-    @GetMapping(value = "/imagesList/{advertisement}")
+    @GetMapping(value = "/imagesList/{advertisementId}")
 
-    public ResponseEntity<?> getImagesList(@PathVariable Advertisement advertisement) {
-        List<Image> images = imageService.findAllByAdvertisement(advertisement);
+    public ResponseEntity<?> getImagesList(@PathVariable Long advertisementId) {
+        List<Image> images = imageService.findAllByAdvertisementId(advertisementId);
         return new ResponseEntity<>(images, HttpStatus.OK);
     }
 

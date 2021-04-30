@@ -1,5 +1,6 @@
 package com.dataart.cerebro.controller;
 
+import com.dataart.cerebro.controller.dto.ValueDTO;
 import com.dataart.cerebro.domain.Advertisement;
 import com.dataart.cerebro.domain.AdvertisementOrder;
 import com.dataart.cerebro.domain.UserInfo;
@@ -9,6 +10,8 @@ import com.dataart.cerebro.service.UserInfoService;
 import io.swagger.annotations.Api;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -50,7 +53,10 @@ public class UserInfoController {
                 ? new ResponseEntity<>(advertisementOrders, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-//    public ResponseEntity<?> addMoneyAmountByUserId(@PathVariable Long userId){
-//
-//    }
+    @PreAuthorize("permitAll()")
+    @GetMapping("/")
+    public ResponseEntity<?> getCurrentUser(){
+        UserInfo userInfo = userInfoService.getCurrentUser();
+        return new ResponseEntity<>(new ValueDTO(userInfo), HttpStatus.OK);
+    }
 }

@@ -97,7 +97,7 @@ public class AdvertisementService {
         Advertisement newAdvertisement = advertisementRepository.save(advertisement);
         log.info("New advertisement created ({})", newAdvertisement);
 
-       if(!images.isEmpty()){ imageService.saveImage(images, newAdvertisement);}
+       if(images != null){ imageService.saveImage(images, newAdvertisement);}
 
         emailService.sendEmailAboutPublication(newAdvertisement);
     }

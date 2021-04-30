@@ -1,5 +1,22 @@
 $(function () {
-    function getAdvertisementInfoById(advertisementId) {
+    function getCurrentUser(){
+        $.ajax({
+            type: "GET",
+            url: CURRENT_USER
+        }).done(function (resp) {
+            console.log(resp);
+            let user = resp.value;
+
+            const urlString = window.location.search;
+            let advertisementId = urlString.substring(urlString.lastIndexOf("=") + 1);
+
+            getAdvertisementInfoById(advertisementId, user);
+            getImagesList(advertisementId);
+            getAdditionalServicesByAdvertisementId(advertisementId);
+        });
+    }
+
+    function getAdvertisementInfoById(advertisementId, user) {
         $.ajax({
             type: "GET",
             url: API_ADVERTISEMENT + advertisementId
@@ -12,6 +29,8 @@ $(function () {
             $("#type").append(advertisement.type);
             $("#category").append(advertisement.category.name);
             $("#owner").append(advertisement.owner.firstName + " " + advertisement.owner.secondName);
+
+            if (user !== null){
             if (advertisement.category.orderable === true) {
                 $("#order").append($("<form></form>")
                     .attr("id", "orderButtonForm")
@@ -25,6 +44,7 @@ $(function () {
                         .attr("type", "submit")
                         .attr("value", "ORDER"));
             }
+            }
         });
     }
 
@@ -34,11 +54,18 @@ $(function () {
             url: "http://localhost:8080/api/image/imagesList/" + advertisementId
         }).done(function (imagesList) {
             console.log(imagesList);
-            $.each(imagesList, function (index, image) {
+            if(imagesList.length === 0){
                 $("#images")
                     .append($("<img/>")
-                        .attr("src", API_ADVERTISEMENT + "image/" + image.id));
-            });
+                        .attr("src", API_IMAGE + advertisementId));
+            }else {
+                $.each(imagesList, function (index, image) {
+                    $("#images")
+                        .append($("<img/>")
+                            .attr("src", API_ADVERTISEMENT + "image/" + image.id));
+
+                });
+            }
         });
     }
 
@@ -54,12 +81,7 @@ $(function () {
             })
         })
     }
-
-    const urlString = window.location.search;
-    let advertisementId = urlString.substring(urlString.lastIndexOf("=") + 1);
-    getAdvertisementInfoById(advertisementId);
-    getImagesList(advertisementId);
-    getAdditionalServicesByAdvertisementId(advertisementId);
+    getCurrentUser();
 })
 
 // function getParameterByName(name) {
