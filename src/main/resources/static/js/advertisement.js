@@ -31,7 +31,7 @@ $(function () {
             $("#owner").append(advertisement.owner.firstName + " " + advertisement.owner.secondName);
 
             if (user !== null){
-            if (advertisement.category.orderable === true) {
+            if (advertisement.category.orderable === true && advertisement.status === "ACTIVE") {
                 $("#order").append($("<form></form>")
                     .attr("id", "orderButtonForm")
                     .attr("action", "orderForm.html"));
@@ -84,8 +84,4 @@ $(function () {
     getCurrentUser();
 })
 
-// function getParameterByName(name) {
-//     const match = RegExp(`[?&]${name}=([^&]*)`).exec(window.location.search);
-//     return match && decodeURIComponent(match[1].replace(/\+/g, ' ') );
-// }
 

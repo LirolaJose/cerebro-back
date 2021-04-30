@@ -1,5 +1,6 @@
 package com.dataart.cerebro.email;
 
+import com.dataart.cerebro.domain.AdditionalService;
 import com.dataart.cerebro.domain.Advertisement;
 import com.dataart.cerebro.domain.AdvertisementOrder;
 import com.dataart.cerebro.domain.UserInfo;
@@ -18,6 +19,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -91,15 +93,17 @@ public class EmailService {
             log.info("Sending email about purchase is started at {}", LocalDateTime.now());
             String template = "orderTemplate";
             Advertisement advertisement = order.getAdvertisement();
+            Set<AdditionalService> servicesSet = order.getAdditionalServices();
             Map<String, Object> contextMap = new HashMap<>();
             contextMap.put("action", "purchase");
             contextMap.put("userInfo", customer);
             contextMap.put("advertisement", advertisement);
+            contextMap.put("additionalServices", servicesSet);
             contextMap.put("order", order);
             contextMap.put("url", url);
             sendEmail(contextMap, template);
             log.info("Email about purchase is sent to {} at {}", customer.getEmail(), LocalDateTime.now());
-//            Set<AdditionalService> servicesSet = order.getAdditionalServices();
+
         });
     }
 
@@ -109,16 +113,18 @@ public class EmailService {
             log.info("Sending email about sell is started at {}", LocalDateTime.now());
             String template = "orderTemplate";
             Advertisement advertisement = order.getAdvertisement();
+            Set<AdditionalService> servicesSet = order.getAdditionalServices();
             Map<String, Object> contextMap = new HashMap<>();
             contextMap.put("action", "sell");
             contextMap.put("userInfo", advertisement.getOwner());
             contextMap.put("customer", customer);
             contextMap.put("advertisement", advertisement);
+            contextMap.put("additionalServices", servicesSet);
             contextMap.put("order", order);
             contextMap.put("url", url);
             sendEmail(contextMap, template);
             log.info("Email about sell is sent to {} at {}", advertisement.getOwner().getEmail(), LocalDateTime.now());
-            //            Set<AdditionalService> servicesSet = order.getAdditionalServices();
+
         });
     }
 

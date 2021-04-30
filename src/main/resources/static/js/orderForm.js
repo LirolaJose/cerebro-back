@@ -13,6 +13,14 @@ function fillOrderFormInfo(id) {
 
         $("#order-advertisement-image").append($("<img/>")
             .attr("src", "http://localhost:8080/api/image/" + id));
+
+        if(advertisement.status === "ACTIVE") {
+            $("#confirm-order").append($("<input/>")
+                .attr("type", "submit")
+                .attr("value", "CONFIRM THE ORDER")
+                .attr("onclick", sendOrder()));
+        }
+
         fillAdditionalServicesInfo(id);
     });
 }

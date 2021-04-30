@@ -10,13 +10,25 @@
 <body>
 <div>Dear <b th:utext="|${userInfo.firstName} ${userInfo.secondName}, |"></b></div>
 <div th:switch=${action}>
-    <p th:case="purchase">You have done a purchase: <span th:utext="|${url}${advertisement.id} <br> Total price: ${order.totalPrice} <br>|"></span>
-        <span>If you haven't made this purchase, call or email us</span>
+    <p th:case="purchase">You have done a purchase:
+        <span th:utext="|${url}${advertisement.id} <br> Total price: ${order.totalPrice} <br>|"></span>
+        <span th:utext="|<br> Additional services: <br>|"></span>
+        <span th:each="additionalService : ${additionalServices}"
+              th:value="${additionalService}"
+              th:utext="|${additionalService.name} ${additionalService.price} <br>|">
+        </span>
+
+        <span> <br> If you haven't made this purchase, call or email us</span>
     </p>
 
     <p th:case="sell">Your advertisement(s) has been sold:
         <span th:utext="|${url}${advertisement.id} <br> Total price: ${order.totalPrice} <br>|"></span>
-        <span th:utext="|Customer contact info: ${customer.firstName} ${customer.secondName}|"></span>
+        <span th:utext="|<br> Additional services: <br>|"></span>
+        <span th:each="additionalService : ${additionalServices}"
+              th:value="${additionalService}"
+              th:utext="|${additionalService.name} ${additionalService.price} <br>|">
+        </span>
+        <span th:utext="|<br> Customer contact info: ${customer.firstName} ${customer.secondName}|"></span>
     </p>
 </div>
 <div><b th:utext="|CEREBRO: <br /> +7 (222) 555-77-99 <br /> lirolaboard@gmail.com|"></b> </div>
