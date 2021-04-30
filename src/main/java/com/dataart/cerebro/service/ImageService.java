@@ -35,18 +35,18 @@ public class ImageService {
         }
     }
 
-    public byte[] findImageByAdvertisement(Long advertisement) throws IOException {
-        Image image = imageRepository.findImageByAdvertisement_IdAndMainImageTrue(advertisement);
+    public byte[] findImageByAdvertisementId(Long advertisementId) throws IOException {
+        Image image = imageRepository.findImageByAdvertisement_IdAndMainImageTrue(advertisementId);
         return getImage(image);
     }
 
-    public byte[] findImageById(Long id) throws IOException {
-        Image image = imageRepository.findImageById(id);
+    public byte[] findImageById(Long imageId) throws IOException {
+        Image image = imageRepository.findImageById(imageId);
         return getImage(image);
     }
 
-    public List<Image> findAllByAdvertisement(Advertisement advertisement){
-        return imageRepository.findAllByAdvertisement_Id(advertisement.getId());
+    public List<Image> findAllByAdvertisementId(Long advertisementId){
+        return imageRepository.findAllByAdvertisement_Id(advertisementId);
     }
 
     private byte[] getImage(Image image) throws IOException {
