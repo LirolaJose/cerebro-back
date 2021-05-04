@@ -10,7 +10,7 @@ import java.util.List;
 
 
 public interface AdvertisementRepository extends JpaRepository<Advertisement, Long> {
-    List<Advertisement> findAdvertisementsByStatus(Status status);
+    List<Advertisement> findAdvertisementsByStatusOrderByIdDesc(Status status);
 
     Advertisement findAdvertisementById(Long id);
 

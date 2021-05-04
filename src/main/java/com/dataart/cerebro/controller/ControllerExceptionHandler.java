@@ -57,7 +57,7 @@ public class ControllerExceptionHandler {
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
-    private static class ErrorDTO implements Serializable {
+    public static class ErrorDTO implements Serializable {
         private static final long serialVersionUID = 1L;
         private String message;
     }

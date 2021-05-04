@@ -16,6 +16,7 @@ public class UserInfoDTO {
     @Size(max = 100)
     private String secondName;
 
+    @NotEmpty
     @Size(min = 9, max = 20)
     private String phone;
 

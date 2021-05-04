@@ -20,15 +20,13 @@ import java.util.stream.Collectors;
 public class AdvertisementOrderService {
     private final AdvertisementOrderRepository advertisementOrderRepository;
     private final EmailService emailService;
-    private final AdditionalServiceRepository additionalServiceRepository;
     private final UserInfoService userInfoService;
     private final AdvertisementRepository advertisementRepository;
     private final AdditionalServiceService additionalServiceService;
 
-    public AdvertisementOrderService(AdvertisementOrderRepository advertisementOrderRepository, EmailService emailService, AdditionalServiceRepository additionalServiceRepository, UserInfoService userInfoService, AdvertisementRepository advertisementRepository, AdditionalServiceService additionalServiceService) {
+    public AdvertisementOrderService(AdvertisementOrderRepository advertisementOrderRepository, EmailService emailService, UserInfoService userInfoService, AdvertisementRepository advertisementRepository, AdditionalServiceService additionalServiceService) {
         this.advertisementOrderRepository = advertisementOrderRepository;
         this.emailService = emailService;
-        this.additionalServiceRepository = additionalServiceRepository;
         this.userInfoService = userInfoService;
         this.advertisementRepository = advertisementRepository;
         this.additionalServiceService = additionalServiceService;
@@ -64,7 +62,7 @@ public class AdvertisementOrderService {
         advertisement.setStatus(Status.SOLD);
         advertisementRepository.save(advertisement);
 
-        log.info("New order added (id = {})", newOrder.getId());
+//        log.info("New order added (id = {})", newOrder.getId());
         emailService.sendEmailAboutPurchase(newOrder, customer);
         emailService.sendEmailAboutSell(newOrder, customer);
     }

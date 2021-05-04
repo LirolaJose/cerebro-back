@@ -18,14 +18,10 @@ import static java.util.stream.Collectors.groupingBy;
 @Slf4j
 @Component
 public class ScheduledEmailTasks {
-    private final AdvertisementRepository advertisementRepository;
     private final AdvertisementService advertisementService;
-    private final EmailService emailService;
 
-    public ScheduledEmailTasks(AdvertisementRepository advertisementRepository, AdvertisementService advertisementService, EmailService emailService) {
-        this.advertisementRepository = advertisementRepository;
+    public ScheduledEmailTasks(AdvertisementService advertisementService) {
         this.advertisementService = advertisementService;
-        this.emailService = emailService;
     }
 
     @Scheduled(cron = "00 31 12 * * ?") // At 12:31:00 AM every day
