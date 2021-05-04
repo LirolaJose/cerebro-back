@@ -55,8 +55,8 @@ public class AdvertisementOrderService {
         advertisementOrder.setCustomer(customer);
 
         Set<AdditionalService> additionalServices = advertisementOrderDTO.getAdditionalServicesId().stream()
-                        .map(additionalServiceService::findAdditionalServiceById)
-                        .collect(Collectors.toSet());
+                .map(additionalServiceService::findAdditionalServiceById)
+                .collect(Collectors.toSet());
 
         advertisementOrder.setAdditionalServices(additionalServices);
         AdvertisementOrder newOrder = advertisementOrderRepository.save(advertisementOrder);

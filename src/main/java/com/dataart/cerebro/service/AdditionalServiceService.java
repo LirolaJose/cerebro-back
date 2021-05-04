@@ -1,8 +1,6 @@
 package com.dataart.cerebro.service;
 
 import com.dataart.cerebro.domain.AdditionalService;
-import com.dataart.cerebro.domain.Advertisement;
-import com.dataart.cerebro.domain.Category;
 import com.dataart.cerebro.repository.AdditionalServiceRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

@@ -21,7 +21,6 @@ import java.io.Serializable;
 @ControllerAdvice
 @Slf4j
 public class ControllerExceptionHandler {
-    private static final String MESSAGE = "message";
 
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
@@ -42,7 +41,7 @@ public class ControllerExceptionHandler {
     @ExceptionHandler(MaxUploadSizeExceededException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
-    public ErrorDTO handleMaxUploadSizeExceededExceptionException(MaxUploadSizeExceededException e) {
+    public ErrorDTO handleMaxUploadSizeExceededException(MaxUploadSizeExceededException e) {
         log.error("Error: {}", e.getMessage(), e);
         return new ErrorDTO("Max Upload Size Exceeded");
     }

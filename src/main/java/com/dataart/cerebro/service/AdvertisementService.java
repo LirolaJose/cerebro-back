@@ -6,14 +6,10 @@ import com.dataart.cerebro.email.EmailService;
 import com.dataart.cerebro.exception.NotFoundException;
 import com.dataart.cerebro.repository.AdvertisementRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.mail.Multipart;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -97,12 +93,14 @@ public class AdvertisementService {
         Advertisement newAdvertisement = advertisementRepository.save(advertisement);
         log.info("New advertisement created ({})", newAdvertisement);
 
-       if(images != null){ imageService.saveImage(images, newAdvertisement);}
+        if (images != null && !images.isEmpty()) {
+            imageService.saveImage(images, newAdvertisement);
+        }
 
         emailService.sendEmailAboutPublication(newAdvertisement);
     }
 
-    public void findAdvertisementsByExpiringDate(Long statusId, Integer lookbackDays){
+    public void findAdvertisementsByExpiringDate(Long statusId, Integer lookbackDays) {
         log.info("Searching expiring advertisements");
         List<Advertisement> advertisementsList = advertisementRepository.findAdvertisementsByDate(statusId, lookbackDays);
         Map<String, List<Advertisement>> emailAndAds = advertisementsList.stream()
@@ -111,9 +109,12 @@ public class AdvertisementService {
         if (!emailAndAds.isEmpty()) {
             emailService.sendEmailAboutExpiring(emailAndAds);
             log.info("Letter was sent to {} addresses", emailAndAds.size());
-        }else{ log.info("No matching advertisements found");}
+        } else {
+            log.info("No matching advertisements found");
+        }
     }
-    public void findAdvertisementsByExpiredDate(Long statusId, Integer lookbackDays){
+
+    public void findAdvertisementsByExpiredDate(Long statusId, Integer lookbackDays) {
         log.info("Searching expired advertisements");
         List<Advertisement> advertisementsList = advertisementRepository.findAdvertisementsByDate(statusId, lookbackDays);
         Map<String, List<Advertisement>> emailAndAds = advertisementsList.stream()
@@ -126,6 +127,8 @@ public class AdvertisementService {
         if (!emailAndAds.isEmpty()) {
             emailService.sendEmailAboutExpired(emailAndAds);
             log.info("Letter was sent to {} addresses", emailAndAds.size());
-        }else{ log.info("No matching advertisements found");}
+        } else {
+            log.info("No matching advertisements found");
+        }
     }
 }

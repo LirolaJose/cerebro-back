@@ -2,11 +2,11 @@ package com.dataart.cerebro.service;
 
 import com.dataart.cerebro.domain.Advertisement;
 import com.dataart.cerebro.domain.Image;
-import com.dataart.cerebro.exception.NotFoundException;
 import com.dataart.cerebro.repository.ImageRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,6 +22,7 @@ public class ImageService {
         this.imageRepository = imageRepository;
     }
 
+    @Transactional
     public void saveImage(List<MultipartFile> images, Advertisement advertisement) throws IOException {
 
         for (int i = 0; i < images.size(); i++) {
@@ -45,7 +46,7 @@ public class ImageService {
         return getImage(image);
     }
 
-    public List<Image> findAllByAdvertisementId(Long advertisementId){
+    public List<Image> findAllByAdvertisementId(Long advertisementId) {
         return imageRepository.findAllByAdvertisement_Id(advertisementId);
     }
 
