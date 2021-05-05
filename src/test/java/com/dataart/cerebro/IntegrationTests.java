@@ -122,7 +122,7 @@ class IntegrationTests {
         ResponseEntity<UserInfo> response = restTemplate.postForEntity("/registration/", userInfo, UserInfo.class);
         assertThat(response.getStatusCode(), equalTo(HttpStatus.CREATED));
 
-        assertThat(userInfoRepository.findUserInfoByEmail(email).getSecondName(), equalTo(email));
+        assertThat(userInfoRepository.findUserInfoByEmail(email).getSecondName(), equalTo(secondName));
         return userInfo;
     }
 
