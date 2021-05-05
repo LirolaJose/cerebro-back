@@ -75,6 +75,6 @@ public class UserInfoService {
             userInfoRepository.save(customer);
             owner.setMoneyAmount(owner.getMoneyAmount() + totalPrice);
             userInfoRepository.save(owner);
-        }
+        } //// FIXME: 5/5/2021 else?
     }
 }

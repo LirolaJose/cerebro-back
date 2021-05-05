@@ -43,10 +43,11 @@ public class ControllerExceptionHandler {
     @ResponseBody
     public ErrorDTO handleMaxUploadSizeExceededException(MaxUploadSizeExceededException e) {
         log.error("Error: {}", e.getMessage(), e);
-        return new ErrorDTO("Max Upload Size Exceeded");
+        return new ErrorDTO("Max Upload Size Exceeded"); // FIXME: 5/5/2021 add parameter value
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    // FIXME: 5/5/2021 probably add dataprocessingexception
     @ExceptionHandler(RuntimeException.class)
     @ResponseBody
     public ErrorDTO handleRuntimeException(Exception e) {

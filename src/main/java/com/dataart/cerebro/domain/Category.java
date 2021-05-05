@@ -16,12 +16,14 @@ public class Category {
 
     private Boolean orderable;
 
+    // FIXME: 5/5/2021 do we need non-used field?
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "services_of_category",
     joinColumns = @JoinColumn(name = "category_id"),
     inverseJoinColumns = @JoinColumn(name = "service_id"))
     private Set<AdditionalService> additionalServices;
 
+    // FIXME: 5/5/2021 dead code
 //    @ManyToMany(fetch = FetchType.EAGER)
 //    @JoinTable(name = "category_of_types",
 //    joinColumns = @JoinColumn(name = "category_id"),

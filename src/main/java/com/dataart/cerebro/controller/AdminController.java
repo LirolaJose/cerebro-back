@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+// FIXME: 5/5/2021 remove me
+
 @RestController
 @RequestMapping("/api/admin")
 @Api(tags = "Admin")

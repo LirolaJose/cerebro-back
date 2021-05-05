@@ -10,6 +10,7 @@
     </parent>
     <groupId>com.dataart</groupId>
     <artifactId>cerebro</artifactId>
+<!--    fixme version upgrade-->
     <version>0.0.1-SNAPSHOT</version>
     <name>cerebro</name>
     <description>Project for practice</description>
@@ -121,12 +122,14 @@
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-boot-starter</artifactId>
+<!--            extract prop-->
             <version>3.0.0</version>
         </dependency>
 
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
+            <!--            extract prop-->
             <version>1.15</version>
         </dependency>
         <dependency>
@@ -144,6 +147,8 @@
         <dependency>
             <groupId>com.github.javafaker</groupId>
             <artifactId>javafaker</artifactId>
+            <!--            extract prop-->
+<!--            scope test-->
             <version>1.0.2</version>
         </dependency>
 
@@ -166,6 +171,7 @@
 
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
+                <!--            extract prop-->
                 <version>3.2.0</version>
                 <executions>
                     <execution>
@@ -190,6 +196,7 @@
             <plugin>
                 <groupId>org.flywaydb</groupId>
                 <artifactId>flyway-maven-plugin</artifactId>
+                <!--            extract prop-->
                 <version>4.0.3</version>
             </plugin>
         </plugins>

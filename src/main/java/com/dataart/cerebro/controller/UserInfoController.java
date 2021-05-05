@@ -40,6 +40,7 @@ public class UserInfoController {
     public ResponseEntity<?> getUsersAdvertisementsByUserId(@PathVariable Long userId) {
         List<Advertisement> advertisements = advertisementService.findAdvertisementsByUserInfoId(userId);
 
+        // FIXME: 5/5/2021 return ok always
         return advertisements != null && !advertisements.isEmpty()
                 ? new ResponseEntity<>(advertisements, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);

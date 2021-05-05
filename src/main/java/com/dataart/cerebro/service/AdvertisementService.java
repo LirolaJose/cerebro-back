@@ -41,7 +41,7 @@ public class AdvertisementService {
 
 
     public List<Advertisement> findAllAdvertisements() {
-        log.info("Find all advertisements");
+        log.info("Find all advertisements"); // FIXME: 5/5/2021 do we need?
         return advertisementRepository.findAll();
     }
 
@@ -76,6 +76,7 @@ public class AdvertisementService {
         advertisementDTO.getAdditionalServicesId().stream()
                 .peek(additionalService -> additionalServices.add(additionalServiceService.findAdditionalServiceById(additionalService)))
                 .collect(Collectors.toSet());
+        // FIXME: 5/5/2021 replace with findAll (you can use addServRepo)
 
         Advertisement advertisement = new Advertisement();
         advertisement.setTitle(advertisementDTO.getTitle());
@@ -100,6 +101,8 @@ public class AdvertisementService {
         emailService.sendEmailAboutPublication(newAdvertisement);
     }
 
+    // FIXME: 5/5/2021 find & notify, byExpiringInDays(Integer lookbackDays)
+    // FIXME: 5/5/2021 remove status from parameter, use active always
     public void findAdvertisementsByExpiringDate(Long statusId, Integer lookbackDays) {
         log.info("Searching expiring advertisements");
         List<Advertisement> advertisementsList = advertisementRepository.findAdvertisementsByDate(statusId, lookbackDays);
@@ -114,6 +117,7 @@ public class AdvertisementService {
         }
     }
 
+    // FIXME: 5/5/2021 do we need parameters?
     public void findAdvertisementsByExpiredDate(Long statusId, Integer lookbackDays) {
         log.info("Searching expired advertisements");
         List<Advertisement> advertisementsList = advertisementRepository.findAdvertisementsByDate(statusId, lookbackDays);

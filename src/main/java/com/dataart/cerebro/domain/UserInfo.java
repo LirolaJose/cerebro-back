@@ -39,6 +39,7 @@ public class UserInfo {
     @Column(name = "role_id")
     private Role role;
 
+    // FIXME: 5/5/2021 not needed?
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_favourites_advertisements",
             joinColumns = @JoinColumn(name = "user_id"),

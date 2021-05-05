@@ -37,6 +37,7 @@ public class AdvertisementController {
     @GetMapping("/")
     public ResponseEntity<?> getActiveAdvertisements() {
         List<Advertisement> advertisements = advertisementService.findActiveAdvertisements();
+        // FIXME: 5/5/2021 always return ok even if it empty
         return advertisements != null && !advertisements.isEmpty()
                 ? new ResponseEntity<>(advertisements, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -45,6 +46,7 @@ public class AdvertisementController {
     @GetMapping("/{advertisementId}")
     public ResponseEntity<?> getAdvertisementById(@PathVariable Long advertisementId) {
         Advertisement advertisement = advertisementService.findAdvertisementById(advertisementId);
+        // FIXME: 5/5/2021 return dto
         return new ResponseEntity<>(advertisement, HttpStatus.OK);
     }
 
@@ -62,6 +64,7 @@ public class AdvertisementController {
                                                @RequestPart(value = "images", required = false) List<MultipartFile> images) throws IOException {
         if(bindingResult.hasErrors()){
             List<FieldError> fieldErrorList = new ArrayList<>(bindingResult.getFieldErrors());
+            // FIXME: 5/5/2021 remove double logging
             log.warn("Some parameters are not filled");
             throw new ValidationException(fieldErrorList);
         }

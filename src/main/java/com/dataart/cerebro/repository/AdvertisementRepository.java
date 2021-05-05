@@ -10,6 +10,7 @@ import java.util.List;
 
 
 public interface AdvertisementRepository extends JpaRepository<Advertisement, Long> {
+    // FIXME: 5/5/2021 order by add date?
     List<Advertisement> findAdvertisementsByStatusOrderByIdDesc(Status status);
 
     Advertisement findAdvertisementById(Long id);

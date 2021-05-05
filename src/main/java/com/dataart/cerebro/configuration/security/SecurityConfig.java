@@ -20,6 +20,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         this.customAuthenticationProvider = customAuthenticationProvider;
     }
 
+    // FIXME: 5/5/2021 remove
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -36,7 +37,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers("/login").permitAll()
                     .antMatchers("/api/image/*").permitAll()
                     .antMatchers("/api/admin/**").hasRole("ADMIN")
+                // FIXME: 5/5/2021 remove or replace with authenticated
 //                    .antMatchers("/api/**").permitAll()
+
                     .antMatchers("/advertisementForm.html").authenticated()
                     .antMatchers("/orderForm.html").authenticated()
                 .and().formLogin()
@@ -51,6 +54,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         auth.authenticationProvider(customAuthenticationProvider);
     }
 
+    // FIXME: 5/5/2021 remove
 //    @Override
 //    public void configure(WebSecurity web) throws Exception {
 //        web.ignoring().antMatchers("/v2/api-docs/**");

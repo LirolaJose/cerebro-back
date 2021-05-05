@@ -17,6 +17,7 @@ public class Image {
 
     private Boolean mainImage;
 
+    // FIXME: 5/5/2021 many to one
     @OneToOne
     @JoinColumn (name = "advertisement_id")
     private Advertisement advertisement;

@@ -1,5 +1,5 @@
 $(function () {
-    function getCurrentUser(){
+    function getCurrentUser(callback) {
         $.ajax({
             type: "GET",
             url: CURRENT_USER
@@ -13,8 +13,18 @@ $(function () {
             getAdvertisementInfoById(advertisementId, user);
             getImagesList(advertisementId);
             getAdditionalServicesByAdvertisementId(advertisementId);
+
+            // callback(user);
         });
     }
+
+    // getCurrentUser(function (user) {
+    //         let advertisementId = urlString.substring(urlString.lastIndexOf("=") + 1);
+    //         getAdvertisementInfoById(advertisementId, user);
+    //         getImagesList(advertisementId);
+    //         getAdditionalServicesByAdvertisementId(advertisementId);
+    //     }
+    // );
 
     function getAdvertisementInfoById(advertisementId, user) {
         $.ajax({
@@ -30,20 +40,20 @@ $(function () {
             $("#category").append(advertisement.category.name);
             $("#owner").append(advertisement.owner.firstName + " " + advertisement.owner.secondName);
 
-            if (user !== null){
-            if (advertisement.category.orderable === true && advertisement.status === "ACTIVE") {
-                $("#order").append($("<form></form>")
-                    .attr("id", "orderButtonForm")
-                    .attr("action", "orderForm.html"));
+            if (user !== null) {
+                if (advertisement.category.orderable === true && advertisement.status === "ACTIVE") {
+                    $("#order").append($("<form></form>")
+                        .attr("id", "orderButtonForm")
+                        .attr("action", "orderForm.html"));
 
-                $("#orderButtonForm").append($("<input/>")
-                    .attr("type", "hidden")
-                    .attr("name", "id")
-                    .attr("value", advertisementId))
-                    .append($("<input/>")
-                        .attr("type", "submit")
-                        .attr("value", "ORDER"));
-            }
+                    $("#orderButtonForm").append($("<input/>")
+                        .attr("type", "hidden")
+                        .attr("name", "id")
+                        .attr("value", advertisementId))
+                        .append($("<input/>")
+                            .attr("type", "submit")
+                            .attr("value", "ORDER"));
+                }
             }
         });
     }
@@ -54,11 +64,11 @@ $(function () {
             url: "http://localhost:8080/api/image/imagesList/" + advertisementId
         }).done(function (imagesList) {
             console.log(imagesList);
-            if(imagesList.length === 0){
+            if (imagesList.length === 0) {
                 $("#images")
                     .append($("<img/>")
                         .attr("src", API_IMAGE + advertisementId));
-            }else {
+            } else {
                 $.each(imagesList, function (index, image) {
                     $("#images")
                         .append($("<img/>")
@@ -81,6 +91,7 @@ $(function () {
             })
         })
     }
+
     getCurrentUser();
 })
 

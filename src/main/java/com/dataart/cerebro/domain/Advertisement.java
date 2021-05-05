@@ -31,6 +31,7 @@ public class Advertisement {
     private LocalDateTime expiredTime;
     private Boolean visible;
 
+    // FIXME: 5/5/2021 actually it's  many to one
     @OneToOne
     @JoinColumn(name = "category_id")
     private Category category;
@@ -45,6 +46,7 @@ public class Advertisement {
     @JoinColumn(name = "owner_id")
     private UserInfo owner;
 
+    // FIXME: 5/5/2021 do we need eager?
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "services_of_advertisement",
             joinColumns = @JoinColumn(name = "advertisement_id"),

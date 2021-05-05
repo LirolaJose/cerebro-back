@@ -42,6 +42,7 @@ public class EmailService {
     }
 
     public void sendEmailAboutPublication(Advertisement advertisement) {
+        // FIXME: 5/5/2021 wrap with try-catch
         executor.execute(() -> {
             log.info("Sending email about publication is started at {}", LocalDateTime.now());
             String template = "publicationTemplate";
@@ -71,6 +72,8 @@ public class EmailService {
         });
     }
 
+    // FIXME: 5/5/2021 replace contextMap.put("action", "soon"); with parameter and leave 1 method
+
     public void sendEmailAboutExpired(Map<String, List<Advertisement>> emailAndAds) {
         executor.execute(() -> {
             log.info("Sending email about expired is started at {}", LocalDateTime.now());
@@ -93,7 +96,7 @@ public class EmailService {
             log.info("Sending email about purchase is started at {}", LocalDateTime.now());
             String template = "orderTemplate";
             Advertisement advertisement = order.getAdvertisement();
-            Set<AdditionalService> servicesSet = order.getAdditionalServices();
+            Set<AdditionalService> servicesSet = order.getAdditionalServices(); // FIXME: 5/5/2021 maybe replace with asRepository.findAsByOrder to avoid EAGER
             Map<String, Object> contextMap = new HashMap<>();
             contextMap.put("action", "purchase");
             contextMap.put("userInfo", customer);
@@ -107,6 +110,7 @@ public class EmailService {
         });
     }
 
+    // FIXME: 5/5/2021 replace action with parameter
 
     public void sendEmailAboutSell(AdvertisementOrder order, UserInfo customer) {
         executor.execute(() -> {
@@ -129,6 +133,7 @@ public class EmailService {
     }
 
 
+    // FIXME: 5/5/2021 add subject parameter
     private void sendEmail(Map<String, Object> contextMap, String template) {
 //        executor.execute(() -> {
         Context context = new Context();

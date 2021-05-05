@@ -41,7 +41,9 @@ public class AdditionalServiceService {
             return 0.0;
         }
         List<AdditionalService> additionalServices = new ArrayList<>();
+        // FIXME: 5/5/2021 try with sum query
         additionalServicesId.forEach(aLong -> additionalServices.add(additionalServiceRepository.findAdditionalServiceById(aLong)));
+// fixme analog        List<AdditionalService> allById = additionalServiceRepository.findAllById(additionalServicesId);
 
         return additionalServices.stream().mapToDouble(AdditionalService::getPrice).sum();
     }

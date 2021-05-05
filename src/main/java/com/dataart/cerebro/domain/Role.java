@@ -26,6 +26,7 @@ public enum Role {
     }
     public static Role getRoleById(Long id) {
         if (!ROLE_MAP.containsKey(id)) {
+            // FIXME: 5/5/2021 status?
             throw new NotFoundException("Status", id);
         }
         return ROLE_MAP.get(id);
