@@ -1,0 +1,1 @@
+alter table image alter column main_image set default false;

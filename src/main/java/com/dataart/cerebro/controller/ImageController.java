@@ -31,7 +31,6 @@ public class ImageController {
     }
 
     @GetMapping(value = "/imagesList/{advertisementId}")
-
     public ResponseEntity<?> getImagesList(@PathVariable Long advertisementId) {
         List<Image> images = imageService.findAllByAdvertisementId(advertisementId);
         return new ResponseEntity<>(images, HttpStatus.OK);
