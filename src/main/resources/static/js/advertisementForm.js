@@ -18,6 +18,7 @@ function createAdvertisement() {
 
     let allImages = document.getElementById("image").files.length;
     for (let index = 0; index < allImages; index ++){
+        // FIXME: 5/7/2021 add frontend images size and type check, you can ignore non-suitable files
         data.append("images", document.getElementById("image").files[index])
     }
 

@@ -104,6 +104,7 @@ class IntegrationTests {
         return loginResponse.getHeaders().get("Set-Cookie").get(0);
     }
 
+    // FIXME: 5/7/2021 refactor as it was discussed
     private UserInfo registerNewUser() {
         UserInfo userInfo = new UserInfo();
         Faker faker = new Faker();

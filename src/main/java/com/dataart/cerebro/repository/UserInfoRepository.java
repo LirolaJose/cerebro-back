@@ -11,6 +11,7 @@ public interface UserInfoRepository extends JpaRepository<UserInfo, Long> {
 
     UserInfo findUserInfoById(Long id);
 
+    // FIXME: 5/7/2021 not used?
     @Query(value = "SELECT email FROM user_Info;", nativeQuery = true)
     List<String> findEmail();
 }
