@@ -19,6 +19,41 @@
         <commons-fileupload.version>1.4</commons-fileupload.version>
     </properties>
 
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <spring.profiles.active>dev</spring.profiles.active>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>docker</id>
+            <properties>
+                <spring.profiles.active>docker</spring.profiles.active>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-maven-plugin</artifactId>
+                        <configuration>
+                            <executable>true</executable>
+                            <arguments>
+                                <argument>--spring.profiles.active=docker</argument>
+                            </arguments>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+
+    </profiles>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -112,7 +147,6 @@
             <version>1.0.2</version>
         </dependency>
 
-
     </dependencies>
 
     <build>
@@ -136,7 +170,6 @@
                 <executions>
                     <execution>
                         <id>copy-resources</id>
-                        <!-- here the phase you need -->
                         <phase>validate</phase>
                         <goals>
                             <goal>copy-resources</goal>
@@ -158,14 +191,8 @@
                 <groupId>org.flywaydb</groupId>
                 <artifactId>flyway-maven-plugin</artifactId>
                 <version>4.0.3</version>
-                <configuration>
-                    <user>postgres</user>
-                    <password>12345</password>
-                    <schemas>
-                        <schema>public</schema>
-                    </schemas>
-                </configuration>
             </plugin>
         </plugins>
+
     </build>
 </project>

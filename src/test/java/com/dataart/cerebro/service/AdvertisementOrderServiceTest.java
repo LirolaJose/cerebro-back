@@ -39,8 +39,8 @@ public class AdvertisementOrderServiceTest {
         exceptedOrder.setAdvertisement(ad1);
 
         when(userInfoServiceMock.getCurrentUser()).thenReturn(customerInfoMock);
-        when(advertisementRepositoryMock.findAdvertisementById(any())).thenReturn(ad);
-        when(additionalServiceServiceMock.getAdditionalServicesTotalPrice(any())).thenReturn((anyDouble()));
+        when(advertisementRepositoryMock.findAdvertisementById(anyLong())).thenReturn(ad);
+        when(additionalServiceServiceMock.getAdditionalServicesTotalPrice(anySet())).thenReturn((0.0));
         when(advertisementOrderRepositoryMock.save(any())).thenReturn(exceptedOrder);
 
         //when
