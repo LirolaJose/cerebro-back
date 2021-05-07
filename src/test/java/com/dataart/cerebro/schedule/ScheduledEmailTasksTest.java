@@ -55,6 +55,6 @@ public class ScheduledEmailTasksTest {
         expectedMap.put("email1", List.of(ad1, ad3));
         expectedMap.put("email2", List.of(ad2));
 
-        verify(emailServiceMock).sendEmailAboutExpiring(expectedMap);
+        verify(emailServiceMock).sendEmailAboutFinishingAdvertisement(expectedMap, "soon");
     }
 }

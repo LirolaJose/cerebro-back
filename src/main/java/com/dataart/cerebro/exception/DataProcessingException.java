@@ -1,8 +1,8 @@
 package com.dataart.cerebro.exception;
 
 public class DataProcessingException extends RuntimeException {
-    public DataProcessingException(Exception e) {
-        super(String.format("Data processing exception: %s", e.getMessage()));
+    public DataProcessingException(String error, Exception e) {
+        super(String.format("%s, %s", error, e.getMessage()));
     }
 
     // FIXME: 5/5/2021 usage example. keep in mind exception text output

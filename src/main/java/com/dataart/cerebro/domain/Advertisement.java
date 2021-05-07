@@ -15,24 +15,32 @@ import java.util.Set;
 public class Advertisement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
     @NotEmpty
     @Size(max = 100)
+    @Column(name = "title")
     private String title;
 
     @Size(max = 2000)
+    @Column(name = "text")
     private String text;
 
     @NotNull
+    @Column(name = "price")
     private Double price;
 
+    @Column(name = "publication_time")
     private LocalDateTime publicationTime;
+
+    @Column(name = "expired_time")
     private LocalDateTime expiredTime;
+
+    @Column(name = "visible")
     private Boolean visible;
 
-    // FIXME: 5/5/2021 actually it's  many to one
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
 
@@ -42,12 +50,11 @@ public class Advertisement {
     @Column(name = "status_id")
     private Status status;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "owner_id")
     private UserInfo owner;
 
-    // FIXME: 5/5/2021 do we need eager?
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "services_of_advertisement",
             joinColumns = @JoinColumn(name = "advertisement_id"),
             inverseJoinColumns = @JoinColumn(name = "service_id"))

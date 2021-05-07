@@ -1,8 +1,6 @@
 package com.dataart.cerebro.domain;
 
 import lombok.Data;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 
@@ -12,13 +10,16 @@ import javax.persistence.*;
 public class Image {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
+
+    @Column(name = "image_bytes")
     private byte[] imageBytes;
 
+    @Column(name = "main_image")
     private Boolean mainImage;
 
-    // FIXME: 5/5/2021 many to one
-    @OneToOne
-    @JoinColumn (name = "advertisement_id")
+    @ManyToOne
+    @JoinColumn(name = "advertisement_id")
     private Advertisement advertisement;
 }

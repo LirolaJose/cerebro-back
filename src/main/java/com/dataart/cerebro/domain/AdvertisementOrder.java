@@ -12,9 +12,13 @@ import java.util.Set;
 public class AdvertisementOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
+    @Column(name = "order_time")
     private LocalDateTime orderTime;
+
+    @Column(name = "total_price")
     private Double totalPrice;
 
     @OneToOne
@@ -25,7 +29,7 @@ public class AdvertisementOrder {
     @JoinColumn (name = "customer_id")
     private UserInfo customer;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "services_of_order",
             joinColumns = @JoinColumn(name = "order_id"),
             inverseJoinColumns = @JoinColumn(name = "service_id"))

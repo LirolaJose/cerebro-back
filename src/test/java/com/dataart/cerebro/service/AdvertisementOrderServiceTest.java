@@ -47,7 +47,7 @@ public class AdvertisementOrderServiceTest {
         advertisementOrderService.createNewAdvertisementOrder(advertisementDTOMock);
 
         //then
-        verify(emailServiceMock, times(1)).sendEmailAboutPurchase(exceptedOrder, customerInfoMock);
-        verify(emailServiceMock, times(1)).sendEmailAboutSell(exceptedOrder, customerInfoMock);
+        verify(emailServiceMock, times(1)).sendEmailAboutOrder(exceptedOrder, customerInfoMock, "purchase");
+        verify(emailServiceMock, times(1)).sendEmailAboutOrder(exceptedOrder, customerInfoMock, "sell");
     }
 }

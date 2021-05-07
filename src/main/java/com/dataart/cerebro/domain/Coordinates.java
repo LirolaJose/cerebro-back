@@ -14,7 +14,10 @@ public class Coordinates implements Serializable{
     @JoinColumn(name = "advertisement_id")
     private Advertisement advertisement;
 
+    @Column(name = "latitude")
     private Double latitude;
+
+    @Column(name = "longitude")
     private Double longitude;
 
 

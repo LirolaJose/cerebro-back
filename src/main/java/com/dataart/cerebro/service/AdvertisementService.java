@@ -110,7 +110,7 @@ public class AdvertisementService {
                 .collect(groupingBy(ad -> ad.getOwner().getEmail()));
 
         if (!emailAndAds.isEmpty()) {
-            emailService.sendEmailAboutExpiring(emailAndAds);
+            emailService.sendEmailAboutFinishingAdvertisement(emailAndAds, "soon");
             log.info("Letter was sent to {} addresses", emailAndAds.size());
         } else {
             log.info("No matching advertisements found");
@@ -129,7 +129,7 @@ public class AdvertisementService {
                 .collect(groupingBy(ad -> ad.getOwner().getEmail()));
 
         if (!emailAndAds.isEmpty()) {
-            emailService.sendEmailAboutExpired(emailAndAds);
+            emailService.sendEmailAboutFinishingAdvertisement(emailAndAds, "expired");
             log.info("Letter was sent to {} addresses", emailAndAds.size());
         } else {
             log.info("No matching advertisements found");

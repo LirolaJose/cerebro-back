@@ -1,8 +1,6 @@
 package com.dataart.cerebro.domain;
 
 import lombok.Data;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 
@@ -12,7 +10,12 @@ import javax.persistence.*;
 public class AdditionalService {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
+
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "price")
     private Double price;
 }

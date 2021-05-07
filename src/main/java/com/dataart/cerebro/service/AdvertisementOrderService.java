@@ -62,8 +62,7 @@ public class AdvertisementOrderService {
         advertisement.setStatus(Status.SOLD);
         advertisementRepository.save(advertisement);
 
-//        log.info("New order added (id = {})", newOrder.getId());
-        emailService.sendEmailAboutPurchase(newOrder, customer);
-        emailService.sendEmailAboutSell(newOrder, customer);
+        emailService.sendEmailAboutOrder(newOrder, customer, "purchase");
+        emailService.sendEmailAboutOrder(newOrder, customer, "sell");
     }
 }

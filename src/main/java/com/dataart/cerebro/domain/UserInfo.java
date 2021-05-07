@@ -1,13 +1,11 @@
 package com.dataart.cerebro.domain;
 
-import com.dataart.cerebro.domain.converter.RoleConverter;
 import lombok.Data;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
-import java.util.Set;
 
 @Data
 @Entity
@@ -15,34 +13,38 @@ import java.util.Set;
 public class UserInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
     @NotEmpty
     @Size(max = 100)
+    @Column(name = "first_name")
     private String firstName;
+
     @NotEmpty
     @Size(max = 100)
+    @Column(name = "second_name")
     private String secondName;
 
 
     @Size(min = 9, max = 20)
+    @NotEmpty
+    @Column(name = "phone")
     private String phone;
 
     @NotEmpty
     @Size(max = 100)
     @Email(message = "Incorrect email")
+    @Column(name = "email")
     private String email;
+
+    @NotEmpty
+    @Size(max = 100)
     private String password;
 
+    @Column(name = "money_amount")
     private Double moneyAmount;
 
     @Column(name = "role_id")
     private Role role;
-
-    // FIXME: 5/5/2021 not needed?
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "user_favourites_advertisements",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "advertisement_id"))
-    private Set<Advertisement> favouritesAdvertisements;
 }

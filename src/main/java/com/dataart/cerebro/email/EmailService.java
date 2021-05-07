@@ -4,6 +4,8 @@ import com.dataart.cerebro.domain.AdditionalService;
 import com.dataart.cerebro.domain.Advertisement;
 import com.dataart.cerebro.domain.AdvertisementOrder;
 import com.dataart.cerebro.domain.UserInfo;
+import com.dataart.cerebro.exception.DataProcessingException;
+import com.dataart.cerebro.repository.AdditionalServiceRepository;
 import com.dataart.cerebro.repository.UserInfoRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,7 +21,6 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -29,113 +30,84 @@ public class EmailService {
     private final JavaMailSender emailSender;
     private final SpringTemplateEngine templateEngine;
     private final UserInfoRepository userInfoRepository;
+    private final AdditionalServiceRepository additionalServiceRepository;
 
     private final Executor executor = Executors.newFixedThreadPool(10);
 
     @Value("${spring.data.rest.page-param-name}")
     private String url;
 
-    public EmailService(JavaMailSender emailSender, SpringTemplateEngine templateEngine, UserInfoRepository userInfoRepository) {
+    public EmailService(JavaMailSender emailSender, SpringTemplateEngine templateEngine, UserInfoRepository userInfoRepository, AdditionalServiceRepository additionalServiceRepository) {
         this.emailSender = emailSender;
         this.templateEngine = templateEngine;
         this.userInfoRepository = userInfoRepository;
+        this.additionalServiceRepository = additionalServiceRepository;
     }
 
     public void sendEmailAboutPublication(Advertisement advertisement) {
-        // FIXME: 5/5/2021 wrap with try-catch (only send email content)
         executor.execute(() -> {
-            log.info("Sending email about publication is started at {}", LocalDateTime.now());
-            String template = "publicationTemplate";
-            UserInfo userInfo = advertisement.getOwner();
-            Map<String, Object> contextMap = new HashMap<>();
-            contextMap.put("userInfo", userInfo);
-            contextMap.put("advertisement", advertisement);
-            contextMap.put("url", url);
-            sendEmail(contextMap, template);
-            log.info("Email about publication has been sent to {} at {}", userInfo.getEmail(), LocalDateTime.now());
-        });
-    }
-
-    public void sendEmailAboutExpiring(Map<String, List<Advertisement>> emailAndAds) {
-        executor.execute(() -> {
-            log.info("Sending email about expiring is started at {}", LocalDateTime.now());
-            String template = "scheduleTemplate";
-            emailAndAds.forEach(((email, advertisementsList) -> {
+            try {
+                log.info("Sending email about publication is started at {}", LocalDateTime.now());
+                String template = "publicationTemplate";
+                UserInfo userInfo = advertisement.getOwner();
                 Map<String, Object> contextMap = new HashMap<>();
-                contextMap.put("action", "soon");
-                contextMap.put("userInfo", userInfoRepository.findUserInfoByEmail(email));
-                contextMap.put("advertisementList", advertisementsList);
+                contextMap.put("userInfo", userInfo);
+                contextMap.put("advertisement", advertisement);
                 contextMap.put("url", url);
-                sendEmail(contextMap, template);
-                log.info("Email about expiring has been sent to {} at {}", email, LocalDateTime.now());
-            }));
+                sendEmail(contextMap, template, "Information about the publication of advertisement");
+                log.info("Email about publication has been sent to {} at {}", userInfo.getEmail(), LocalDateTime.now());
+            }catch (Exception e){
+                log.error("Failed to send email about publication", e);
+                throw new DataProcessingException("Error during email sending about publication", e);
+            }
         });
     }
 
-    // FIXME: 5/5/2021 replace contextMap.put("action", "soon"); with parameter and leave 1 method
-
-    public void sendEmailAboutExpired(Map<String, List<Advertisement>> emailAndAds) {
+    public void sendEmailAboutFinishingAdvertisement(Map<String, List<Advertisement>> emailAndAds, String action) {
         executor.execute(() -> {
-            log.info("Sending email about expired is started at {}", LocalDateTime.now());
-            String template = "scheduleTemplate";
-            emailAndAds.forEach(((email, advertisementsList) -> {
-                Map<String, Object> contextMap = new HashMap<>();
-                contextMap.put("action", "expired");
-                contextMap.put("userInfo", userInfoRepository.findUserInfoByEmail(email));
-                contextMap.put("advertisementList", advertisementsList);
-                contextMap.put("url", url);
-                sendEmail(contextMap, template);
-                log.info("Email about expired has been sent to {} at {}", email, LocalDateTime.now());
-            }));
+            try {
+                log.info("Sending email about expiring is started at {}", LocalDateTime.now());
+                String template = "scheduleTemplate";
+                emailAndAds.forEach(((email, advertisementsList) -> {
+                    Map<String, Object> contextMap = new HashMap<>();
+                    contextMap.put("action", action);
+                    contextMap.put("userInfo", userInfoRepository.findUserInfoByEmail(email));
+                    contextMap.put("advertisementList", advertisementsList);
+                    contextMap.put("url", url);
+                    sendEmail(contextMap, template, "Information about the ending of advertisement");
+                    log.info("Email about expiring has been sent to {} at {}", email, LocalDateTime.now());
+                }));
+            }catch (Exception e){
+                log.error("Failed to send email about expiring", e);
+                throw new DataProcessingException("Error during email sending about expiring", e);
+            }
         });
     }
-
-
-    public void sendEmailAboutPurchase(AdvertisementOrder order, UserInfo customer) {
+    
+    public void sendEmailAboutOrder(AdvertisementOrder order, UserInfo customer, String action) {
         executor.execute(() -> {
+            try{
             log.info("Sending email about purchase is started at {}", LocalDateTime.now());
             String template = "orderTemplate";
             Advertisement advertisement = order.getAdvertisement();
-            Set<AdditionalService> servicesSet = order.getAdditionalServices(); // FIXME: 5/5/2021 maybe replace with asRepository.findAsByOrder to avoid EAGER
+            List<AdditionalService> servicesSet = additionalServiceRepository.findAdditionalServiceByOrderId(order.getId());
             Map<String, Object> contextMap = new HashMap<>();
-            contextMap.put("action", "purchase");
+            contextMap.put("action", action);
             contextMap.put("userInfo", customer);
             contextMap.put("advertisement", advertisement);
             contextMap.put("additionalServices", servicesSet);
             contextMap.put("order", order);
             contextMap.put("url", url);
-            sendEmail(contextMap, template);
+            sendEmail(contextMap, template, "Information about the order");
             log.info("Email about purchase is sent to {} at {}", customer.getEmail(), LocalDateTime.now());
-
+            }catch (Exception e){
+                log.error("Failed to send email about purchase", e);
+                throw new DataProcessingException("Error during email sending about purchase", e);
+            }
         });
     }
 
-    // FIXME: 5/5/2021 replace action with parameter
-
-    public void sendEmailAboutSell(AdvertisementOrder order, UserInfo customer) {
-        executor.execute(() -> {
-            log.info("Sending email about sell is started at {}", LocalDateTime.now());
-            String template = "orderTemplate";
-            Advertisement advertisement = order.getAdvertisement();
-            Set<AdditionalService> servicesSet = order.getAdditionalServices();
-            Map<String, Object> contextMap = new HashMap<>();
-            contextMap.put("action", "sell");
-            contextMap.put("userInfo", advertisement.getOwner());
-            contextMap.put("customer", customer);
-            contextMap.put("advertisement", advertisement);
-            contextMap.put("additionalServices", servicesSet);
-            contextMap.put("order", order);
-            contextMap.put("url", url);
-            sendEmail(contextMap, template);
-            log.info("Email about sell is sent to {} at {}", advertisement.getOwner().getEmail(), LocalDateTime.now());
-
-        });
-    }
-
-
-    // FIXME: 5/5/2021 add subject parameter
-    private void sendEmail(Map<String, Object> contextMap, String template) {
-//        executor.execute(() -> {
+    private void sendEmail(Map<String, Object> contextMap, String template, String subject) {
         Context context = new Context();
         context.setVariables(contextMap);
         UserInfo userInfo = (UserInfo) contextMap.get("userInfo");
@@ -144,14 +116,13 @@ public class EmailService {
         MimeMessage mimeMessage = emailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage);
         try {
-            helper.setSubject("CEREBRO");
+            helper.setSubject(subject);
             helper.setText(process, true);
             helper.setTo(userInfo.getEmail());
             emailSender.send(mimeMessage);
         } catch (MessagingException e) {
             e.printStackTrace();
         }
-//        });
     }
 
 }
