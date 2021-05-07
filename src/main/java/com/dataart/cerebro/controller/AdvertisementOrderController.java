@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/order")
-@Api(tags = "Advertisement Order Controller")
 public class AdvertisementOrderController {
     private final AdvertisementOrderService advertisementOrderService;
 

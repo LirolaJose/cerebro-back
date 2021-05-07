@@ -24,9 +24,6 @@ public class CategoryController {
     @GetMapping("/{type}")
     public ResponseEntity<?> getCategoryByType(@PathVariable Type type) {
         List<Category> categories = categoryService.findCategoriesByType(type);
-        // FIXME: 5/5/2021 always return ok
-        return categories != null && !categories.isEmpty()
-                ? new ResponseEntity<>(categories, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(categories, HttpStatus.OK);
     }
 }
