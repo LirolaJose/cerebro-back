@@ -47,7 +47,7 @@ public class AdvertisementService {
 
     public List<Advertisement> findActiveAdvertisements() {
         log.info("Find all ACTIVE advertisements");
-        return advertisementRepository.findAdvertisementsByStatusOrderByIdDesc(Status.ACTIVE);
+        return advertisementRepository.findAdvertisementsByStatusOrderByPublicationTimeDesc(Status.ACTIVE);
     }
 
     public Advertisement findAdvertisementById(Long id) {

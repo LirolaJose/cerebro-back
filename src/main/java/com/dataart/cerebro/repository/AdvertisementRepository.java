@@ -10,12 +10,11 @@ import java.util.List;
 
 
 public interface AdvertisementRepository extends JpaRepository<Advertisement, Long> {
-    // FIXME: 5/5/2021 order by add date?
-    List<Advertisement> findAdvertisementsByStatusOrderByIdDesc(Status status);
+    List<Advertisement> findAdvertisementsByStatusOrderByPublicationTimeDesc(Status status);
 
-    Advertisement findAdvertisementById(Long id);
+    Advertisement findAdvertisementById(Long advertisementId);
 
-    List<Advertisement> findAdvertisementsByOwnerId(Long id);
+    List<Advertisement> findAdvertisementsByOwnerId(Long ownerId);
 
     @Query(value = "SELECT * FROM advertisement WHERE status_id = :status and current_date >= date(expired_time) - :days ;", nativeQuery = true)
     List<Advertisement> findAdvertisementsByDate(@Param("status") Long statusId, @Param("days") Integer lookbackDays);

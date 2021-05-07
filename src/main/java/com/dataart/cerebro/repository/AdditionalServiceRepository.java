@@ -12,7 +12,7 @@ public interface AdditionalServiceRepository extends JpaRepository<AdditionalSer
             "join category c on c.id = soc.category_id WHERE c.id = :categoryId ;", nativeQuery = true)
     List<AdditionalService> findAdditionalServiceByCategoryId(@Param("categoryId") Long categoryId);
 
-    AdditionalService findAdditionalServiceById(Long id);
+    AdditionalService findAdditionalServiceById(Long additionalServiceId);
 
     @Query(value = "SELECT * FROM service s join services_of_advertisement soa on s.id = soa.service_id " +
             "WHERE advertisement_id = :advertisementId ;", nativeQuery = true)
