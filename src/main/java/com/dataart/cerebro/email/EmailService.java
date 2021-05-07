@@ -42,7 +42,7 @@ public class EmailService {
     }
 
     public void sendEmailAboutPublication(Advertisement advertisement) {
-        // FIXME: 5/5/2021 wrap with try-catch
+        // FIXME: 5/5/2021 wrap with try-catch (only send email content)
         executor.execute(() -> {
             log.info("Sending email about publication is started at {}", LocalDateTime.now());
             String template = "publicationTemplate";

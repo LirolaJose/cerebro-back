@@ -17,6 +17,7 @@ $(function () {
             url: API_ADVERTISEMENT
         }).done(function (advertisementsList) {
             console.log(advertisementsList);
+            //fixme move this logic to GetCurrentUser method, it's not related to advertisements loading
             if(user === null){
                 $("#log-in-button").append($("<input/>")
                     .attr("type", "button")
@@ -25,6 +26,7 @@ $(function () {
 
                 $(".registration-button-form").append($("<input/>")
                     .attr("type", "submit")
+                    //fixme here's type-submit, but above type-button, do it in one style?
                     .attr("value", "REGISTRATION"));
             }else{
                 $("#log-out-button").append($("<input/>")
@@ -37,6 +39,9 @@ $(function () {
                     .attr("value", "NEW ADVERTISEMENT"));
             }
 
+            //fixne add table header into html and show it always?
+            //when response is empty - show one row with "No data available"
+            //else fill the table
             let table = "<table class=\"table\">\n" +
                 "<tr>\n" +
                 "<th>№</th>\n" +
@@ -57,6 +62,7 @@ $(function () {
 
                 table += '<td>' + advertisement.text + '</td>';
                 table += '<td>' + advertisement.price + '</td>';
+                //fixme get rid of localhost:8080 usages
                 table += '<td>' + '<img src="http://localhost:8080/api/image/' + advertisement.id + '"/>' + '</td>';
                 table += '<td>' + advertisement.type + '</td>';
                 table += '<td>' + advertisement.category.name + '</td>';

@@ -3,17 +3,20 @@ $(function () {
         $.ajax({
             type: "GET",
             url: CURRENT_USER
+            //fixme what if current user will not be fetched? should we redirect to login page?
         }).done(function (resp) {
             console.log(resp);
             let user = resp.value;
 
             const urlString = window.location.search;
+            //fixme advertisment fetch logic move to common and replace all usages
             let advertisementId = urlString.substring(urlString.lastIndexOf("=") + 1);
 
             getAdvertisementInfoById(advertisementId, user);
             getImagesList(advertisementId);
             getAdditionalServicesByAdvertisementId(advertisementId);
 
+            // fixme move to common
             // callback(user);
         });
     }
@@ -64,6 +67,7 @@ $(function () {
             url: "http://localhost:8080/api/image/imagesList/" + advertisementId
         }).done(function (imagesList) {
             console.log(imagesList);
+            //fixme replace with default image usage (place in to static/img path)
             if (imagesList.length === 0) {
                 $("#images")
                     .append($("<img/>")

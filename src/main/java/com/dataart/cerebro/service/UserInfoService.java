@@ -26,6 +26,7 @@ public class UserInfoService {
         log.info("Searching User by id {}", id);
         UserInfo userInfo = userInfoRepository.findUserInfoById(id);
         if (userInfo == null) {
+            // FIXME: 5/7/2021 not info, but warn
             log.info("User with id {} not found", id);
             throw new NotFoundException("User", id);
         }

@@ -41,7 +41,7 @@ public class AdvertisementController {
     @GetMapping("/{advertisementId}")
     public ResponseEntity<?> getAdvertisementById(@PathVariable Long advertisementId) {
         Advertisement advertisement = advertisementService.findAdvertisementById(advertisementId);
-        // FIXME: 5/5/2021 return dto
+        // FIXME: 5/5/2021 return dto everywhere
         return new ResponseEntity<>(advertisement, HttpStatus.OK);
     }
 
@@ -61,6 +61,7 @@ public class AdvertisementController {
             List<FieldError> fieldErrorList = new ArrayList<>(bindingResult.getFieldErrors());
             throw new ValidationException(fieldErrorList);
         }
+        // FIXME: 5/7/2021 add backend images size and type check
         advertisementService.createNewAdvertisement(advertisementDTO, images);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }

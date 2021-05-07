@@ -3,7 +3,6 @@ package com.dataart.cerebro.service;
 import com.dataart.cerebro.controller.dto.AdvertisementOrderDTO;
 import com.dataart.cerebro.domain.*;
 import com.dataart.cerebro.email.EmailService;
-import com.dataart.cerebro.repository.AdditionalServiceRepository;
 import com.dataart.cerebro.repository.AdvertisementOrderRepository;
 import com.dataart.cerebro.repository.AdvertisementRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -42,6 +41,7 @@ public class AdvertisementOrderService {
         log.info("User with email {} creates new order", customer.getEmail());
         AdvertisementOrder advertisementOrder = new AdvertisementOrder();
         Advertisement advertisement = advertisementRepository.findAdvertisementById(advertisementOrderDTO.getAdvertisementId());
+        // TODO: 5/7/2021 check if category is orderable and advertisement is active
 
         advertisementOrder.setOrderTime(LocalDateTime.now());
         Double totalPrice = advertisement.getPrice() +
