@@ -16,11 +16,12 @@ function fillOrderFormInfo(id) {
 
         if(advertisement.status === "ACTIVE") {
             //fixme do you need this check if it was checked near order button? if yes - do we need to add check if category is orderable?
-            $("#confirm-order").append($("<input/>")
+
+            $("#confirm-order").append($("<input onclick='sendOrder()'/>")
                 .attr("type", "submit")
-                .attr("value", "CONFIRM THE ORDER")
+                .attr("value", "CONFIRM THE ORDER"));
                 //fixme not sure but probably you have to leave sendOrder without parenthesis
-                .attr("onclick", sendOrder()));
+
         }
 
         fillAdditionalServicesInfo(id);

@@ -2,6 +2,7 @@ package com.dataart.cerebro.service;
 
 import com.dataart.cerebro.domain.Advertisement;
 import com.dataart.cerebro.domain.Image;
+import com.dataart.cerebro.exception.DataProcessingException;
 import com.dataart.cerebro.repository.ImageRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
@@ -23,8 +24,8 @@ public class ImageService {
     }
 
     @Transactional
-    public void saveImage(List<MultipartFile> images, Advertisement advertisement) throws IOException {
-
+    public void saveImage(List<MultipartFile> images, Advertisement advertisement)  {
+        try{
         for (int i = 0; i < images.size(); i++) {
             Image image = new Image();
             image.setImageBytes(images.get(i).getBytes());
@@ -34,14 +35,18 @@ public class ImageService {
             }
             imageRepository.save(image);
         }
+        }catch(IOException e){
+            log.error("Error: {}", e.getMessage(), e);
+            throw new DataProcessingException("Error during image saving");
+        }
     }
 
-    public byte[] findImageByAdvertisementId(Long advertisementId) throws IOException {
+    public byte[] findImageByAdvertisementId(Long advertisementId) {
         Image image = imageRepository.findImageByAdvertisement_IdAndMainImageTrue(advertisementId);
         return getImage(image);
     }
 
-    public byte[] findImageById(Long imageId) throws IOException {
+    public byte[] findImageById(Long imageId) {
         Image image = imageRepository.findImageById(imageId);
         return getImage(image);
     }
@@ -50,15 +55,20 @@ public class ImageService {
         return imageRepository.findAllByAdvertisement_Id(advertisementId);
     }
 
-    private byte[] getImage(Image image) throws IOException {
-        byte[] imageBytes;
-        if (image != null) {
-            imageBytes = image.getImageBytes();
-        } else {
-            var path = new ClassPathResource("image/notFound.jpg");
-            imageBytes = StreamUtils.copyToByteArray(path.getInputStream());
+    private byte[] getImage(Image image){
+        try {
+            byte[] imageBytes;
+            if (image != null) {
+                imageBytes = image.getImageBytes();
+            } else {
+                var path = new ClassPathResource("image/notFound.jpg");
+                imageBytes = StreamUtils.copyToByteArray(path.getInputStream());
+            }
+            return imageBytes;
+        }catch(IOException e){
+            log.error("Error: {}", e.getMessage(), e);
+            throw new DataProcessingException("Error during image saving");
         }
-        return imageBytes;
     }
 }
 

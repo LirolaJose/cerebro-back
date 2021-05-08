@@ -1,15 +1,11 @@
 package com.dataart.cerebro.controller;
 
-import com.dataart.cerebro.exception.DataProcessingException;
-import com.dataart.cerebro.exception.EmailExistsException;
-import com.dataart.cerebro.exception.NotFoundException;
-import com.dataart.cerebro.exception.ValidationException;
+import com.dataart.cerebro.exception.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -23,7 +19,7 @@ import java.io.Serializable;
 @Slf4j
 public class ControllerExceptionHandler {
     @Value("${spring.servlet.multipart.max-file-size}")
-    private String  MAX_SIZE;
+    private String MAX_SIZE;
 
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
@@ -50,8 +46,17 @@ public class ControllerExceptionHandler {
         return new ErrorDTO(String.format("Max Upload Size Exceeded (%s)", MAX_SIZE));
     }
 
+    @ExceptionHandler(NotEnoughMoneyException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseBody
+    public ErrorDTO handleNotEnoughMoneyException(NotEnoughMoneyException e){
+        log.error("Error: {} {}", e.getMessage(), e);
+        return new ErrorDTO("You don't have enough money to complete this order");
+    }
+
+
     @ExceptionHandler({DataProcessingException.class, RuntimeException.class})
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ResponseBody
     public ErrorDTO handleRuntimeException(Exception e) {
         log.error("Error: {}", e.getMessage(), e);

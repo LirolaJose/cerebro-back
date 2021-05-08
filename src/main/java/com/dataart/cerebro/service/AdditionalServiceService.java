@@ -5,7 +5,6 @@ import com.dataart.cerebro.repository.AdditionalServiceRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -27,8 +26,8 @@ public class AdditionalServiceService {
         return additionalServices;
     }
 
-    public AdditionalService findAdditionalServiceById(Long id) {
-        return additionalServiceRepository.findAdditionalServiceById(id);
+    public AdditionalService findAdditionalServiceById(Long additionalServiceId) {
+        return additionalServiceRepository.findAdditionalServiceById(additionalServiceId);
     }
 
     public List<AdditionalService> findAdditionalServiceByAdvertisement(Long advertisementId) {
@@ -40,11 +39,8 @@ public class AdditionalServiceService {
             log.info("The order without additional services");
             return 0.0;
         }
-        List<AdditionalService> additionalServices = new ArrayList<>();
-        // FIXME: 5/5/2021 try with sum query
-        additionalServicesId.forEach(aLong -> additionalServices.add(additionalServiceRepository.findAdditionalServiceById(aLong)));
-// fixme analog        List<AdditionalService> allById = additionalServiceRepository.findAllById(additionalServicesId);
 
-        return additionalServices.stream().mapToDouble(AdditionalService::getPrice).sum();
+        List<AdditionalService> additionalServices = additionalServiceRepository.findAllById(additionalServicesId);
+        return additionalServiceRepository.getAdditionalServicesPriceSum(additionalServices);
     }
 }

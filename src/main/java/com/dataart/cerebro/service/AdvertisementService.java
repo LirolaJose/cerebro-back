@@ -4,6 +4,7 @@ import com.dataart.cerebro.controller.dto.AdvertisementDTO;
 import com.dataart.cerebro.domain.*;
 import com.dataart.cerebro.email.EmailService;
 import com.dataart.cerebro.exception.NotFoundException;
+import com.dataart.cerebro.repository.AdditionalServiceRepository;
 import com.dataart.cerebro.repository.AdvertisementRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -12,11 +13,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.groupingBy;
 
@@ -27,22 +26,18 @@ public class AdvertisementService {
     private final EmailService emailService;
     private final UserInfoService userInfoService;
     private final CategoryService categoryService;
-    private final AdditionalServiceService additionalServiceService;
     private final ImageService imageService;
+    private final AdditionalServiceRepository additionalServiceRepository;
 
-    public AdvertisementService(AdvertisementRepository advertisementRepository, EmailService emailService, UserInfoService userInfoService, CategoryService categoryService, AdditionalServiceService additionalServiceService, ImageService imageService) {
+    public AdvertisementService(AdvertisementRepository advertisementRepository, EmailService emailService,
+                                UserInfoService userInfoService, CategoryService categoryService,
+                                ImageService imageService, AdditionalServiceRepository additionalServiceRepository) {
         this.advertisementRepository = advertisementRepository;
         this.emailService = emailService;
         this.userInfoService = userInfoService;
         this.categoryService = categoryService;
-        this.additionalServiceService = additionalServiceService;
         this.imageService = imageService;
-    }
-
-
-    public List<Advertisement> findAllAdvertisements() {
-        log.info("Find all advertisements"); // FIXME: 5/5/2021 do we need?
-        return advertisementRepository.findAll();
+        this.additionalServiceRepository = additionalServiceRepository;
     }
 
     public List<Advertisement> findActiveAdvertisements() {
@@ -50,19 +45,19 @@ public class AdvertisementService {
         return advertisementRepository.findAdvertisementsByStatusOrderByPublicationTimeDesc(Status.ACTIVE);
     }
 
-    public Advertisement findAdvertisementById(Long id) {
-        log.info("Find advertisement by ID {}", id);
-        Advertisement advertisement = advertisementRepository.findAdvertisementById(id);
+    public Advertisement findAdvertisementById(Long advertisementId) {
+        log.info("Find advertisement by ID {}", advertisementId);
+        Advertisement advertisement = advertisementRepository.findAdvertisementById(advertisementId);
         if (advertisement == null) {
-            log.info("Advertisement with id {} not found", id);
+            log.info("Advertisement with id {} not found", advertisementId);
             throw new NotFoundException("Advertisement not found");
         }
         return advertisement;
     }
 
-    public List<Advertisement> findAdvertisementsByUserInfoId(Long id) {
-        log.info("Find advertisements by user id {}", id);
-        return advertisementRepository.findAdvertisementsByOwnerId(id);
+    public List<Advertisement> findAdvertisementsByUserInfoId(Long userInfoId) {
+        log.info("Find advertisements by user id {}", userInfoId);
+        return advertisementRepository.findAdvertisementsByOwnerId(userInfoId);
     }
 
     @Transactional
@@ -72,10 +67,10 @@ public class AdvertisementService {
         UserInfo owner = userInfoService.getCurrentUser();
         Category category = categoryService.findCategoryById(advertisementDTO.getCategoryId());
         LocalDateTime publicationTime = LocalDateTime.now();
-        Set<AdditionalService> additionalServices = new HashSet<>();
-        advertisementDTO.getAdditionalServicesId().stream()
-                .peek(additionalService -> additionalServices.add(additionalServiceService.findAdditionalServiceById(additionalService)))
-                .collect(Collectors.toSet());
+        Set<AdditionalService> additionalServices = (Set<AdditionalService>) additionalServiceRepository.findAllById(advertisementDTO.getAdditionalServicesId());
+//        advertisementDTO.getAdditionalServicesId().stream()
+//                .peek(additionalService -> additionalServices.add(additionalServiceService.findAdditionalServiceById(additionalService)))
+//                .collect(Collectors.toSet());
         // FIXME: 5/5/2021 replace with findAll (you can use addServRepo)
 
         Advertisement advertisement = new Advertisement();
@@ -101,11 +96,10 @@ public class AdvertisementService {
         emailService.sendEmailAboutPublication(newAdvertisement);
     }
 
-    // FIXME: 5/5/2021 find & notify, byExpiringInDays(Integer lookbackDays)
-    // FIXME: 5/5/2021 remove status from parameter, use active always
-    public void findAdvertisementsByExpiringDate(Long statusId, Integer lookbackDays) {
+
+    public void findAndNotifyByExpiringInDays(Integer lookbackDays) {
         log.info("Searching expiring advertisements");
-        List<Advertisement> advertisementsList = advertisementRepository.findAdvertisementsByDate(statusId, lookbackDays);
+        List<Advertisement> advertisementsList = advertisementRepository.findAdvertisementsByDate(Status.ACTIVE.getId(), lookbackDays);
         Map<String, List<Advertisement>> emailAndAds = advertisementsList.stream()
                 .collect(groupingBy(ad -> ad.getOwner().getEmail()));
 
@@ -117,10 +111,9 @@ public class AdvertisementService {
         }
     }
 
-    // FIXME: 5/5/2021 do we need parameters?
-    public void findAdvertisementsByExpiredDate(Long statusId, Integer lookbackDays) {
+    public void findAdvertisementsByExpiredDate() {
         log.info("Searching expired advertisements");
-        List<Advertisement> advertisementsList = advertisementRepository.findAdvertisementsByDate(statusId, lookbackDays);
+        List<Advertisement> advertisementsList = advertisementRepository.findAdvertisementsByDate(Status.ACTIVE.getId(), 0);
         Map<String, List<Advertisement>> emailAndAds = advertisementsList.stream()
                 .peek(advertisement -> {
                     advertisement.setStatus(Status.CLOSED);

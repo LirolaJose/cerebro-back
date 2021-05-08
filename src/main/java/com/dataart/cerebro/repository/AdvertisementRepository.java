@@ -16,7 +16,10 @@ public interface AdvertisementRepository extends JpaRepository<Advertisement, Lo
 
     List<Advertisement> findAdvertisementsByOwnerId(Long ownerId);
 
-    @Query(value = "SELECT * FROM advertisement WHERE status_id = :status and current_date >= date(expired_time) - :days ;", nativeQuery = true)
+    @Query(value =
+            "SELECT * FROM advertisement " +
+            "WHERE status_id = :status and current_date >= date(expired_time) - :days ;",
+            nativeQuery = true)
     List<Advertisement> findAdvertisementsByDate(@Param("status") Long statusId, @Param("days") Integer lookbackDays);
 }
 

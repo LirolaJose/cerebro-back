@@ -4,6 +4,7 @@ import com.dataart.cerebro.controller.dto.UserInfoDTO;
 import com.dataart.cerebro.domain.Role;
 import com.dataart.cerebro.domain.UserInfo;
 import com.dataart.cerebro.exception.EmailExistsException;
+import com.dataart.cerebro.exception.NotEnoughMoneyException;
 import com.dataart.cerebro.exception.NotFoundException;
 import com.dataart.cerebro.repository.UserInfoRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -22,13 +23,12 @@ public class UserInfoService {
         this.userInfoRepository = userInfoRepository;
     }
 
-    public UserInfo findUserInfoById(Long id) {
-        log.info("Searching User by id {}", id);
-        UserInfo userInfo = userInfoRepository.findUserInfoById(id);
+    public UserInfo findUserInfoById(Long userInfoId) {
+        log.info("Searching User by id {}", userInfoId);
+        UserInfo userInfo = userInfoRepository.findUserInfoById(userInfoId);
         if (userInfo == null) {
-            // FIXME: 5/7/2021 not info, but warn
-            log.info("User with id {} not found", id);
-            throw new NotFoundException("User", id);
+            log.warn("User with id {} not found", userInfoId);
+            throw new NotFoundException("User", userInfoId);
         }
         return userInfo;
     }
@@ -76,6 +76,8 @@ public class UserInfoService {
             userInfoRepository.save(customer);
             owner.setMoneyAmount(owner.getMoneyAmount() + totalPrice);
             userInfoRepository.save(owner);
-        } //// FIXME: 5/5/2021 else?
+        } else{
+            throw new NotEnoughMoneyException(String.format("User (%s) doesn't have enough money to complete this order", customer.getEmail()));
+        }
     }
 }

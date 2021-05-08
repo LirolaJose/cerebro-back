@@ -5,6 +5,10 @@ public class DataProcessingException extends RuntimeException {
         super(String.format("%s, %s", error, e.getMessage()));
     }
 
+    public DataProcessingException(String error) {
+        super(error);
+    }
+
     // FIXME: 5/5/2021 usage example. keep in mind exception text output
     //  try {
     //            authTokenRepository.save(authToken);

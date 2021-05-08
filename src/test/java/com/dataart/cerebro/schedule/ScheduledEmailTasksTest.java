@@ -48,7 +48,7 @@ public class ScheduledEmailTasksTest {
         when(advertisementRepository.findAdvertisementsByDate(1L, 1)).thenReturn(list);
 
         //when
-        advertisementService.findAdvertisementsByExpiringDate(1L, 1);
+        advertisementService.findAndNotifyByExpiringInDays( 1);
 
         //then
         Map<String, List<Advertisement>> expectedMap = new HashMap<>();

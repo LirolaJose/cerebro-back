@@ -3,6 +3,8 @@ package com.dataart.cerebro.service;
 import com.dataart.cerebro.controller.dto.AdvertisementOrderDTO;
 import com.dataart.cerebro.domain.*;
 import com.dataart.cerebro.email.EmailService;
+import com.dataart.cerebro.exception.DataProcessingException;
+import com.dataart.cerebro.repository.AdditionalServiceRepository;
 import com.dataart.cerebro.repository.AdvertisementOrderRepository;
 import com.dataart.cerebro.repository.AdvertisementRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -22,13 +24,16 @@ public class AdvertisementOrderService {
     private final UserInfoService userInfoService;
     private final AdvertisementRepository advertisementRepository;
     private final AdditionalServiceService additionalServiceService;
+    private final AdditionalServiceRepository additionalServiceRepository;
 
-    public AdvertisementOrderService(AdvertisementOrderRepository advertisementOrderRepository, EmailService emailService, UserInfoService userInfoService, AdvertisementRepository advertisementRepository, AdditionalServiceService additionalServiceService) {
+    public AdvertisementOrderService(AdvertisementOrderRepository advertisementOrderRepository, EmailService emailService, UserInfoService userInfoService, AdvertisementRepository advertisementRepository, AdditionalServiceService additionalServiceService, AdditionalServiceRepository additionalServiceRepository) {
         this.advertisementOrderRepository = advertisementOrderRepository;
         this.emailService = emailService;
         this.userInfoService = userInfoService;
         this.advertisementRepository = advertisementRepository;
         this.additionalServiceService = additionalServiceService;
+
+        this.additionalServiceRepository = additionalServiceRepository;
     }
 
     public List<AdvertisementOrder> findAdvertisementOrdersByUserId(Long id) {
@@ -41,28 +46,32 @@ public class AdvertisementOrderService {
         log.info("User with email {} creates new order", customer.getEmail());
         AdvertisementOrder advertisementOrder = new AdvertisementOrder();
         Advertisement advertisement = advertisementRepository.findAdvertisementById(advertisementOrderDTO.getAdvertisementId());
-        // TODO: 5/7/2021 check if category is orderable and advertisement is active
 
-        advertisementOrder.setOrderTime(LocalDateTime.now());
-        Double totalPrice = advertisement.getPrice() +
-                additionalServiceService.getAdditionalServicesTotalPrice(advertisementOrderDTO.getAdditionalServicesId());
+        if(advertisement.getCategory().getOrderable() && advertisement.getStatus() == Status.ACTIVE) {
+            advertisementOrder.setOrderTime(LocalDateTime.now());
+            Double totalPrice = advertisement.getPrice() +
+                    additionalServiceService.getAdditionalServicesTotalPrice(advertisementOrderDTO.getAdditionalServicesId());
 
-        userInfoService.changeMoneyAmount(customer, advertisement.getOwner(), totalPrice);
-        advertisementOrder.setTotalPrice(totalPrice);
-        advertisementOrder.setAdvertisement(advertisement);
-        advertisementOrder.setCustomer(customer);
+            userInfoService.changeMoneyAmount(customer, advertisement.getOwner(), totalPrice);
+            advertisementOrder.setTotalPrice(totalPrice);
+            advertisementOrder.setAdvertisement(advertisement);
+            advertisementOrder.setCustomer(customer);
 
-        Set<AdditionalService> additionalServices = advertisementOrderDTO.getAdditionalServicesId().stream()
-                .map(additionalServiceService::findAdditionalServiceById)
-                .collect(Collectors.toSet());
+            Set<AdditionalService> additionalServices = advertisementOrderDTO.getAdditionalServicesId().stream()
+                    .map(additionalServiceRepository::findAdditionalServiceById)
+                    .collect(Collectors.toSet());
 
-        advertisementOrder.setAdditionalServices(additionalServices);
-        AdvertisementOrder newOrder = advertisementOrderRepository.save(advertisementOrder);
+            advertisementOrder.setAdditionalServices(additionalServices);
+            AdvertisementOrder newOrder = advertisementOrderRepository.save(advertisementOrder);
 
-        advertisement.setStatus(Status.SOLD);
-        advertisementRepository.save(advertisement);
+            advertisement.setStatus(Status.SOLD);
+            advertisementRepository.save(advertisement);
 
-        emailService.sendEmailAboutOrder(newOrder, customer, "purchase");
-        emailService.sendEmailAboutOrder(newOrder, customer, "sell");
+            emailService.sendEmailAboutPurchase(newOrder, customer);
+            emailService.sendEmailAboutSell(newOrder, customer);
+        }else {
+            log.error("Category {} is not orderable or not Active", advertisement.getCategory());
+            throw new DataProcessingException("Category is not orderable or not Active");
+        }
     }
 }

@@ -8,16 +8,33 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface AdditionalServiceRepository extends JpaRepository<AdditionalService, Long> {
-    @Query(value = "SELECT * FROM service s join services_of_category soc on s.id = soc.service_id\n" +
-            "join category c on c.id = soc.category_id WHERE c.id = :categoryId ;", nativeQuery = true)
+    @Query(value =
+            "SELECT * FROM service s " +
+            "join services_of_category soc on s.id = soc.service_id\n" +
+            "join category c on c.id = soc.category_id " +
+            "WHERE c.id = :categoryId ;",
+            nativeQuery = true)
     List<AdditionalService> findAdditionalServiceByCategoryId(@Param("categoryId") Long categoryId);
 
     AdditionalService findAdditionalServiceById(Long additionalServiceId);
 
-    @Query(value = "SELECT * FROM service s join services_of_advertisement soa on s.id = soa.service_id " +
-            "WHERE advertisement_id = :advertisementId ;", nativeQuery = true)
+    @Query(value =
+            "SELECT * FROM service s " +
+            "join services_of_advertisement soa on s.id = soa.service_id " +
+            "WHERE advertisement_id = :advertisementId ;",
+            nativeQuery = true)
     List<AdditionalService> findAdditionalServicesByAdvertisementId(@Param("advertisementId") Long advertisementId);
 
-    @Query(value = "SELECT * FROM service s join services_of_order soo on s.id = soo.service_id WHERE order_id = :orderId", nativeQuery = true)
+    @Query(value =
+            "SELECT * FROM service s " +
+            "join services_of_order soo on s.id = soo.service_id " +
+            "WHERE order_id = :orderId",
+            nativeQuery = true)
     List<AdditionalService> findAdditionalServiceByOrderId(@Param("orderId") Long orderId);
+
+    @Query(value =
+            "SELECT SUM(price) FROM service " +
+            "WHERE id IN :services",
+            nativeQuery = true)
+    Double getAdditionalServicesPriceSum(@Param("services") List<AdditionalService> additionalServices);
 }
