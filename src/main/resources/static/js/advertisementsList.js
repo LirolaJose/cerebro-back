@@ -7,26 +7,14 @@ $(function () {
             console.log(resp);
 
             let user = resp.value;
-            showActiveAdvertisements(user)
-        });
-    }
-
-    function showActiveAdvertisements(user) {
-        $.ajax({
-            type: "GET",
-            url: API_ADVERTISEMENT
-        }).done(function (advertisementsList) {
-            console.log(advertisementsList);
-            //fixme move this logic to GetCurrentUser method, it's not related to advertisements loading
-            if(user === null){
+            if(user.email === null){
                 $("#log-in-button").append($("<input/>")
-                    .attr("type", "button")
+                    .attr("type", "submit")
                     .attr("value", "LOGIN")
                     .attr("onclick", "location.href = LOGIN"));
 
                 $(".registration-button-form").append($("<input/>")
                     .attr("type", "submit")
-                    //fixme here's type-submit, but above type-button, do it in one style?
                     .attr("value", "REGISTRATION"));
             }else{
                 $("#log-out-button").append($("<input/>")
@@ -38,40 +26,41 @@ $(function () {
                     .attr("type", "submit")
                     .attr("value", "NEW ADVERTISEMENT"));
             }
+            showActiveAdvertisements()
+        });
+    }
+
+    function showActiveAdvertisements() {
+        $.ajax({
+            type: "GET",
+            url: API_ADVERTISEMENT
+        }).done(function (advertisementsList) {
+            console.log(advertisementsList);
 
             //fixne add table header into html and show it always?
             //when response is empty - show one row with "No data available"
             //else fill the table
-            let table = "<table class=\"table\">\n" +
-                "<tr>\n" +
-                "<th>№</th>\n" +
-                "<th>Title</th>\n" +
-                "<th>Text</th>\n" +
-                "<th>Price</th>\n" +
-                "<th>Image</th>\n" +
-                "<th>Type</th>\n" +
-                "<th>Category</th>\n" +
-                "<th>Owner</th>\n" +
-                "</tr>";
 
+            let table;
+            if(advertisementsList.length !== 0) {
             $.each(advertisementsList, function (index, advertisement) {
-                table += '<tr>'
-                table += '<td>' + advertisement.id + '</td>';
+                    table += '<tr>'
+                    table += '<td>' + advertisement.id + '</td>';
+                    table += '<td>' + '<a href="advertisement.html?id=' + advertisement.id + '">' + advertisement.title + '</a>' + '</td>';
+                    table += '<td>' + advertisement.text + '</td>';
+                    table += '<td>' + advertisement.price + '</td>';
+                    table += '<td>' + '<img src="' + API_IMAGE + advertisement.id + '"/>' + '</td>';
+                    table += '<td>' + advertisement.type + '</td>';
+                    table += '<td>' + advertisement.category.name + '</td>';
+                    table += '<td>' + advertisement.owner.firstName + " " + advertisement.owner.secondName + '</td>';
+                    table += '</tr>'
+                 });
+            }else {
+                $("#advertisements-list-table").append('<i><p id="text" align="center"></p></i>');
+                $("#text").text("advertisements not found");
+            }
 
-                table += '<td>' + '<a href="advertisement.html?id=' + advertisement.id + '">' + advertisement.title + '</a>' + '</td>';
-
-                table += '<td>' + advertisement.text + '</td>';
-                table += '<td>' + advertisement.price + '</td>';
-                //fixme get rid of localhost:8080 usages
-                table += '<td>' + '<img src="http://localhost:8080/api/image/' + advertisement.id + '"/>' + '</td>';
-                table += '<td>' + advertisement.type + '</td>';
-                table += '<td>' + advertisement.category.name + '</td>';
-                table += '<td>' + advertisement.owner.firstName + " " + advertisement.owner.secondName + '</td>';
-                table += '</tr>'
-            });
-            table += "</table>"
-            $('#table').append(table)
-
+            $('#table').append(table);
         }).fail(function () {
             $('#table').html("<p>Error!</p>");
         });

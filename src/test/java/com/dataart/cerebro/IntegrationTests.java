@@ -2,6 +2,7 @@ package com.dataart.cerebro;
 
 
 import com.dataart.cerebro.controller.ControllerExceptionHandler;
+import com.dataart.cerebro.controller.dto.UserInfoDTO;
 import com.dataart.cerebro.domain.UserInfo;
 import com.dataart.cerebro.repository.UserInfoRepository;
 import com.github.javafaker.Faker;
@@ -52,14 +53,23 @@ class IntegrationTests {
 
     @Test
     void whenNewUserRegisteredThenGet201StatusAndLogin() {
-        registerNewUser();
+        Faker faker = new Faker();
+        String secondName = "Raul";
+        String email = faker.bothify("????##@gmail.com");
+        ResponseEntity<UserInfoDTO> response = registerNewUser(secondName, email);
+        assertThat(response.getStatusCode(), equalTo(HttpStatus.CREATED));
+
+        assertThat(userInfoRepository.findUserInfoByEmail(email).getSecondName(), equalTo(secondName));
     }
 
     @Test
     void whenLoginThenCreatedUserAndLogged() {
-        UserInfo userInfo = registerNewUser();
+        Faker faker = new Faker();
+        String secondName = "Raul";
+        String email = faker.bothify("????##@gmail.com");
+        ResponseEntity<UserInfoDTO> response = registerNewUser(secondName, email);
         String securedUrl = "/advertisementForm.html";
-        String cookie = getCookieForUser(userInfo.getEmail(), userInfo.getPassword(), "/login");
+        String cookie = getCookieForUser(email, "password", "/login");
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Cookie", cookie);
@@ -105,26 +115,18 @@ class IntegrationTests {
     }
 
     // FIXME: 5/7/2021 refactor as it was discussed
-    private UserInfo registerNewUser() {
-        UserInfo userInfo = new UserInfo();
+    private ResponseEntity<UserInfoDTO> registerNewUser(String secondName, String email) {
+        UserInfoDTO userInfoDTO = new UserInfoDTO();
         Faker faker = new Faker();
 
-        userInfo.setFirstName(faker.name().firstName());
+        userInfoDTO.setFirstName(faker.name().firstName());
+        userInfoDTO.setSecondName(secondName);
+        userInfoDTO.setPhone(faker.phoneNumber().cellPhone());
+        userInfoDTO.setPassword("password");
+        userInfoDTO.setEmail(email);
 
-        String secondName = faker.name().lastName();
-        userInfo.setSecondName(secondName);
+        return restTemplate.postForEntity("/registration/", userInfoDTO, UserInfoDTO.class);
 
-        userInfo.setPhone(faker.phoneNumber().cellPhone());
-        userInfo.setPassword("password");
-
-        String email = faker.bothify("????##@gmail.com");
-        userInfo.setEmail(email);
-
-        ResponseEntity<UserInfo> response = restTemplate.postForEntity("/registration/", userInfo, UserInfo.class);
-        assertThat(response.getStatusCode(), equalTo(HttpStatus.CREATED));
-
-        assertThat(userInfoRepository.findUserInfoByEmail(email).getSecondName(), equalTo(secondName));
-        return userInfo;
     }
 
 }

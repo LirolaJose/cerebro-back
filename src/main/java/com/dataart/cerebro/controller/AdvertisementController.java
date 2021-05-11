@@ -1,12 +1,11 @@
 package com.dataart.cerebro.controller;
 
 import com.dataart.cerebro.controller.dto.AdvertisementDTO;
+import com.dataart.cerebro.controller.dto.NewAdvertisementDTO;
 import com.dataart.cerebro.domain.Advertisement;
 import com.dataart.cerebro.exception.ValidationException;
 import com.dataart.cerebro.service.AdvertisementService;
 import com.dataart.cerebro.service.ImageService;
-import io.swagger.annotations.Api;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -35,14 +34,17 @@ public class AdvertisementController {
     @GetMapping("/")
     public ResponseEntity<?> getActiveAdvertisements() {
         List<Advertisement> advertisements = advertisementService.findActiveAdvertisements();
-        return new ResponseEntity<>(advertisements, HttpStatus.OK);
+        List<AdvertisementDTO> advertisementDTOS = new ArrayList<>();
+                advertisements.forEach(advertisement -> advertisementDTOS.add(new AdvertisementDTO(advertisement)));
+        return ResponseEntity.ok(advertisementDTOS);
     }
 
     @GetMapping("/{advertisementId}")
     public ResponseEntity<?> getAdvertisementById(@PathVariable Long advertisementId) {
         Advertisement advertisement = advertisementService.findAdvertisementById(advertisementId);
-        // FIXME: 5/5/2021 return dto everywhere
-        return new ResponseEntity<>(advertisement, HttpStatus.OK);
+        AdvertisementDTO advertisementDTO = new AdvertisementDTO(advertisement);
+
+        return ResponseEntity.ok(advertisementDTO);
     }
 
     @GetMapping("/image/{imageId}")
@@ -54,15 +56,27 @@ public class AdvertisementController {
 
     @Secured("ROLE_USER")
     @PostMapping(value = "/", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> saveAdvertisement(@RequestPart("advertisementDTO") @Valid AdvertisementDTO advertisementDTO,
+    public ResponseEntity<?> saveAdvertisement(@RequestPart("advertisementDTO") @Valid NewAdvertisementDTO newAdvertisementDTO,
                                                BindingResult bindingResult,
                                                @RequestPart(value = "images", required = false) List<MultipartFile> images) throws IOException {
         if(bindingResult.hasErrors()){
             List<FieldError> fieldErrorList = new ArrayList<>(bindingResult.getFieldErrors());
             throw new ValidationException(fieldErrorList);
         }
-        // FIXME: 5/7/2021 add backend images size and type check
-        advertisementService.createNewAdvertisement(advertisementDTO, images);
+
+        for(MultipartFile image : images){
+            String contentType = image.getContentType();
+            if(contentType != null && !isSupportedContentType(contentType)){
+                throw new ValidationException("Only PNG or JPG images are allowed");
+            }
+        }
+        advertisementService.createNewAdvertisement(newAdvertisementDTO, images);
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    private boolean isSupportedContentType(String contentType) {
+        return contentType.equals("image/png")
+                || contentType.equals("image/jpg")
+                || contentType.equals("image/jpeg");
     }
 }

@@ -10,4 +10,8 @@ public class ValidationException extends RuntimeException {
     public ValidationException(List<FieldError> fieldErrors) {
         super(fieldErrors.stream().map(FieldError::getField).collect(Collectors.joining(", ")) + " must be filled correctly");
     }
+
+    public ValidationException(String message) {
+        super(message);
+    }
 }

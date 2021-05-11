@@ -6,12 +6,4 @@ let LOGIN = SERVER_URL + "login";
 let LOGOUT = SERVER_URL + "logout";
 let CURRENT_USER = SERVER_URL + "api/user/";
 
-// let USER_INFO = function getCurrentUser() {
-//     $.ajax({
-//         type: "GET",
-//         url: CURRENT_USER
-//     }).done(function (resp) {
-//         console.log(resp);
-//         return resp.value;
-//     });
-// }
+

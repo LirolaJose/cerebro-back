@@ -1,6 +1,6 @@
 package com.dataart.cerebro.service;
 
-import com.dataart.cerebro.controller.dto.AdvertisementDTO;
+import com.dataart.cerebro.controller.dto.NewAdvertisementDTO;
 import com.dataart.cerebro.domain.*;
 import com.dataart.cerebro.email.EmailService;
 import com.dataart.cerebro.exception.NotFoundException;
@@ -13,9 +13,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.groupingBy;
 
@@ -61,24 +63,25 @@ public class AdvertisementService {
     }
 
     @Transactional
-    public void createNewAdvertisement(AdvertisementDTO advertisementDTO, List<MultipartFile> images) throws IOException {
+    public void createNewAdvertisement(NewAdvertisementDTO newAdvertisementDTO, List<MultipartFile> images) throws IOException {
         log.info("Creating new advertisement");
 
         UserInfo owner = userInfoService.getCurrentUser();
-        Category category = categoryService.findCategoryById(advertisementDTO.getCategoryId());
+        Category category = categoryService.findCategoryById(newAdvertisementDTO.getCategoryId());
         LocalDateTime publicationTime = LocalDateTime.now();
-        Set<AdditionalService> additionalServices = (Set<AdditionalService>) additionalServiceRepository.findAllById(advertisementDTO.getAdditionalServicesId());
-//        advertisementDTO.getAdditionalServicesId().stream()
-//                .peek(additionalService -> additionalServices.add(additionalServiceService.findAdditionalServiceById(additionalService)))
-//                .collect(Collectors.toSet());
+//        Set<AdditionalService> additionalServices = (Set<AdditionalService>) additionalServiceRepository.findAllById(advertisementDTO.getAdditionalServicesId());
+        Set<AdditionalService> additionalServices = new HashSet<>();
+        newAdvertisementDTO.getAdditionalServicesId().stream()
+                .peek(additionalService -> additionalServices.add(additionalServiceRepository.findAdditionalServiceById(additionalService)))
+                .collect(Collectors.toSet());
         // FIXME: 5/5/2021 replace with findAll (you can use addServRepo)
 
         Advertisement advertisement = new Advertisement();
-        advertisement.setTitle(advertisementDTO.getTitle());
-        advertisement.setText(advertisementDTO.getText());
-        advertisement.setPrice(advertisementDTO.getPrice());
+        advertisement.setTitle(newAdvertisementDTO.getTitle());
+        advertisement.setText(newAdvertisementDTO.getText());
+        advertisement.setPrice(newAdvertisementDTO.getPrice());
         advertisement.setStatus(Status.ACTIVE);
-        advertisement.setType(advertisementDTO.getType());
+        advertisement.setType(newAdvertisementDTO.getType());
         advertisement.setCategory(category);
         advertisement.setAdditionalServices(additionalServices);
         advertisement.setOwner(owner);

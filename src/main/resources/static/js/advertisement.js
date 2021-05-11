@@ -43,7 +43,7 @@ $(function () {
             $("#category").append(advertisement.category.name);
             $("#owner").append(advertisement.owner.firstName + " " + advertisement.owner.secondName);
 
-            if (user !== null) {
+            if (user.email !== null ) {
                 if (advertisement.category.orderable === true && advertisement.status === "ACTIVE") {
                     $("#order").append($("<form></form>")
                         .attr("id", "orderButtonForm")
@@ -64,14 +64,13 @@ $(function () {
     function getImagesList(advertisementId) {
         $.ajax({
             type: "GET",
-            url: "http://localhost:8080/api/image/imagesList/" + advertisementId
+            url: API_IMAGE + "imagesList/" + advertisementId
         }).done(function (imagesList) {
             console.log(imagesList);
-            //fixme replace with default image usage (place in to static/img path)
             if (imagesList.length === 0) {
                 $("#images")
                     .append($("<img/>")
-                        .attr("src", API_IMAGE + advertisementId));
+                        .attr("src", "/image/notFound.JPG"));
             } else {
                 $.each(imagesList, function (index, image) {
                     $("#images")

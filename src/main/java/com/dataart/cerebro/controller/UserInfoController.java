@@ -1,9 +1,9 @@
 package com.dataart.cerebro.controller;
 
+import com.dataart.cerebro.controller.dto.UserInfoDTO;
 import com.dataart.cerebro.controller.dto.ValueDTO;
 import com.dataart.cerebro.domain.Advertisement;
 import com.dataart.cerebro.domain.AdvertisementOrder;
-import com.dataart.cerebro.domain.UserInfo;
 import com.dataart.cerebro.service.AdvertisementOrderService;
 import com.dataart.cerebro.service.AdvertisementService;
 import com.dataart.cerebro.service.UserInfoService;
@@ -32,16 +32,18 @@ public class UserInfoController {
 
     @GetMapping("/{userId}")
     public ResponseEntity<?> getUserInfoById(@PathVariable Long userId) {
-        UserInfo userInfo = userInfoService.findUserInfoById(userId);
-        return new ResponseEntity<>(userInfo, HttpStatus.OK);
+        UserInfoDTO userInfoDTO = new UserInfoDTO(userInfoService.findUserInfoById(userId));
+        return ResponseEntity.ok(new ValueDTO(userInfoDTO));
     }
 
+    // TODO: 11.05.2021 change Advertisement to AdvertisementDTO
     @GetMapping("/{userId}/advertisements")
     public ResponseEntity<?> getUsersAdvertisementsByUserId(@PathVariable Long userId) {
         List<Advertisement> advertisements = advertisementService.findAdvertisementsByUserInfoId(userId);
         return new ResponseEntity<>(advertisements, HttpStatus.OK);
     }
 
+    // TODO: 11.05.2021 change AdvertisementOrder to AdvertisementOrderDTO
     @GetMapping("/{userId}/orders")
     public ResponseEntity<?> getUsersOrdersByUserId(@PathVariable Long userId) {
         List<AdvertisementOrder> advertisementOrders = advertisementOrderService.findAdvertisementOrdersByUserId(userId);
@@ -51,7 +53,7 @@ public class UserInfoController {
     @PreAuthorize("permitAll()")
     @GetMapping("/")
     public ResponseEntity<?> getCurrentUser() {
-        UserInfo userInfo = userInfoService.getCurrentUser();
-        return new ResponseEntity<>(new ValueDTO(userInfo), HttpStatus.OK);
+        UserInfoDTO userInfoDTO = new UserInfoDTO(userInfoService.getCurrentUser());
+        return ResponseEntity.ok(new ValueDTO(userInfoDTO));
     }
 }

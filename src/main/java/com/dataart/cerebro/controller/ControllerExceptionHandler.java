@@ -41,13 +41,12 @@ public class ControllerExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     public ErrorDTO handleMaxUploadSizeExceededException(MaxUploadSizeExceededException e) {
-
         log.error("Error: {} {}", e.getMessage(), e);
         return new ErrorDTO(String.format("Max Upload Size Exceeded (%s)", MAX_SIZE));
     }
 
     @ExceptionHandler(NotEnoughMoneyException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseStatus(HttpStatus.PAYMENT_REQUIRED)
     @ResponseBody
     public ErrorDTO handleNotEnoughMoneyException(NotEnoughMoneyException e){
         log.error("Error: {} {}", e.getMessage(), e);

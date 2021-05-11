@@ -11,8 +11,7 @@ function addNewUserInfo() {
         type: "POST",
         data: JSON.stringify(userInfo),
         dataType: "json",
-        //fixme localhost
-        url: "http://localhost:8080/registration/",
+        url: SERVER_URL + "registration/",
         contentType: "application/json",
 
         // success: function (data) {

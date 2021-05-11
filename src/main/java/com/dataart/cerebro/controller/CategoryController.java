@@ -3,7 +3,6 @@ package com.dataart.cerebro.controller;
 import com.dataart.cerebro.domain.Category;
 import com.dataart.cerebro.domain.Type;
 import com.dataart.cerebro.service.CategoryService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +23,6 @@ public class CategoryController {
     @GetMapping("/{type}")
     public ResponseEntity<?> getCategoryByType(@PathVariable Type type) {
         List<Category> categories = categoryService.findCategoriesByType(type);
-        return new ResponseEntity<>(categories, HttpStatus.OK);
+        return ResponseEntity.ok(categories);
     }
 }

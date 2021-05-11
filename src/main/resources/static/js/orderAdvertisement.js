@@ -19,8 +19,7 @@ function sendOrder(){
     $.ajax({
         type: "POST",
         data: JSON.stringify(order),
-        //fixme localhost
-        url: "http://localhost:8080/api/order/",
+        url: SERVER_URL + "api/order/",
         contentType: "application/json"
     });
 }
