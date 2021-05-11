@@ -43,7 +43,6 @@ public class AdvertisementController {
     public ResponseEntity<?> getAdvertisementById(@PathVariable Long advertisementId) {
         Advertisement advertisement = advertisementService.findAdvertisementById(advertisementId);
         AdvertisementDTO advertisementDTO = new AdvertisementDTO(advertisement);
-
         return ResponseEntity.ok(advertisementDTO);
     }
 

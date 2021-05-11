@@ -7,7 +7,7 @@ $(function () {
             console.log(resp);
 
             let user = resp.value;
-            if(user.email === null){
+            if(user === null){
                 $("#log-in-button").append($("<input/>")
                     .attr("type", "submit")
                     .attr("value", "LOGIN")
@@ -36,11 +36,6 @@ $(function () {
             url: API_ADVERTISEMENT
         }).done(function (advertisementsList) {
             console.log(advertisementsList);
-
-            //fixne add table header into html and show it always?
-            //when response is empty - show one row with "No data available"
-            //else fill the table
-
             let table;
             if(advertisementsList.length !== 0) {
             $.each(advertisementsList, function (index, advertisement) {

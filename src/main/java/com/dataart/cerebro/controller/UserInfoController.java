@@ -4,6 +4,7 @@ import com.dataart.cerebro.controller.dto.UserInfoDTO;
 import com.dataart.cerebro.controller.dto.ValueDTO;
 import com.dataart.cerebro.domain.Advertisement;
 import com.dataart.cerebro.domain.AdvertisementOrder;
+import com.dataart.cerebro.domain.UserInfo;
 import com.dataart.cerebro.service.AdvertisementOrderService;
 import com.dataart.cerebro.service.AdvertisementService;
 import com.dataart.cerebro.service.UserInfoService;
@@ -53,6 +54,10 @@ public class UserInfoController {
     @PreAuthorize("permitAll()")
     @GetMapping("/")
     public ResponseEntity<?> getCurrentUser() {
+        UserInfo userInfo = userInfoService.getCurrentUser();
+        if(userInfo == null){
+            return ResponseEntity.ok(new ValueDTO(null));
+        }
         UserInfoDTO userInfoDTO = new UserInfoDTO(userInfoService.getCurrentUser());
         return ResponseEntity.ok(new ValueDTO(userInfoDTO));
     }

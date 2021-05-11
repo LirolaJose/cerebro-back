@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Advertisement Form</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="js/jquery.min.js"></script>
     <script src="js/constantParameters.js"></script>
+    <script src="js/getUrlParameter.js"></script>
     <script src="js/typesSelect.js"></script>
     <script src="js/advertisementForm.js"></script>
     <script src="js/categorySelect.js"></script>
@@ -28,7 +29,7 @@
     </select></p>
     <p id="additionalServices"></p>
 
-    <p>Images <input id="image" name="images" accept="image/jpeg, image/png, image/jpg" size="1KB" formenctype="multipart/form-data" type="file" multiple></p>
+    <p>Images (50MB) <input id="image" name="images" accept="image/jpeg, image/png, image/jpg" formenctype="multipart/form-data" type="file" multiple></p>
     <p>Location</p>
     <p><input type="submit" onclick="createAdvertisement()" value="Add advertisement"/></p>
 

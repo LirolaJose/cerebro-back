@@ -1,33 +1,17 @@
 $(function () {
-    function getCurrentUser(callback) {
+    function getCurrentUser() {
         $.ajax({
             type: "GET",
             url: CURRENT_USER
-            //fixme what if current user will not be fetched? should we redirect to login page?
         }).done(function (resp) {
             console.log(resp);
             let user = resp.value;
-
-            const urlString = window.location.search;
-            //fixme advertisment fetch logic move to common and replace all usages
-            let advertisementId = urlString.substring(urlString.lastIndexOf("=") + 1);
-
+            let advertisementId = getUrlParameter("id");
             getAdvertisementInfoById(advertisementId, user);
             getImagesList(advertisementId);
             getAdditionalServicesByAdvertisementId(advertisementId);
-
-            // fixme move to common
-            // callback(user);
         });
     }
-
-    // getCurrentUser(function (user) {
-    //         let advertisementId = urlString.substring(urlString.lastIndexOf("=") + 1);
-    //         getAdvertisementInfoById(advertisementId, user);
-    //         getImagesList(advertisementId);
-    //         getAdditionalServicesByAdvertisementId(advertisementId);
-    //     }
-    // );
 
     function getAdvertisementInfoById(advertisementId, user) {
         $.ajax({
@@ -43,7 +27,7 @@ $(function () {
             $("#category").append(advertisement.category.name);
             $("#owner").append(advertisement.owner.firstName + " " + advertisement.owner.secondName);
 
-            if (user.email !== null ) {
+            if (user !== null ) {
                 if (advertisement.category.orderable === true && advertisement.status === "ACTIVE") {
                     $("#order").append($("<form></form>")
                         .attr("id", "orderButtonForm")
@@ -96,6 +80,5 @@ $(function () {
     }
 
     getCurrentUser();
-})
-
+});
 
