@@ -15,7 +15,7 @@ function sendOrder(){
     $.ajax({
         type: "POST",
         data: JSON.stringify(order),
-        url: SERVER_URL + "api/order/",
+        url: SERVER_URL + "/api/order/",
         contentType: "application/json"
     });
 }

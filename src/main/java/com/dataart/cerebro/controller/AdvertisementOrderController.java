@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/order")
+@Api(tags = "Order")
 public class AdvertisementOrderController {
     private final AdvertisementOrderService advertisementOrderService;
 

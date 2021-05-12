@@ -8,6 +8,7 @@ import com.dataart.cerebro.domain.UserInfo;
 import com.dataart.cerebro.service.AdvertisementOrderService;
 import com.dataart.cerebro.service.AdvertisementService;
 import com.dataart.cerebro.service.UserInfoService;
+import io.swagger.annotations.Api;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,6 +21,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/user")
+@Api(tags = "User Info")
 public class UserInfoController {
     private final UserInfoService userInfoService;
     private final AdvertisementService advertisementService;

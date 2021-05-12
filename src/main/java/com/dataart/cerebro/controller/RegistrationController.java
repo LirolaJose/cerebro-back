@@ -3,6 +3,7 @@ package com.dataart.cerebro.controller;
 import com.dataart.cerebro.controller.dto.UserInfoDTO;
 import com.dataart.cerebro.exception.ValidationException;
 import com.dataart.cerebro.service.UserInfoService;
+import io.swagger.annotations.Api;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/registration")
+@Api(tags = "Registration")
 public class RegistrationController {
     private final UserInfoService userInfoService;
 

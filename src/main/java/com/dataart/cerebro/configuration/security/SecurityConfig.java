@@ -24,10 +24,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests()
                 .antMatchers("/api/advertisement/").permitAll()
+                .antMatchers("/advertisementsList.html").permitAll()
                 .antMatchers("/login").permitAll()
                 .antMatchers("/api/image/*").permitAll()
                 .antMatchers("/api/admin/**").hasRole("ADMIN")
                 .antMatchers("/advertisementForm.html").authenticated()
+                .antMatchers("/api/order/").authenticated()
                 .antMatchers("/orderForm.html").authenticated()
                     .and().formLogin()
                 .defaultSuccessUrl("/advertisementsList.html")

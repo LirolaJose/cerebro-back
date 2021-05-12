@@ -57,7 +57,6 @@ public class ImageService {
 
     private byte[] getImage(Image image) {
         try {
-            byte[] imageBytes;
             if (image != null) {
                 return image.getImageBytes();
             }

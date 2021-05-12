@@ -2,6 +2,7 @@ package com.dataart.cerebro.controller;
 
 import com.dataart.cerebro.domain.AdditionalService;
 import com.dataart.cerebro.service.AdditionalServiceService;
+import io.swagger.annotations.Api;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/additionalServices")
+@Api(tags = "Additional Services")
 public class AdditionalServiceController {
     private final AdditionalServiceService additionalServiceService;
 

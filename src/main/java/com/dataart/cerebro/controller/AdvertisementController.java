@@ -6,6 +6,7 @@ import com.dataart.cerebro.domain.Advertisement;
 import com.dataart.cerebro.exception.ValidationException;
 import com.dataart.cerebro.service.AdvertisementService;
 import com.dataart.cerebro.service.ImageService;
+import io.swagger.annotations.Api;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/advertisement")
+@Api(tags = "Advertisement")
 public class AdvertisementController {
     private final AdvertisementService advertisementService;
     private final ImageService imageService;
@@ -62,11 +64,12 @@ public class AdvertisementController {
             List<FieldError> fieldErrorList = bindingResult.getFieldErrors();
             throw new ValidationException(fieldErrorList);
         }
-
-        for(MultipartFile image : images){
-            String contentType = image.getContentType();
-            if(contentType != null && !isSupportedContentType(contentType)){
-                throw new ValidationException("Only PNG or JPG images are allowed");
+        if(images != null && !images.isEmpty()) {
+            for (MultipartFile image : images) {
+                String contentType = image.getContentType();
+                if (contentType != null && !isSupportedContentType(contentType)) {
+                    throw new ValidationException("Only PNG or JPG images are allowed");
+                }
             }
         }
         advertisementService.createNewAdvertisement(newAdvertisementDTO, images);
