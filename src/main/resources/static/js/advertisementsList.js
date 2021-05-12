@@ -29,7 +29,7 @@ $(function () {
                 $("#user-money-menu").append($("<p>Money</p>")
                     .text("Money: " + userInfo.moneyAmount));
 
-                $("#user-money-menu").append($("<form id='add-money-form'></form>"));
+                $("#user-money-menu").append($("<div id='add-money-form'></div>"));
                 $("#add-money-form").append($("<div id='money-form-info'>"));
                 $("#money-form-info").append($("<input id='entered-money'>")
                     .attr("type", "number")
