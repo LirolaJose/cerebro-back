@@ -30,8 +30,6 @@ public class AdditionalServiceService {
             log.info("The order without additional services");
             return 0.0;
         }
-
-        List<AdditionalService> additionalServices = additionalServiceRepository.findAllById(additionalServicesId);
-        return additionalServiceRepository.getAdditionalServicesPriceSum(additionalServices);
+        return additionalServiceRepository.getAdditionalServicesPriceSum(additionalServicesId);
     }
 }

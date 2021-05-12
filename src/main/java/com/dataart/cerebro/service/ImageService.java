@@ -64,7 +64,7 @@ public class ImageService {
             return StreamUtils.copyToByteArray(path.getInputStream());
         } catch (IOException e) {
             log.error("Error: {}", e.getMessage(), e);
-            throw new DataProcessingException("Error during image saving");
+            throw new DataProcessingException("Error during image saving", e);
         }
     }
 }

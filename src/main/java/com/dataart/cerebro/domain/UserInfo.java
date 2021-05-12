@@ -39,7 +39,7 @@ public class UserInfo {
     private String email;
 
     @NotEmpty
-    @Size(min = 10, max = 100)
+    @Size(min = 4, max = 100)
     private String password;
 
     @Column(name = "money_amount")

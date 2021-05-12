@@ -33,7 +33,7 @@ public class AdvertisementController {
         this.imageService = imageService;
     }
 
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<?> getActiveAdvertisements() {
         List<Advertisement> advertisements = advertisementService.findActiveAdvertisements();
         List<AdvertisementDTO> advertisementDTOS = new ArrayList<>();

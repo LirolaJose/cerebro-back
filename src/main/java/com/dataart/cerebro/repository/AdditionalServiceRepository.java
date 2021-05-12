@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Set;
 
 public interface AdditionalServiceRepository extends JpaRepository<AdditionalService, Long> {
     @Query(value =
@@ -36,5 +37,5 @@ public interface AdditionalServiceRepository extends JpaRepository<AdditionalSer
             "SELECT SUM(price) FROM service " +
             "WHERE id IN :services",
             nativeQuery = true)
-    Double getAdditionalServicesPriceSum(@Param("services") List<AdditionalService> additionalServices);
+    Double getAdditionalServicesPriceSum(@Param("services") Set<Long> additionalServices);
 }
