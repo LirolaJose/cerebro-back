@@ -3,7 +3,7 @@ $(function () {
         let type = $("#selectType option:selected").attr("value");
         $.ajax({
             type: "GET",
-            url: "http://localhost:8080/categories/" + type
+            url:CATEGORIES +"/" + type
         }).done(function (categoriesList) {
             console.log(categoriesList);
             $("#selectCategory").html('<select id="selectCategory">' +

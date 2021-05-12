@@ -2,7 +2,7 @@ $(function () {
     function getCurrentUser() {
         $.ajax({
             type: "GET",
-            url: CURRENT_USER
+            url: CURRENT_USER +"/"
         }).done(function (resp) {
             console.log(resp);
             let user = resp.value;
@@ -16,7 +16,7 @@ $(function () {
     function getAdvertisementInfoById(advertisementId, user) {
         $.ajax({
             type: "GET",
-            url: API_ADVERTISEMENT + advertisementId
+            url: API_ADVERTISEMENT +"/" + advertisementId
         }).done(function (advertisement) {
             console.log(advertisement);
             $("#title-info").append(advertisement.title);
@@ -48,18 +48,18 @@ $(function () {
     function getImagesList(advertisementId) {
         $.ajax({
             type: "GET",
-            url: API_IMAGE + "imagesList/" + advertisementId
-        }).done(function (imagesList) {
-            console.log(imagesList);
-            if (imagesList.length === 0) {
+            url: API_IMAGE + "/imagesList/" + advertisementId
+        }).done(function (imagesIdList) {
+            console.log(imagesIdList);
+            if (imagesIdList.length === 0) {
                 $("#images")
                     .append($("<img/>")
                         .attr("src", "/image/notFound.JPG"));
             } else {
-                $.each(imagesList, function (index, image) {
+                $.each(imagesIdList, function (index, imageId) {
                     $("#images")
                         .append($("<img/>")
-                            .attr("src", API_ADVERTISEMENT + "image/" + image.id));
+                            .attr("src", API_ADVERTISEMENT + "/image/" + imageId));
 
                 });
             }
@@ -69,7 +69,7 @@ $(function () {
     function getAdditionalServicesByAdvertisementId(advertisementId) {
         $.ajax({
             type: "GET",
-            url: API_ADDITIONAL_SERVICES + "advertisement/" + advertisementId
+            url: API_ADDITIONAL_SERVICES + "/advertisement/" + advertisementId
         }).done(function (additionalServicesList) {
             console.log(additionalServicesList);
             $.each(additionalServicesList, function (index, additionalService) {
@@ -78,7 +78,6 @@ $(function () {
             })
         })
     }
-
     getCurrentUser();
 });
 

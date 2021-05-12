@@ -12,9 +12,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -57,9 +57,11 @@ public class AdvertisementOrderService {
             advertisementOrder.setAdvertisement(advertisement);
             advertisementOrder.setCustomer(customer);
 
-            Set<AdditionalService> additionalServices = advertisementOrderDTO.getAdditionalServicesId().stream()
-                    .map(additionalServiceRepository::findAdditionalServiceById)
-                    .collect(Collectors.toSet());
+//            Set<AdditionalService> additionalServices = advertisementOrderDTO.getAdditionalServicesId().stream()
+//                    .map(additionalServiceRepository::findAdditionalServiceById)
+//                    .collect(Collectors.toSet());
+            Set<AdditionalService> additionalServices = new HashSet<>(additionalServiceRepository.findAllById(advertisementOrderDTO.getAdditionalServicesId()));
+
 
             advertisementOrder.setAdditionalServices(additionalServices);
             AdvertisementOrder newOrder = advertisementOrderRepository.save(advertisementOrder);

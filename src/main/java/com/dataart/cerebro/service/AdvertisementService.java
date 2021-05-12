@@ -49,12 +49,7 @@ public class AdvertisementService {
 
     public Advertisement findAdvertisementById(Long advertisementId) {
         log.info("Find advertisement by ID {}", advertisementId);
-        Advertisement advertisement = advertisementRepository.findAdvertisementById(advertisementId);
-        if (advertisement == null) {
-            log.info("Advertisement with id {} not found", advertisementId);
-            throw new NotFoundException("Advertisement not found");
-        }
-        return advertisement;
+        return advertisementRepository.findById(advertisementId).orElseThrow(() -> new NotFoundException("Advertisement", advertisementId));
     }
 
     public List<Advertisement> findAdvertisementsByUserInfoId(Long userInfoId) {
@@ -90,11 +85,10 @@ public class AdvertisementService {
         advertisement.setExpiredTime(publicationTime.plusDays(7));
 
         Advertisement newAdvertisement = advertisementRepository.save(advertisement);
-        log.info("New advertisement created ({})", newAdvertisement);
-
         if (images != null && !images.isEmpty()) {
-            imageService.saveImage(images, newAdvertisement);
+            imageService.saveImages(images, newAdvertisement);
         }
+        log.info("New advertisement created ({})", newAdvertisement);
 
         emailService.sendEmailAboutPublication(newAdvertisement);
     }

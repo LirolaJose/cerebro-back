@@ -2,7 +2,7 @@ $(function () {
     function fillTypesSelect() {
         $.ajax({
             type: "GET",
-            url: "http://localhost:8080/api/types"
+            url: TYPES + "/"
         }).done(function (typesList) {
             console.log(typesList);
             $.each(typesList, function (index, type) {

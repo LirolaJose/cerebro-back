@@ -18,16 +18,7 @@ public class AdditionalServiceService {
     }
 
     public List<AdditionalService> findAdditionalServicesByCategory(Long categoryId) {
-        List<AdditionalService> additionalServices = additionalServiceRepository.findAdditionalServiceByCategoryId(categoryId);
-        if (additionalServices.isEmpty()) {
-            log.info("Category with {} doesn't have additional services", categoryId);
-            return additionalServices;
-        }
-        return additionalServices;
-    }
-
-    public AdditionalService findAdditionalServiceById(Long additionalServiceId) {
-        return additionalServiceRepository.findAdditionalServiceById(additionalServiceId);
+        return additionalServiceRepository.findAdditionalServiceByCategoryId(categoryId);
     }
 
     public List<AdditionalService> findAdditionalServiceByAdvertisement(Long advertisementId) {

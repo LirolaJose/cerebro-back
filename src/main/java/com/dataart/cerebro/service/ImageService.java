@@ -24,18 +24,18 @@ public class ImageService {
     }
 
     @Transactional
-    public void saveImage(List<MultipartFile> images, Advertisement advertisement)  {
-        try{
-        for (int i = 0; i < images.size(); i++) {
-            Image image = new Image();
-            image.setImageBytes(images.get(i).getBytes());
-            image.setAdvertisement(advertisement);
-            if (i == 0) {
-                image.setMainImage(true);
+    public void saveImages(List<MultipartFile> images, Advertisement advertisement) {
+        try {
+            for (int i = 0; i < images.size(); i++) {
+                Image image = new Image();
+                image.setImageBytes(images.get(i).getBytes());
+                image.setAdvertisement(advertisement);
+                if (i == 0) {
+                    image.setMainImage(true);
+                }
+                imageRepository.save(image);
             }
-            imageRepository.save(image);
-        }
-        }catch(IOException e){
+        } catch (IOException e) {
             log.error("Error: {}", e.getMessage(), e);
             throw new DataProcessingException("Error during image saving");
         }
@@ -55,17 +55,15 @@ public class ImageService {
         return imageRepository.findAllByAdvertisement_Id(advertisementId);
     }
 
-    private byte[] getImage(Image image){
+    private byte[] getImage(Image image) {
         try {
             byte[] imageBytes;
             if (image != null) {
-                imageBytes = image.getImageBytes();
-            } else {
-                var path = new ClassPathResource("image/notFound.jpg");
-                imageBytes = StreamUtils.copyToByteArray(path.getInputStream());
+                return image.getImageBytes();
             }
-            return imageBytes;
-        }catch(IOException e){
+            ClassPathResource path = new ClassPathResource("image/notFound.jpg");
+            return StreamUtils.copyToByteArray(path.getInputStream());
+        } catch (IOException e) {
             log.error("Error: {}", e.getMessage(), e);
             throw new DataProcessingException("Error during image saving");
         }

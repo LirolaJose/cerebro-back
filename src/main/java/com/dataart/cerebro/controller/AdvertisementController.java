@@ -31,7 +31,7 @@ public class AdvertisementController {
         this.imageService = imageService;
     }
 
-    @GetMapping("/")
+    @GetMapping()
     public ResponseEntity<?> getActiveAdvertisements() {
         List<Advertisement> advertisements = advertisementService.findActiveAdvertisements();
         List<AdvertisementDTO> advertisementDTOS = new ArrayList<>();
@@ -59,7 +59,7 @@ public class AdvertisementController {
                                                BindingResult bindingResult,
                                                @RequestPart(value = "images", required = false) List<MultipartFile> images) throws IOException {
         if(bindingResult.hasErrors()){
-            List<FieldError> fieldErrorList = new ArrayList<>(bindingResult.getFieldErrors());
+            List<FieldError> fieldErrorList = bindingResult.getFieldErrors();
             throw new ValidationException(fieldErrorList);
         }
 

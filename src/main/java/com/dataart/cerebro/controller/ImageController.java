@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/image")
@@ -29,7 +30,9 @@ public class ImageController {
 
     @GetMapping(value = "/imagesList/{advertisementId}")
     public ResponseEntity<?> getImagesList(@PathVariable Long advertisementId) {
-        List<Image> images = imageService.findAllByAdvertisementId(advertisementId);
-        return ResponseEntity.ok(images);
+        List<Long> imagesId = imageService.findAllByAdvertisementId(advertisementId).stream()
+                .map(Image::getId)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(imagesId);
     }
 }

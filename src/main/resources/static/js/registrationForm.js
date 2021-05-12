@@ -11,7 +11,7 @@ function addNewUserInfo() {
         type: "POST",
         data: JSON.stringify(userInfo),
         dataType: "json",
-        url: SERVER_URL + "registration/",
+        url: SERVER_URL + "/registration/",
         contentType: "application/json",
 
         // success: function (data) {

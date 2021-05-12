@@ -41,7 +41,7 @@ public class UserInfoService {
     @Transactional
     public void createNewUserInfo(UserInfoDTO userInfoDTO) {
         if (findUserInfoByEmail(userInfoDTO.getEmail()) != null) {
-            log.info("An attempt to create user with exists email: {}", userInfoDTO.getEmail());
+            log.info("An attempt to create user with existing email: {}", userInfoDTO.getEmail());
             throw new EmailExistsException(userInfoDTO.getEmail());
         }
         UserInfo userInfo = new UserInfo();

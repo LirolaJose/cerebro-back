@@ -4,10 +4,10 @@ $(function () {
     })
 
     $("#selectCategory").change(function () {
-        let category = $("#selectCategory option:selected").attr("value");
+        let categoryId = $("#selectCategory option:selected").attr("value");
         $.ajax({
             type: "GET",
-            url: API_ADDITIONAL_SERVICES + "category/" + category
+            url: API_ADDITIONAL_SERVICES + "/category/" + categoryId
         }).done(function (additionalServicesList) {
             console.log(additionalServicesList);
             if (additionalServicesList.length === 0) {

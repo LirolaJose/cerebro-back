@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -29,8 +28,8 @@ public class RegistrationController {
 
     @PostMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> signUp(@RequestBody @Valid UserInfoDTO userInfoDTO, BindingResult bindingResult) {
-        if(bindingResult.hasErrors()){
-            List<FieldError> fieldErrorList = new ArrayList<>(bindingResult.getFieldErrors());
+        if (bindingResult.hasErrors()) {
+            List<FieldError> fieldErrorList = bindingResult.getFieldErrors();
             throw new ValidationException(fieldErrorList);
         }
         userInfoService.createNewUserInfo(userInfoDTO);

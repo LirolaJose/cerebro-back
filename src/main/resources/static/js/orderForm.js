@@ -2,7 +2,7 @@ $(function () {
     function fillOrderFormInfo(advertisementId) {
         $.ajax({
             type: "GET",
-            url: API_ADVERTISEMENT + advertisementId
+            url: API_ADVERTISEMENT +"/" + advertisementId
         }).done(function (advertisement) {
             console.log(advertisement);
             $("#order-advertisement-title").append($("<a href=advertisement.html?id="
@@ -12,7 +12,7 @@ $(function () {
                 .attr("text", advertisement.price);
 
             $("#order-advertisement-image").append($("<img/>")
-                .attr("src", SERVER_URL + "/api/image/" + advertisementId));
+                .attr("src", API_IMAGE + "/" + advertisementId));
 
             if (advertisement.category.orderable === true && advertisement.status === "ACTIVE") {
                 $("#confirm-order").append($("<input onclick='sendOrder()'/>")
@@ -27,7 +27,7 @@ $(function () {
     function fillAdditionalServicesInfo(id) {
         $.ajax({
             type: "GET",
-            url: API_ADDITIONAL_SERVICES + "advertisement/" + id
+            url: API_ADDITIONAL_SERVICES + "/advertisement/" + id
         }).done(function (additionalServicesList) {
             //fixme here's additional services logic in the other place, should we combine them or not?
             console.log(additionalServicesList);
