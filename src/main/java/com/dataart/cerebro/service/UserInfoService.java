@@ -3,6 +3,7 @@ package com.dataart.cerebro.service;
 import com.dataart.cerebro.controller.dto.UserInfoDTO;
 import com.dataart.cerebro.domain.Role;
 import com.dataart.cerebro.domain.UserInfo;
+import com.dataart.cerebro.exception.DataProcessingException;
 import com.dataart.cerebro.exception.EmailExistsException;
 import com.dataart.cerebro.exception.NotEnoughMoneyException;
 import com.dataart.cerebro.exception.NotFoundException;
@@ -83,9 +84,14 @@ public class UserInfoService {
     }
 
     @Transactional
-    public UserInfo increaseMoneyAmount(Double money) {
+    public void increaseCurrentUserMoneyAmount(Double money, Long userId) {
         UserInfo userInfo = getCurrentUser();
-        userInfo.setMoneyAmount(userInfo.getMoneyAmount() + money);
-        return userInfoRepository.save(userInfo);
+        if(userInfo.getId().equals(userId)) {
+            userInfo.setMoneyAmount(userInfo.getMoneyAmount() + money);
+            userInfoRepository.save(userInfo);
+            log.info("User {} has successfully increased the amount of money", userInfo.getEmail());
+        }else{
+            throw new DataProcessingException("Wrong user");
+        }
     }
 }

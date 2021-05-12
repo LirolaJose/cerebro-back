@@ -56,7 +56,8 @@ class IntegrationTests {
         Faker faker = new Faker();
         String secondName = "Raul";
         String email = faker.bothify("????##@gmail.com");
-        ResponseEntity<UserInfoDTO> response = registerNewUser(secondName, email);
+        String password = "password";
+        ResponseEntity<UserInfoDTO> response = registerNewUser(secondName, email, password);
         assertThat(response.getStatusCode(), equalTo(HttpStatus.CREATED));
 
         assertThat(userInfoRepository.findUserInfoByEmail(email).getSecondName(), equalTo(secondName));
@@ -67,9 +68,11 @@ class IntegrationTests {
         Faker faker = new Faker();
         String secondName = "Raul";
         String email = faker.bothify("????##@gmail.com");
-        ResponseEntity<UserInfoDTO> response = registerNewUser(secondName, email);
+        String password = "password";
+
+        registerNewUser(secondName, email, password);
         String securedUrl = "/advertisementForm.html";
-        String cookie = getCookieForUser(email, "password", "/login");
+        String cookie = getCookieForUser(email, password, "/login");
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Cookie", cookie);
@@ -114,14 +117,14 @@ class IntegrationTests {
         return loginResponse.getHeaders().get("Set-Cookie").get(0);
     }
 
-    private ResponseEntity<UserInfoDTO> registerNewUser(String secondName, String email) {
+    private ResponseEntity<UserInfoDTO> registerNewUser(String secondName, String email, String password) {
         UserInfoDTO userInfoDTO = new UserInfoDTO();
         Faker faker = new Faker();
 
         userInfoDTO.setFirstName(faker.name().firstName());
         userInfoDTO.setSecondName(secondName);
         userInfoDTO.setPhone(faker.phoneNumber().cellPhone());
-        userInfoDTO.setPassword("password");
+        userInfoDTO.setPassword(password);
         userInfoDTO.setEmail(email);
 
         return restTemplate.postForEntity("/registration/", userInfoDTO, UserInfoDTO.class);

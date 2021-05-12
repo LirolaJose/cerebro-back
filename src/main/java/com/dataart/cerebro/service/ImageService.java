@@ -37,7 +37,7 @@ public class ImageService {
             }
         } catch (Exception e) {
             log.error("Error: {}", e.getMessage(), e);
-            throw new DataProcessingException("Error during image saving");
+            throw new DataProcessingException("Error during image saving", e);
         }
     }
 

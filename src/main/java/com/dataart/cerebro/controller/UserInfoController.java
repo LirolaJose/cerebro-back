@@ -60,9 +60,13 @@ public class UserInfoController {
         return ResponseEntity.ok(new ValueDTO(userInfo == null ? null : new UserInfoDTO(userInfo)));
     }
 
-    @PostMapping(value = "/{userId}/money/}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> increaseMoneyAmount(@PathVariable String userId, @RequestBody Double money){
-       userInfoService.increaseMoneyAmount(money);
-       return  new ResponseEntity<>(HttpStatus.OK);
+    @PostMapping(value = "/{userId}/money/", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> increaseMoneyAmount(@PathVariable Long userId, @RequestBody ValueDTO money) {
+        double moneyValue = Double.parseDouble((String) money.getValue());
+        if (moneyValue <= 0){
+            return new ResponseEntity<>("Wrong money format. The number must be positive and minimum 1.", HttpStatus.BAD_REQUEST);
+        }
+        userInfoService.increaseCurrentUserMoneyAmount(moneyValue, userId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

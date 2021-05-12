@@ -11,6 +11,7 @@ import javax.validation.constraints.Size;
 @Data
 @NoArgsConstructor
 public class UserInfoDTO {
+    private Long id;
     @NotEmpty
     @Size(max = 100)
     private String firstName;
@@ -35,10 +36,11 @@ public class UserInfoDTO {
     private Double moneyAmount;
 
     public UserInfoDTO(UserInfo userInfo) {
-            this.firstName = userInfo.getFirstName();
-            this.secondName = userInfo.getSecondName();
-            this.phone = userInfo.getPhone();
-            this.email = userInfo.getEmail();
-            this.moneyAmount = userInfo.getMoneyAmount();
+        this.id = userInfo.getId();
+        this.firstName = userInfo.getFirstName();
+        this.secondName = userInfo.getSecondName();
+        this.phone = userInfo.getPhone();
+        this.email = userInfo.getEmail();
+        this.moneyAmount = userInfo.getMoneyAmount();
     }
 }

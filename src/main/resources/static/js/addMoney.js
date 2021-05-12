@@ -1,7 +1,7 @@
 function addMoney(userInfoId, money){
     $.ajax({
         type: "POST",
-        data: JSON.stringify(money),
+        data: JSON.stringify({value: money}),
         dataType: "json",
         url: SERVER_URL + "/api/user/" + userInfoId + "/money/",
         contentType: "application/json",
