@@ -29,7 +29,6 @@ $(function () {
             type: "GET",
             url: API_ADDITIONAL_SERVICES + "/advertisement/" + id
         }).done(function (additionalServicesList) {
-            //fixme here's additional services logic in the other place, should we combine them or not?
             console.log(additionalServicesList);
             $.each(additionalServicesList, function (index, additionalService) {
                 $("#order-additional-services").append($('<input class="additionalService" type="checkbox">' + additionalService.name + ", price: " +
@@ -40,7 +39,6 @@ $(function () {
             getTotal();
         });
     }
-//fixme also do we need to fetch and check current user here only for case when someone just navigate here via bookmark?
-    let advertisementId = getUrlParameter("id");
+    let advertisementId = getParameter("id");
     fillOrderFormInfo(advertisementId);
 })

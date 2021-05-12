@@ -1,16 +1,16 @@
 function sendOrder(){
-    let checkboxes = [];
-    let id = getUrlParameter("id");
+    let additionalServices = [];
+    let id = getParameter("id");
 
     //show error if parameter is empty or broken or etc
     $(".additionalService").each(function (){
         if(this.checked){
-            checkboxes.push($(this).val());
+            additionalServices.push($(this).val());
         }
     })
     let order = {
         advertisementId: id,
-        additionalServicesId: checkboxes
+        additionalServicesId: additionalServices
     }
     $.ajax({
         type: "POST",

@@ -35,8 +35,7 @@ public class ImageService {
                 }
                 imageRepository.save(image);
             }
-            // FIXME: 5/12/2021 not only IO exception possible
-        } catch (IOException e) {
+        } catch (Exception e) {
             log.error("Error: {}", e.getMessage(), e);
             throw new DataProcessingException("Error during image saving");
         }

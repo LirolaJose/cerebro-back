@@ -114,7 +114,6 @@ class IntegrationTests {
         return loginResponse.getHeaders().get("Set-Cookie").get(0);
     }
 
-    // FIXME: 5/7/2021 refactor as it was discussed
     private ResponseEntity<UserInfoDTO> registerNewUser(String secondName, String email) {
         UserInfoDTO userInfoDTO = new UserInfoDTO();
         Faker faker = new Faker();
@@ -126,7 +125,5 @@ class IntegrationTests {
         userInfoDTO.setEmail(email);
 
         return restTemplate.postForEntity("/registration/", userInfoDTO, UserInfoDTO.class);
-
     }
-
 }

@@ -6,7 +6,7 @@ $(function () {
         }).done(function (resp) {
             console.log(resp);
             let user = resp.value;
-            let advertisementId = getUrlParameter("id");
+            let advertisementId = getParameter("id");
             getAdvertisementInfoById(advertisementId, user);
             getImagesList(advertisementId);
             getAdditionalServicesByAdvertisementId(advertisementId);
@@ -27,8 +27,7 @@ $(function () {
             $("#category").append(advertisement.category.name);
             $("#owner").append(advertisement.owner.firstName + " " + advertisement.owner.secondName);
 
-            if (user !== null ) {
-                if (advertisement.category.orderable === true && advertisement.status === "ACTIVE") {
+                if (user !== null && advertisement.category.orderable === true && advertisement.status === "ACTIVE") {
                     $("#order").append($("<form></form>")
                         .attr("id", "orderButtonForm")
                         .attr("action", "orderForm.html"));
@@ -40,7 +39,6 @@ $(function () {
                         .append($("<input/>")
                             .attr("type", "submit")
                             .attr("value", "ORDER"));
-                }
             }
         });
     }

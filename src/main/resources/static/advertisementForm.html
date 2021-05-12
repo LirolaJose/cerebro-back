@@ -16,15 +16,15 @@
 <h1>Advertisement form</h1>
 <div id="advertisementForm">
 
-    <p>Title <input id="title" type="text"></p>
-    <p>Text <textarea id="text" name="text" placeholder="Write a description"></textarea></p>
-    <p>Price <input id="price" type="text"></p>
+    <p>Title <label for="title"></label><input id="title" type="text"></p>
+    <p>Text <label for="text"></label><textarea id="text" name="text" placeholder="Write a description"></textarea></p>
+    <p>Price <label for="price"></label><input id="price" type="text"></p>
 
-    <p>Type <select id="selectType">
+    <p>Type <label for="selectType"></label><select id="selectType">
         <option disabled selected>Please, choose the type</option>
     </select></p>
 
-    <p>Category <select id="selectCategory">
+    <p>Category <label for="selectCategory"></label><select id="selectCategory">
         <option>- - -</option>
     </select></p>
     <p id="additionalServices"></p>
@@ -32,7 +32,6 @@
     <p>Images (50MB) <input id="image" name="images" accept="image/jpeg, image/png, image/jpg" formenctype="multipart/form-data" type="file" multiple></p>
     <p>Location</p>
     <p><input type="submit" onclick="createAdvertisement()" value="Add advertisement"/></p>
-
 
 </div>
 </body>

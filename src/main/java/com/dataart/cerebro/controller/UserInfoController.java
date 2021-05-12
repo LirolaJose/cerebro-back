@@ -57,12 +57,8 @@ public class UserInfoController {
     @GetMapping("/")
     public ResponseEntity<?> getCurrentUser() {
         UserInfo userInfo = userInfoService.getCurrentUser();
-        if(userInfo == null){
-            return ResponseEntity.ok(new ValueDTO(null));
-        }
-        UserInfoDTO userInfoDTO = new UserInfoDTO(userInfoService.getCurrentUser());
         // FIXME: 5/12/2021 why do you call getCurrentUser twice?
         // what about  new ValueDTO(userInfo == null ? null : new UserInfoDTO(userInfo))
-        return ResponseEntity.ok(new ValueDTO(userInfoDTO));
+        return ResponseEntity.ok(new ValueDTO(userInfo == null ? null : new UserInfoDTO(userInfo)));
     }
 }

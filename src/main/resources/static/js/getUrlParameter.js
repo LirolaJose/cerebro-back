@@ -1,5 +1,4 @@
-//fixme rename file somehow
-function getUrlParameter(parameterName) {
+function getParameter(parameterName) {
     parameterName = parameterName.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
     let regex = new RegExp('[\\?&]' + parameterName + '=([^&#]*)');
     let results = regex.exec(location.search);

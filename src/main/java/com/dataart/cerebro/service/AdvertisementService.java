@@ -17,7 +17,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.groupingBy;
 
@@ -64,12 +63,7 @@ public class AdvertisementService {
         UserInfo owner = userInfoService.getCurrentUser();
         Category category = categoryService.findCategoryById(newAdvertisementDTO.getCategoryId());
         LocalDateTime publicationTime = LocalDateTime.now();
-//        Set<AdditionalService> additionalServices = (Set<AdditionalService>) additionalServiceRepository.findAllById(advertisementDTO.getAdditionalServicesId());
-        Set<AdditionalService> additionalServices = new HashSet<>();
-        newAdvertisementDTO.getAdditionalServicesId().stream()
-                .peek(additionalService -> additionalServices.add(additionalServiceRepository.findAdditionalServiceById(additionalService)))
-                .collect(Collectors.toSet());
-        // FIXME: 5/5/2021 replace with findAll (you can use addServRepo)
+        Set<AdditionalService> additionalServices = new HashSet<>(additionalServiceRepository.findAllById(newAdvertisementDTO.getAdditionalServicesId()));
 
         Advertisement advertisement = new Advertisement();
         advertisement.setTitle(newAdvertisementDTO.getTitle());
