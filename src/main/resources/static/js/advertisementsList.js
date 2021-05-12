@@ -13,7 +13,7 @@ $(function () {
             .attr("value", "LOGIN")
             .attr("onclick", "location.href = LOGIN"));
 
-        $(".registration-button-form").append($("<input/>")
+        $("#registration-button-form").append($("<input/>")
             .attr("type", "submit")
             .attr("value", "REGISTRATION"));
     } else {
@@ -22,9 +22,20 @@ $(function () {
             .attr("value", "LOGOUT")
             .attr("onclick", "location.href = LOGOUT"));
 
-        $(".new-advertisement-button-form").append($("<input/>")
+        $("#new-advertisement-button-form").append($("<input/>")
             .attr("type", "submit")
             .attr("value", "NEW ADVERTISEMENT"));
+
+        $("#user-money-menu").append($("<p>Money</p>")
+            .text("Money: " + user.moneyAmount))
+
+            .append($("<p>Add money</p>")).append($("<form id='add-money-button'></form>")
+            .append($("<input id='entered-money'>"))
+            .attr("type", "number")
+            .append($("<input>"))
+            .attr("type", "button")
+            .attr("onclick", addMoney(user.id, $("#entered-money"))));
+
     }
     showActiveAdvertisements()
 });

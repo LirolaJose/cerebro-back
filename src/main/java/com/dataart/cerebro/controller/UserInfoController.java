@@ -10,12 +10,10 @@ import com.dataart.cerebro.service.AdvertisementService;
 import com.dataart.cerebro.service.UserInfoService;
 import io.swagger.annotations.Api;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -60,5 +58,11 @@ public class UserInfoController {
         // FIXME: 5/12/2021 why do you call getCurrentUser twice?
         // what about  new ValueDTO(userInfo == null ? null : new UserInfoDTO(userInfo))
         return ResponseEntity.ok(new ValueDTO(userInfo == null ? null : new UserInfoDTO(userInfo)));
+    }
+
+    @PostMapping(value = "/{userId}/money/}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> increaseMoneyAmount(@PathVariable String userId, @RequestBody Double money){
+       userInfoService.increaseMoneyAmount(money);
+       return  new ResponseEntity<>(HttpStatus.OK);
     }
 }

@@ -14,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
 @Service
 @Slf4j
 public class UserInfoService {
@@ -76,8 +77,15 @@ public class UserInfoService {
             userInfoRepository.save(customer);
             owner.setMoneyAmount(owner.getMoneyAmount() + totalPrice);
             userInfoRepository.save(owner);
-        } else{
+        } else {
             throw new NotEnoughMoneyException(String.format("User (%s) doesn't have enough money to complete this order", customer.getEmail()));
         }
+    }
+
+    @Transactional
+    public UserInfo increaseMoneyAmount(Double money) {
+        UserInfo userInfo = getCurrentUser();
+        userInfo.setMoneyAmount(userInfo.getMoneyAmount() + money);
+        return userInfoRepository.save(userInfo);
     }
 }
