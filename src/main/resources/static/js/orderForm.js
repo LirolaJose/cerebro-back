@@ -15,7 +15,7 @@ $(function () {
                 .attr("src", API_IMAGE + "/" + advertisementId));
 
             if (advertisement.category.orderable === true && advertisement.status === "ACTIVE") {
-                $("#confirm-order").append($("<input onclick='sendOrder()'/>")
+                $("#confirm-order").append($("<input id='order-button' onclick='sendOrder()'/>")
                     .attr("type", "submit")
                     .attr("value", "CONFIRM THE ORDER"));
             }
@@ -40,5 +40,8 @@ $(function () {
         });
     }
     let advertisementId = getParameter("id");
+    if(!advertisementId) {
+        redirectToHome();
+    }
     fillOrderFormInfo(advertisementId);
 })

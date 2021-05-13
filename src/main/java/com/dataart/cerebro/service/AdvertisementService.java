@@ -3,6 +3,7 @@ package com.dataart.cerebro.service;
 import com.dataart.cerebro.controller.dto.NewAdvertisementDTO;
 import com.dataart.cerebro.domain.*;
 import com.dataart.cerebro.email.EmailService;
+import com.dataart.cerebro.exception.DataProcessingException;
 import com.dataart.cerebro.exception.NotFoundException;
 import com.dataart.cerebro.repository.AdditionalServiceRepository;
 import com.dataart.cerebro.repository.AdvertisementRepository;
@@ -11,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
@@ -57,7 +57,7 @@ public class AdvertisementService {
     }
 
     @Transactional
-    public void createNewAdvertisement(NewAdvertisementDTO newAdvertisementDTO, List<MultipartFile> images) throws IOException {
+    public void createNewAdvertisement(NewAdvertisementDTO newAdvertisementDTO, List<MultipartFile> images) {
         log.info("Creating new advertisement");
 
         UserInfo owner = userInfoService.getCurrentUser();
@@ -78,13 +78,17 @@ public class AdvertisementService {
         advertisement.setPublicationTime(publicationTime);
         advertisement.setExpiredTime(publicationTime.plusDays(7));
 
-        Advertisement newAdvertisement = advertisementRepository.save(advertisement);
-        if (images != null && !images.isEmpty()) {
-            imageService.saveImages(images, newAdvertisement);
-        }
-        log.info("New advertisement created ({})", newAdvertisement);
 
-        emailService.sendEmailAboutPublication(newAdvertisement);
+        try {
+            Advertisement newAdvertisement = advertisementRepository.save(advertisement);
+            if (images != null && !images.isEmpty()) {
+                imageService.saveImages(images, newAdvertisement);
+            }
+            log.info("New advertisement created ({})", newAdvertisement);
+            emailService.sendEmailAboutPublication(newAdvertisement);
+        } catch (Exception e) {
+            throw new DataProcessingException("Error during creating the advertisement", e);
+        }
     }
 
 
@@ -94,11 +98,11 @@ public class AdvertisementService {
         Map<String, List<Advertisement>> emailAndAds = advertisementsList.stream()
                 .collect(groupingBy(ad -> ad.getOwner().getEmail()));
 
-        if (!emailAndAds.isEmpty()) {
+        if (emailAndAds.isEmpty()) {
+            log.info("No matching advertisements found");
+        } else {
             emailService.sendEmailAboutFinishingAdvertisement(emailAndAds, "soon");
             log.info("Letter was sent to {} addresses", emailAndAds.size());
-        } else {
-            log.info("No matching advertisements found");
         }
     }
 
@@ -112,11 +116,11 @@ public class AdvertisementService {
                 })
                 .collect(groupingBy(ad -> ad.getOwner().getEmail()));
 
-        if (!emailAndAds.isEmpty()) {
+        if (emailAndAds.isEmpty()) {
+            log.info("No matching advertisements found");
+        } else {
             emailService.sendEmailAboutFinishingAdvertisement(emailAndAds, "expired");
             log.info("Letter was sent to {} addresses", emailAndAds.size());
-        } else {
-            log.info("No matching advertisements found");
         }
     }
 }

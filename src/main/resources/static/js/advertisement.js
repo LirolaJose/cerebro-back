@@ -7,9 +7,12 @@ $(function () {
             console.log(resp);
             let user = resp.value;
             let advertisementId = getParameter("id");
-            getAdvertisementInfoById(advertisementId, user);
-            getImagesList(advertisementId);
-            getAdditionalServicesByAdvertisementId(advertisementId);
+            if(!advertisementId) {
+                redirectToHome();
+            }
+                getAdvertisementInfoById(advertisementId, user);
+                getImagesList(advertisementId);
+                getAdditionalServicesByAdvertisementId(advertisementId);
         });
     }
 

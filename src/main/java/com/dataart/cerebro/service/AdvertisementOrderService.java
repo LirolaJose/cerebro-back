@@ -4,6 +4,7 @@ import com.dataart.cerebro.controller.dto.AdvertisementOrderDTO;
 import com.dataart.cerebro.domain.*;
 import com.dataart.cerebro.email.EmailService;
 import com.dataart.cerebro.exception.DataProcessingException;
+import com.dataart.cerebro.exception.ValidationException;
 import com.dataart.cerebro.repository.AdditionalServiceRepository;
 import com.dataart.cerebro.repository.AdvertisementOrderRepository;
 import com.dataart.cerebro.repository.AdvertisementRepository;
@@ -47,7 +48,11 @@ public class AdvertisementOrderService {
         AdvertisementOrder advertisementOrder = new AdvertisementOrder();
         Advertisement advertisement = advertisementRepository.findAdvertisementById(advertisementOrderDTO.getAdvertisementId());
 
-        if(advertisement.getCategory().getOrderable() && advertisement.getStatus() == Status.ACTIVE) {
+        if (!advertisement.getCategory().getOrderable() || advertisement.getStatus() != Status.ACTIVE) {
+            log.error("Category {} is not orderable or not Active", advertisement.getCategory());
+            throw new ValidationException("Category is not orderable or not Active");
+        }
+        try {
             advertisementOrder.setOrderTime(LocalDateTime.now());
             Double totalPrice = advertisement.getPrice() +
                     additionalServiceService.getAdditionalServicesTotalPrice(advertisementOrderDTO.getAdditionalServicesId());
@@ -67,9 +72,8 @@ public class AdvertisementOrderService {
 
             emailService.sendEmailAboutPurchase(newOrder, customer);
             emailService.sendEmailAboutSell(newOrder, customer);
-        }else {
-            log.error("Category {} is not orderable or not Active", advertisement.getCategory());
-            throw new DataProcessingException("Category is not orderable or not Active");
+        } catch (Exception e) {
+            throw new DataProcessingException("Error during creating the order", e);
         }
     }
 }

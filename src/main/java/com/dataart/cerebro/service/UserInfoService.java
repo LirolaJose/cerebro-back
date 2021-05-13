@@ -3,10 +3,7 @@ package com.dataart.cerebro.service;
 import com.dataart.cerebro.controller.dto.UserInfoDTO;
 import com.dataart.cerebro.domain.Role;
 import com.dataart.cerebro.domain.UserInfo;
-import com.dataart.cerebro.exception.DataProcessingException;
-import com.dataart.cerebro.exception.EmailExistsException;
-import com.dataart.cerebro.exception.NotEnoughMoneyException;
-import com.dataart.cerebro.exception.NotFoundException;
+import com.dataart.cerebro.exception.*;
 import com.dataart.cerebro.repository.UserInfoRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -57,9 +54,13 @@ public class UserInfoService {
         userInfo.setPassword(encryptedPassword);
         userInfo.setRole(Role.USER);
         userInfo.setMoneyAmount(0.0);
-        userInfoRepository.save(userInfo);
-        log.info("Created new USER: {}, {}, {}, {}, {}", userInfo.getFirstName(), userInfo.getSecondName(),
-                userInfo.getPhone(), userInfo.getEmail(), userInfo.getRole());
+        try {
+            userInfoRepository.save(userInfo);
+            log.info("Created new USER: {}, {}, {}, {}, {}", userInfo.getFirstName(), userInfo.getSecondName(),
+                    userInfo.getPhone(), userInfo.getEmail(), userInfo.getRole());
+        } catch (Exception e) {
+            throw new DataProcessingException("Error during creating the new user", e);
+        }
     }
 
     public String encryptPassword(String password) {
@@ -73,25 +74,27 @@ public class UserInfoService {
 
     @Transactional
     public void changeMoneyAmount(UserInfo customer, UserInfo owner, Double totalPrice) {
-        if (customer.getMoneyAmount() >= totalPrice) {
-            customer.setMoneyAmount(customer.getMoneyAmount() - totalPrice);
-            userInfoRepository.save(customer);
-            owner.setMoneyAmount(owner.getMoneyAmount() + totalPrice);
-            userInfoRepository.save(owner);
-        } else {
+        if (customer.getMoneyAmount() < totalPrice) {
             throw new NotEnoughMoneyException(String.format("User (%s) doesn't have enough money to complete this order", customer.getEmail()));
         }
+        customer.setMoneyAmount(customer.getMoneyAmount() - totalPrice);
+        userInfoRepository.save(customer);
+        owner.setMoneyAmount(owner.getMoneyAmount() + totalPrice);
+        userInfoRepository.save(owner);
     }
 
     @Transactional
     public void increaseCurrentUserMoneyAmount(Double money, Long userId) {
         UserInfo userInfo = getCurrentUser();
-        if(userInfo.getId().equals(userId)) {
-            userInfo.setMoneyAmount(userInfo.getMoneyAmount() + money);
+        if (!userInfo.getId().equals(userId)) {
+            throw new ValidationException("Incorrect user data");
+        }
+        userInfo.setMoneyAmount(userInfo.getMoneyAmount() + money);
+        try {
             userInfoRepository.save(userInfo);
             log.info("User {} has successfully increased the amount of money", userInfo.getEmail());
-        }else{
-            throw new DataProcessingException("Wrong user");
+        } catch (Exception e) {
+            throw  new DataProcessingException("Error during user balance update", e);
         }
     }
 }

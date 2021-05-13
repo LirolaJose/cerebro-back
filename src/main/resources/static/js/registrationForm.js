@@ -1,4 +1,5 @@
 function addNewUserInfo() {
+    $("#create-user-button").attr("disabled", true);
     let userInfo = {
         firstName: $('#firstName').val(),
         secondName: $('#secondName').val(),
@@ -18,7 +19,8 @@ function addNewUserInfo() {
             window.location.href = "advertisementsList.html";
         })
         .fail(function (err) {
-            alert(err.responseText);
+            $("#create-user-button").attr("disabled", false);
+            alert(err.responseJSON.message)
         });
 }
 

@@ -1,15 +1,17 @@
 function sendOrder(){
+    $("#order-button").attr("disabled", true);
     let additionalServices = [];
-    let id = getParameter("id");
-
-    //show error if parameter is empty or broken or etc
+    let advertisementId = getParameter("id");
+    if(!advertisementId) {
+        redirectToHome();
+    }
     $(".additionalService").each(function (){
         if(this.checked){
             additionalServices.push($(this).val());
         }
     })
     let order = {
-        advertisementId: id,
+        advertisementId: advertisementId,
         additionalServicesId: additionalServices
     }
     $.ajax({
@@ -17,5 +19,12 @@ function sendOrder(){
         data: JSON.stringify(order),
         url: SERVER_URL + "/api/order/",
         contentType: "application/json"
-    });
+    }).done(function (data) {
+        console.log(data);
+        window.location.href = "advertisementsList.html";
+    })
+        .fail(function (err) {
+            $("#order-button").attr("disabled", false);
+            alert(err.responseJSON.message)
+        });
 }

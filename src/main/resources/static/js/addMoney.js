@@ -11,6 +11,6 @@ function addMoney(userInfoId, money) {
         })
         .fail(function (err) {
             console.log(err)
-            alert(err.responseText)
+            alert(err.responseJSON.message)
         });
 }

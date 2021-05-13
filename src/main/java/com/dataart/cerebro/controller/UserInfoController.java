@@ -5,6 +5,7 @@ import com.dataart.cerebro.controller.dto.ValueDTO;
 import com.dataart.cerebro.domain.Advertisement;
 import com.dataart.cerebro.domain.AdvertisementOrder;
 import com.dataart.cerebro.domain.UserInfo;
+import com.dataart.cerebro.exception.ValidationException;
 import com.dataart.cerebro.service.AdvertisementOrderService;
 import com.dataart.cerebro.service.AdvertisementService;
 import com.dataart.cerebro.service.UserInfoService;
@@ -61,7 +62,7 @@ public class UserInfoController {
     public ResponseEntity<?> increaseMoneyAmount(@PathVariable Long userId, @RequestBody ValueDTO money) {
         double moneyValue = Double.parseDouble((String) money.getValue());
         if (moneyValue <= 0){
-            return new ResponseEntity<>("Wrong money format. The number must be positive and minimum 1.", HttpStatus.BAD_REQUEST);
+            throw new ValidationException("Wrong money format. The number must be positive and minimum 1");
         }
         userInfoService.increaseCurrentUserMoneyAmount(moneyValue, userId);
         return new ResponseEntity<>(HttpStatus.OK);

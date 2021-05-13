@@ -41,7 +41,7 @@ function createAdvertisement() {
         .fail(function (err) {
             console.log(err);
             $("#button-submit").attr("disabled", false);
-            alert(err.responseText)
+            alert(err.responseJSON.message)
         });
 }
 
