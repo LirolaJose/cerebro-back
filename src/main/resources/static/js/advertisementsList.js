@@ -26,8 +26,9 @@ $(function () {
                     .attr("type", "submit")
                     .attr("value", "NEW ADVERTISEMENT"));
 
-                $("#user-money-menu").append($("<p>Money</p>")
-                    .text("Money: " + userInfo.moneyAmount));
+                $("#user-money-menu")
+                    .append($("<p></p>").text("Logged user: " + userInfo.email))
+                    .append($("<p></p>").text("Money: " + userInfo.moneyAmount));
 
                 $("#user-money-menu").append($("<div id='add-money-form'></div>"));
                 $("#add-money-form").append($("<div id='money-form-info'>"));
