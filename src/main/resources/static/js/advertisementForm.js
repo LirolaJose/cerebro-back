@@ -19,9 +19,9 @@ function createAdvertisement() {
 
     let allImages = document.getElementById("image").files.length;
     for (let index = 0; index < allImages; index++) {
-        let maxSize = 51200;
+        let maxSize = 5 * 1024 * 1024; // 5MB
         if (document.getElementById("image").files[index].size > maxSize) {
-            alert("Image's size is more than accepted value (50MB). This image will not be uploaded")
+            alert("Image's size is more than accepted value (5MB). This image will not be uploaded")
         }
         data.append("images", document.getElementById("image").files[index])
     }

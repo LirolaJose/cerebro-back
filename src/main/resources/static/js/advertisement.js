@@ -30,7 +30,7 @@ $(function () {
             $("#category").append(advertisement.category.name);
             $("#owner").append(advertisement.owner.firstName + " " + advertisement.owner.secondName);
 
-                if (user !== null && advertisement.category.orderable === true && advertisement.status === "ACTIVE") {
+                if (user !== null && advertisement.type !== "BUY" && advertisement.category.orderable === true && advertisement.status === "ACTIVE") {
                     $("#order").append($("<form></form>")
                         .attr("id", "orderButtonForm")
                         .attr("action", "orderForm.html"));
