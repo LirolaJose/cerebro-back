@@ -10,17 +10,15 @@ function addNewUserInfo() {
     $.ajax({
         type: "POST",
         data: JSON.stringify(userInfo),
-        dataType: "json",
         url: SERVER_URL + "/registration/",
-        contentType: "application/json",
-
-        success: function (data) {
+        contentType: "application/json"
+    })
+        .done(function (data) {
             console.log(data);
-            window.location.href = "advertisementsList.html"
-        },
-        error: function (err){
+            window.location.href = "advertisementsList.html";
+        })
+        .fail(function (err) {
             alert(err.responseText);
-        }
-    });
+        });
 }
 
