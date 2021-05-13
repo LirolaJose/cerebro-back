@@ -24,16 +24,17 @@ public class AdvertisementOrderService {
     private final EmailService emailService;
     private final UserInfoService userInfoService;
     private final AdvertisementRepository advertisementRepository;
+    private final AdvertisementService advertisementService;
     private final AdditionalServiceService additionalServiceService;
     private final AdditionalServiceRepository additionalServiceRepository;
 
-    public AdvertisementOrderService(AdvertisementOrderRepository advertisementOrderRepository, EmailService emailService, UserInfoService userInfoService, AdvertisementRepository advertisementRepository, AdditionalServiceService additionalServiceService, AdditionalServiceRepository additionalServiceRepository) {
+    public AdvertisementOrderService(AdvertisementOrderRepository advertisementOrderRepository, EmailService emailService, UserInfoService userInfoService, AdvertisementRepository advertisementRepository, AdvertisementService advertisementService, AdditionalServiceService additionalServiceService, AdditionalServiceRepository additionalServiceRepository) {
         this.advertisementOrderRepository = advertisementOrderRepository;
         this.emailService = emailService;
         this.userInfoService = userInfoService;
         this.advertisementRepository = advertisementRepository;
+        this.advertisementService = advertisementService;
         this.additionalServiceService = additionalServiceService;
-
         this.additionalServiceRepository = additionalServiceRepository;
     }
 
@@ -46,10 +47,10 @@ public class AdvertisementOrderService {
         UserInfo customer = userInfoService.getCurrentUser();
         log.info("User with email {} creates new order", customer.getEmail());
         AdvertisementOrder advertisementOrder = new AdvertisementOrder();
-        Advertisement advertisement = advertisementRepository.findAdvertisementById(advertisementOrderDTO.getAdvertisementId());
+        Advertisement advertisement = advertisementService.findAdvertisementById(advertisementOrderDTO.getAdvertisementId());
 
         if (!advertisement.getCategory().getOrderable() || advertisement.getStatus() != Status.ACTIVE) {
-            log.error("Category {} is not orderable or not Active", advertisement.getCategory());
+            log.error("Category {} is not orderable or advertisement is not Active", advertisement.getCategory());
             throw new ValidationException("Category is not orderable or not Active");
         }
         try {

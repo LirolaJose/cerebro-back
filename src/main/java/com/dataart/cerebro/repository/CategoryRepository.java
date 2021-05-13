@@ -15,6 +15,4 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
             "WHERE t.id = :typeId ;",
             nativeQuery = true)
     List<Category> findCategoriesByTypeId(@Param("typeId") Long typeId);
-
-    Category findCategoryById(Long categoryId);
 }

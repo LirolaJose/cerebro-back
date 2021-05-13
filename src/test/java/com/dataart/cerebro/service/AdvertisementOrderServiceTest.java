@@ -1,10 +1,7 @@
 package com.dataart.cerebro.service;
 
 import com.dataart.cerebro.controller.dto.AdvertisementOrderDTO;
-import com.dataart.cerebro.domain.Advertisement;
-import com.dataart.cerebro.domain.AdvertisementOrder;
-import com.dataart.cerebro.domain.Status;
-import com.dataart.cerebro.domain.UserInfo;
+import com.dataart.cerebro.domain.*;
 import com.dataart.cerebro.email.EmailService;
 import com.dataart.cerebro.repository.AdditionalServiceRepository;
 import com.dataart.cerebro.repository.AdvertisementOrderRepository;
@@ -26,13 +23,18 @@ public class AdvertisementOrderServiceTest {
         AdvertisementRepository advertisementRepositoryMock = mock(AdvertisementRepository.class);
         AdditionalServiceService additionalServiceServiceMock = mock(AdditionalServiceService.class);
         AdditionalServiceRepository additionalServiceRepository = mock(AdditionalServiceRepository.class);
+        AdvertisementService advertisementServiceMock = mock(AdvertisementService.class);
 
         AdvertisementOrderService advertisementOrderService = new AdvertisementOrderService(advertisementOrderRepositoryMock,
-                emailServiceMock, userInfoServiceMock, advertisementRepositoryMock, additionalServiceServiceMock, additionalServiceRepository);
+                emailServiceMock, userInfoServiceMock, advertisementRepositoryMock, advertisementServiceMock, additionalServiceServiceMock, additionalServiceRepository);
 
         AdvertisementOrder advertisementOrder = new AdvertisementOrder();
         Advertisement ad = new Advertisement();
+        Category category = new Category();
+        category.setOrderable(true);
         ad.setPrice(20.0);
+        ad.setCategory(category);
+        ad.setStatus(Status.ACTIVE);
         advertisementOrder.setAdvertisement(ad);
 
         AdvertisementOrder exceptedOrder = new AdvertisementOrder();
@@ -41,7 +43,7 @@ public class AdvertisementOrderServiceTest {
         exceptedOrder.setAdvertisement(ad1);
 
         when(userInfoServiceMock.getCurrentUser()).thenReturn(customerInfoMock);
-        when(advertisementRepositoryMock.findAdvertisementById(anyLong())).thenReturn(ad);
+        when(advertisementServiceMock.findAdvertisementById(anyLong())).thenReturn(ad);
         when(additionalServiceServiceMock.getAdditionalServicesTotalPrice(anySet())).thenReturn((0.0));
         when(advertisementOrderRepositoryMock.save(any())).thenReturn(exceptedOrder);
 

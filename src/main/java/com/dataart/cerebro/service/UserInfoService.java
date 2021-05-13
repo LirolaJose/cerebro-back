@@ -24,12 +24,7 @@ public class UserInfoService {
 
     public UserInfo findUserInfoById(Long userInfoId) {
         log.info("Searching User by id {}", userInfoId);
-        UserInfo userInfo = userInfoRepository.findUserInfoById(userInfoId);
-        if (userInfo == null) {
-            log.warn("User with id {} not found", userInfoId);
-            throw new NotFoundException("User", userInfoId);
-        }
-        return userInfo;
+        return userInfoRepository.findById(userInfoId).orElseThrow(() -> new NotFoundException("UserInfo", userInfoId));
     }
 
     public UserInfo findUserInfoByEmail(String email) {

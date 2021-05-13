@@ -2,6 +2,7 @@ package com.dataart.cerebro.service;
 
 import com.dataart.cerebro.domain.Category;
 import com.dataart.cerebro.domain.Type;
+import com.dataart.cerebro.exception.NotFoundException;
 import com.dataart.cerebro.repository.CategoryRepository;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,6 @@ public class CategoryService {
     }
 
     public Category findCategoryById(Long categoryId) {
-        return categoryRepository.findCategoryById(categoryId);
+        return categoryRepository.findById(categoryId).orElseThrow(() -> new NotFoundException("Category", categoryId));
     }
 }

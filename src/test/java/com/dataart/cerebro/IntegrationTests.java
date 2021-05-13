@@ -52,19 +52,19 @@ class IntegrationTests {
     }
 
     @Test
-    void whenNewUserRegisteredThenGet201StatusAndLogin() {
+    void whenNewUserRegisterThenGet201StatusAndCheckInDataBase() {
         Faker faker = new Faker();
         String secondName = "Raul";
         String email = faker.bothify("????##@gmail.com");
         String password = "password";
         ResponseEntity<UserInfoDTO> response = registerNewUser(secondName, email, password);
-        assertThat(response.getStatusCode(), equalTo(HttpStatus.CREATED));
 
+        assertThat(response.getStatusCode(), equalTo(HttpStatus.CREATED));
         assertThat(userInfoRepository.findUserInfoByEmail(email).getSecondName(), equalTo(secondName));
     }
 
     @Test
-    void whenLoginThenCreatedUserAndLogged() {
+    void whenLoginAndGoToSecuredPageThenStatus200() {
         Faker faker = new Faker();
         String secondName = "Raul";
         String email = faker.bothify("????##@gmail.com");
@@ -72,7 +72,7 @@ class IntegrationTests {
 
         registerNewUser(secondName, email, password);
         String securedUrl = "/advertisementForm.html";
-        String cookie = getCookieForUser(email, password, "/login");
+        String cookie = getCookieForUser(email, password);
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Cookie", cookie);
@@ -94,9 +94,9 @@ class IntegrationTests {
     }
 
     @Test
-    void whenTryToEnterToSecuredPageThenGetStatus302() {
+    void whenEnterIncorrectPasswordThenGetStatus302() {
         String securedUrl = "/advertisementForm.html";
-        String cookie = getCookieForUser("user@gmail.com", "incorrect password", "/login");
+        String cookie = getCookieForUser("user@gmail.com", "incorrect password");
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Cookie", cookie);
@@ -106,12 +106,12 @@ class IntegrationTests {
 
     }
 
-    private String getCookieForUser(String username, String password, String loginUrl) {
+    private String getCookieForUser(String username, String password) {
         MultiValueMap<String, String> form = new LinkedMultiValueMap<>();
         form.set("username", username);
         form.set("password", password);
         ResponseEntity<String> loginResponse = restTemplate.postForEntity(
-                loginUrl,
+                "/login",
                 new HttpEntity<>(form, new HttpHeaders()),
                 String.class);
         return loginResponse.getHeaders().get("Set-Cookie").get(0);
