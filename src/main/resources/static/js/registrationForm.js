@@ -11,16 +11,16 @@ function addNewUserInfo() {
         type: "POST",
         data: JSON.stringify(userInfo),
         dataType: "json",
-        url: SERVER_URL + "/api/user",
+        url: SERVER_URL + "/registration/",
         contentType: "application/json",
 
-        // success: function (data) {
-        //     console.log(data);
-        //     window.location.href = "advertisementsList.html"
-        // },
-        // error: function (err){
-        //     alert(err.responseJSON.message);
-        // }
+        success: function (data) {
+            console.log(data);
+            window.location.href = "advertisementsList.html"
+        },
+        error: function (err){
+            alert(err.responseText);
+        }
     });
 }
 

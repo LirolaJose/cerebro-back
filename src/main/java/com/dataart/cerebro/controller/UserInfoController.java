@@ -12,7 +12,6 @@ import io.swagger.annotations.Api;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -51,12 +50,10 @@ public class UserInfoController {
         return new ResponseEntity<>(advertisementOrders, HttpStatus.OK);
     }
 
-    @PreAuthorize("permitAll()")
+
     @GetMapping("/")
     public ResponseEntity<?> getCurrentUser() {
         UserInfo userInfo = userInfoService.getCurrentUser();
-        // FIXME: 5/12/2021 why do you call getCurrentUser twice?
-        // what about  new ValueDTO(userInfo == null ? null : new UserInfoDTO(userInfo))
         return ResponseEntity.ok(new ValueDTO(userInfo == null ? null : new UserInfoDTO(userInfo)));
     }
 
