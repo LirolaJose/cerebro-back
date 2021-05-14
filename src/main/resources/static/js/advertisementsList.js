@@ -28,18 +28,18 @@ $(function () {
 
                 $("#user-money-menu")
                     .append($("<p></p>").text("Logged user: " + userInfo.email))
-                    .append($("<p></p>").text("Money: " + userInfo.moneyAmount));
+                    .append($("<p></p>").text("Money: " + userInfo.moneyAmount + "$"));
 
                 $("#user-money-menu").append($("<div id='add-money-form'></div>"));
                 $("#add-money-form").append($("<div id='money-form-info'>"));
                 $("#money-form-info").append($("<input id='entered-money'  pattern='^\\d+(?:\\.\\d{1,2})?$\' >")
                     .attr("type", "number")
                     .attr("min", 1)
-                    .attr("step", .01)
-                    .attr("placeholder", "add money"));
+                    .attr("step", 1)
+                    .attr("placeholder", "enter amount"));
 
                 $("#money-form-info").append($("<input type='button' >")
-                    .attr("value", "Increase money").click(function () {
+                    .attr("value", "TOP UP THE BALANCE").click(function () {
                         addMoney(userInfo.id, $("#entered-money").val());
                     }));
             }
@@ -61,7 +61,7 @@ $(function () {
                     table += '<td>' + advertisement.id + '</td>';
                     table += '<td>' + '<a href="advertisement.html?id=' + advertisement.id + '">' + advertisement.title + '</a>' + '</td>';
                     table += '<td>' + advertisement.text + '</td>';
-                    table += '<td>' + advertisement.price + '</td>';
+                    table += '<td>' + advertisement.price + "$" +'</td>';
                     table += '<td>' + '<img src="' + API_IMAGE + "/" + advertisement.id + '"/>' + '</td>';
                     table += '<td>' + advertisement.type + '</td>';
                     table += '<td>' + advertisement.category.name + '</td>';

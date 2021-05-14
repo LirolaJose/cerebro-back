@@ -24,7 +24,7 @@ $(function () {
             console.log(advertisement);
             $("#title-info").append(advertisement.title);
             $("#textArea").append(advertisement.text);
-            $("#price").append(advertisement.price);
+            $("#price").append(advertisement.price + "$");
             $("#additional-service").append(advertisement.additionalServices);
             $("#type").append(advertisement.type);
             $("#category").append(advertisement.category.name);
@@ -75,7 +75,7 @@ $(function () {
             console.log(additionalServicesList);
             $.each(additionalServicesList, function (index, additionalService) {
                 $("#additional-services").append($("<li></li>")
-                    .text(additionalService.name + ", price: " + additionalService.price));
+                    .text(additionalService.name + ", price: " + additionalService.price + "$"));
             })
         })
     }

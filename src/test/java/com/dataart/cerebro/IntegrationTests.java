@@ -46,7 +46,7 @@ class IntegrationTests {
     @Test
     void whenEnterToMainPageThenGetStatus200() {
         ResponseEntity<String> response = restTemplate.
-                getForEntity("http://localhost:8080/api/advertisement/", String.class);
+                getForEntity("/api/advertisement/", String.class);
 
         assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
     }

@@ -8,8 +8,8 @@ $(function () {
             $("#order-advertisement-title").append($("<a href=advertisement.html?id="
                 + advertisement.id + ">" + advertisement.title + '</a>'));
 
-            $("#order-advertisement-price").append("Price: " + advertisement.price)
-                .attr("text", advertisement.price);
+            $("#order-advertisement-price").append("Price: " + advertisement.price + "$")
+                .attr("text", advertisement.price + "$");
 
             $("#order-advertisement-image").append($("<img/>")
                 .attr("src", API_IMAGE + "/" + advertisementId));
@@ -32,7 +32,7 @@ $(function () {
             console.log(additionalServicesList);
             $.each(additionalServicesList, function (index, additionalService) {
                 $("#order-additional-services").append($('<input class="additionalService" type="checkbox">' + additionalService.name + ", price: " +
-                    +additionalService.price + '<br/>')
+                    +additionalService.price + "$" + '<br/>')
                     .attr("value", additionalService.id)
                     .attr("text", additionalService.price));
             });
