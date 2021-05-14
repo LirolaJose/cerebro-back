@@ -29,7 +29,7 @@ public class AdvertisementOrder {
     @JoinColumn (name = "customer_id")
     private UserInfo customer;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany
     @JoinTable(name = "services_of_order",
             joinColumns = @JoinColumn(name = "order_id"),
             inverseJoinColumns = @JoinColumn(name = "service_id"))

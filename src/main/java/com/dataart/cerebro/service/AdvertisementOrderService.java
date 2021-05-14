@@ -53,7 +53,6 @@ public class AdvertisementOrderService {
             log.error("Category {} is not orderable or advertisement is not Active", advertisement.getCategory());
             throw new ValidationException("Category is not orderable or not Active");
         }
-
             advertisementOrder.setOrderTime(LocalDateTime.now());
             Double totalPrice = advertisement.getPrice() +
                     additionalServiceService.getAdditionalServicesTotalPrice(advertisementOrderDTO.getAdditionalServicesId());
@@ -63,7 +62,8 @@ public class AdvertisementOrderService {
             advertisementOrder.setAdvertisement(advertisement);
             advertisementOrder.setCustomer(customer);
 
-            Set<AdditionalService> additionalServices = new HashSet<>(additionalServiceRepository.findAllById(advertisementOrderDTO.getAdditionalServicesId()));
+            Set<AdditionalService> additionalServices = new HashSet<>
+                    (additionalServiceRepository.findAllById(advertisementOrderDTO.getAdditionalServicesId()));
 
             advertisementOrder.setAdditionalServices(additionalServices);
         try {

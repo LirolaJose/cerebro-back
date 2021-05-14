@@ -27,12 +27,12 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         if (userInfo == null || !password.equals(userInfo.getPassword())) {
             throw new CredentialsExpiredException("Invalid credentials");
         }
-        UserDetails principal = User.builder()
+        UserDetails userDetails = User.builder()
                 .username(userInfo.getEmail())
                 .password(userInfo.getPassword())
                 .roles(userInfo.getRole().getName())
                 .build();
-        return new UsernamePasswordAuthenticationToken(principal, password, principal.getAuthorities());
+        return new UsernamePasswordAuthenticationToken(userDetails, password, userDetails.getAuthorities());
     }
 
     @Override

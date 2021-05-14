@@ -42,17 +42,14 @@ public class AdvertisementService {
     }
 
     public List<Advertisement> findActiveAdvertisements() {
-        log.info("Find all ACTIVE advertisements");
         return advertisementRepository.findAdvertisementsByStatusOrderByPublicationTimeDesc(Status.ACTIVE);
     }
 
     public Advertisement findAdvertisementById(Long advertisementId) {
-        log.info("Find advertisement by ID {}", advertisementId);
         return advertisementRepository.findById(advertisementId).orElseThrow(() -> new NotFoundException("Advertisement", advertisementId));
     }
 
     public List<Advertisement> findAdvertisementsByUserInfoId(Long userInfoId) {
-        log.info("Find advertisements by user id {}", userInfoId);
         return advertisementRepository.findAdvertisementsByOwnerId(userInfoId);
     }
 
@@ -78,10 +75,9 @@ public class AdvertisementService {
         advertisement.setPublicationTime(publicationTime);
         advertisement.setExpiredTime(publicationTime.plusDays(7));
 
-
         try {
             Advertisement newAdvertisement = advertisementRepository.save(advertisement);
-            if (images != null && !images.isEmpty()) {
+            if (images != null) {
                 imageService.saveImages(images, newAdvertisement);
             }
             log.info("New advertisement created ({})", newAdvertisement);
@@ -93,13 +89,12 @@ public class AdvertisementService {
 
 
     public void findAndNotifyByExpiringInDays(Integer lookbackDays) {
-        log.info("Searching expiring advertisements");
         List<Advertisement> advertisementsList = advertisementRepository.findAdvertisementsByDate(Status.ACTIVE.getId(), lookbackDays);
         Map<String, List<Advertisement>> emailAndAds = advertisementsList.stream()
                 .collect(groupingBy(ad -> ad.getOwner().getEmail()));
 
         if (emailAndAds.isEmpty()) {
-            log.info("No matching advertisements found");
+            log.info("No matching expiring advertisements found");
         } else {
             emailService.sendEmailAboutFinishingAdvertisement(emailAndAds, "soon");
             log.info("Letter was sent to {} addresses", emailAndAds.size());
@@ -107,7 +102,6 @@ public class AdvertisementService {
     }
 
     public void findAdvertisementsByExpiredDate() {
-        log.info("Searching expired advertisements");
         List<Advertisement> advertisementsList = advertisementRepository.findAdvertisementsByDate(Status.ACTIVE.getId(), 0);
         Map<String, List<Advertisement>> emailAndAds = advertisementsList.stream()
                 .peek(advertisement -> {
@@ -117,7 +111,7 @@ public class AdvertisementService {
                 .collect(groupingBy(ad -> ad.getOwner().getEmail()));
 
         if (emailAndAds.isEmpty()) {
-            log.info("No matching advertisements found");
+            log.info("No matching expired advertisements found");
         } else {
             emailService.sendEmailAboutFinishingAdvertisement(emailAndAds, "expired");
             log.info("Letter was sent to {} addresses", emailAndAds.size());

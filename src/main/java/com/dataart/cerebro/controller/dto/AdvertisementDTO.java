@@ -6,24 +6,13 @@ import com.dataart.cerebro.domain.Status;
 import com.dataart.cerebro.domain.Type;
 import lombok.Data;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
 @Data
 public class AdvertisementDTO {
 
     private Long id;
-    @NotEmpty
-    @Size(max = 100)
     private String title;
-
-    @Size(max = 2000)
     private String text;
-
-    @NotNull
     private Double price;
-
     private Type type;
     private Category category;
     private Status status;

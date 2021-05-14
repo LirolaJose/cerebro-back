@@ -54,7 +54,7 @@ public class Advertisement {
     @JoinColumn(name = "owner_id")
     private UserInfo owner;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany
     @JoinTable(name = "services_of_advertisement",
             joinColumns = @JoinColumn(name = "advertisement_id"),
             inverseJoinColumns = @JoinColumn(name = "service_id"))

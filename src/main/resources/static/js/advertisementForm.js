@@ -20,10 +20,9 @@ function createAdvertisement() {
     let allImages = document.getElementById("image").files.length;
     for (let index = 0; index < allImages; index++) {
         let maxSize = 5 * 1024 * 1024; // 5MB
-        if (document.getElementById("image").files[index].size > maxSize) {
-            alert("Image's size is more than accepted value (5MB). This image will not be uploaded")
+        if (document.getElementById("image").files[index].size < maxSize) {
+            data.append("images", document.getElementById("image").files[index])
         }
-        data.append("images", document.getElementById("image").files[index])
     }
 
     $.ajax({

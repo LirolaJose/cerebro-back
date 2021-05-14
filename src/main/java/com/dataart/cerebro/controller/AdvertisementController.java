@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,7 +48,7 @@ public class AdvertisementController {
     }
 
     @GetMapping("/image/{imageId}")
-    public ResponseEntity<?> getAdvertisementImageByImageId(@PathVariable Long imageId) throws IOException {
+    public ResponseEntity<?> getAdvertisementImageByImageId(@PathVariable Long imageId) {
         byte[] imageBytes = imageService.findImageById(imageId);
         return new ResponseEntity<>(imageBytes, HttpStatus.OK);
     }
@@ -59,12 +58,12 @@ public class AdvertisementController {
     @PostMapping(value = "/", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> saveAdvertisement(@RequestPart("advertisementDTO") @Valid NewAdvertisementDTO newAdvertisementDTO,
                                                BindingResult bindingResult,
-                                               @RequestPart(value = "images", required = false) List<MultipartFile> images) throws IOException {
+                                               @RequestPart(value = "images", required = false) List<MultipartFile> images) {
         if(bindingResult.hasErrors()){
             List<FieldError> fieldErrorList = bindingResult.getFieldErrors();
             throw new ValidationException(fieldErrorList);
         }
-        if(images != null && !images.isEmpty()) {
+        if(images != null) {
             for (MultipartFile image : images) {
                 String contentType = image.getContentType();
                 if (contentType != null && !isSupportedContentType(contentType)) {

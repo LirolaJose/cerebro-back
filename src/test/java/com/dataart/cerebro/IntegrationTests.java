@@ -52,7 +52,7 @@ class IntegrationTests {
     }
 
     @Test
-    void whenNewUserRegisterThenGet201StatusAndCheckInDataBase() {
+    void whenNewUserRegisterThenGet201StatusAndUserSavedInDataBase() {
         Faker faker = new Faker();
         String secondName = "Raul";
         String email = faker.bothify("????##@gmail.com");
@@ -82,18 +82,6 @@ class IntegrationTests {
     }
 
     @Test
-    void whenAllRequiredFieldsAreNotFilledThenGet400StatusAndNotFilledFields() {
-        UserInfo userInfo = new UserInfo();
-        ResponseEntity<?> response = restTemplate.postForEntity("/registration/", userInfo, ControllerExceptionHandler.ErrorDTO.class);
-        assertThat(response.getStatusCode(), equalTo(HttpStatus.BAD_REQUEST));
-
-        String[] exceptedFields = {"firstName", "secondName", "email", "phone", "password"};
-        Arrays.stream(exceptedFields).forEach(field -> {
-            assertTrue(((ControllerExceptionHandler.ErrorDTO) response.getBody()).getMessage().contains(field));
-        });
-    }
-
-    @Test
     void whenEnterIncorrectPasswordThenGetStatus302() {
         String securedUrl = "/advertisementForm.html";
         String cookie = getCookieForUser("user@gmail.com", "incorrect password");
@@ -105,6 +93,20 @@ class IntegrationTests {
         assertThat(responseFromSecuredEndPoint.getStatusCode(), equalTo(HttpStatus.FOUND));
 
     }
+
+
+    @Test
+    void whenAllRequiredFieldsAreNotFilledThenGet400StatusAndNotFilledFields() {
+        UserInfo userInfo = new UserInfo();
+        ResponseEntity<?> response = restTemplate.postForEntity("/registration/", userInfo, ControllerExceptionHandler.ErrorDTO.class);
+        assertThat(response.getStatusCode(), equalTo(HttpStatus.BAD_REQUEST));
+
+        String[] exceptedFields = {"firstName", "secondName", "email", "phone", "password"};
+        Arrays.stream(exceptedFields).forEach(field -> {
+            assertTrue(((ControllerExceptionHandler.ErrorDTO) response.getBody()).getMessage().contains(field));
+        });
+    }
+
 
     private String getCookieForUser(String username, String password) {
         MultiValueMap<String, String> form = new LinkedMultiValueMap<>();

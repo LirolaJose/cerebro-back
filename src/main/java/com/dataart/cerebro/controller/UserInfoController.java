@@ -34,7 +34,7 @@ public class UserInfoController {
     @GetMapping("/{userId}")
     public ResponseEntity<?> getUserInfoById(@PathVariable Long userId) {
         UserInfoDTO userInfoDTO = new UserInfoDTO(userInfoService.findUserInfoById(userId));
-        return ResponseEntity.ok(new ValueDTO(userInfoDTO));
+        return ResponseEntity.ok(userInfoDTO);
     }
 
     // TODO: 11.05.2021 change Advertisement to AdvertisementDTO

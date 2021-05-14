@@ -120,30 +120,6 @@ public class EmailService {
         }
     }
 
-//    @Async
-//    public void sendEmailAboutOrder(AdvertisementOrder order, UserInfo customer, String action) {
-//        executor.execute(() -> {
-//            try{
-//            log.info("Sending email about {} is started ", action);
-//            String template = "orderTemplate";
-//            Advertisement advertisement = order.getAdvertisement();
-//            List<AdditionalService> servicesSet = additionalServiceRepository.findAdditionalServiceByOrderId(order.getId());
-//            Map<String, Object> contextMap = new HashMap<>();
-//            contextMap.put("action", action);
-//            contextMap.put("userInfo", advertisement.getOwner());
-//            contextMap.put("customer", customer);
-//            contextMap.put("advertisement", advertisement);
-//            contextMap.put("additionalServices", servicesSet);
-//            contextMap.put("order", order);
-//            contextMap.put("url", url);
-//            sendEmail(contextMap, template, "Information about the order");
-//            log.info("Email about {} has been sent to {}", action, customer.getEmail());
-//            }catch (Exception e){
-//                log.error("Failed to send email about {}", action, e);
-//            }
-//        });
-//    }
-
     private void sendEmail(Map<String, Object> contextMap, String template, String subject) throws MessagingException {
         Context context = new Context();
         context.setVariables(contextMap);

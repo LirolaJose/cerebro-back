@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
-import java.io.Serializable;
-
 @ControllerAdvice
 @Slf4j
 public class ControllerExceptionHandler {
@@ -41,7 +39,7 @@ public class ControllerExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     public ErrorDTO handleMaxUploadSizeExceededException(MaxUploadSizeExceededException e) {
-        log.error("Error: {} {}", e.getMessage(), e);
+        log.error("Error: {}", e.getMessage(), e);
         return new ErrorDTO(String.format("Max Upload Size Exceeded (%s)", MAX_SIZE));
     }
 
@@ -49,7 +47,7 @@ public class ControllerExceptionHandler {
     @ResponseStatus(HttpStatus.PAYMENT_REQUIRED)
     @ResponseBody
     public ErrorDTO handleNotEnoughMoneyException(NotEnoughMoneyException e){
-        log.error("Error: {} {}", e.getMessage(), e);
+        log.error("Error: {}", e.getMessage(), e);
         return new ErrorDTO("You don't have enough money to complete this order");
     }
 
@@ -65,8 +63,7 @@ public class ControllerExceptionHandler {
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class ErrorDTO implements Serializable {
-        private static final long serialVersionUID = 1L;
+    public static class ErrorDTO {
         private String message;
     }
 }

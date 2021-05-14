@@ -21,7 +21,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable();
-
         http.authorizeRequests()
                 .antMatchers("/api/advertisement/**").permitAll()
                 .antMatchers("/api/user/").permitAll()
@@ -29,7 +28,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/login").permitAll()
                 .antMatchers("/api/image/**").permitAll()
                 .antMatchers("/api/additionalServices/advertisement/**").permitAll()
-                .antMatchers("/api/admin/**").hasRole("ADMIN")
                 .antMatchers("/advertisementForm.html").authenticated()
                 .antMatchers("/api/order/").authenticated()
                 .antMatchers("/orderForm.html").authenticated()
