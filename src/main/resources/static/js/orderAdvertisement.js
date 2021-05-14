@@ -21,7 +21,7 @@ function sendOrder(){
         contentType: "application/json"
     }).done(function (data) {
         console.log(data);
-        window.location.href = "advertisementsList.html";
+        redirectToHome();
     })
         .fail(function (err) {
             $("#order-button").attr("disabled", false);

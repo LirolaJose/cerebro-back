@@ -10,6 +10,7 @@ import com.dataart.cerebro.repository.AdvertisementOrderRepository;
 import com.dataart.cerebro.repository.AdvertisementRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
@@ -42,7 +43,7 @@ public class AdvertisementOrderService {
         return advertisementOrderRepository.findAdvertisementOrdersByAdvertisementOwnerId(id);
     }
 
-    @Transactional
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public void createNewAdvertisementOrder(AdvertisementOrderDTO advertisementOrderDTO) {
         UserInfo customer = userInfoService.getCurrentUser();
         log.info("User with email {} creates new order", customer.getEmail());

@@ -89,7 +89,7 @@ public class UserInfoService {
             userInfoRepository.save(userInfo);
             log.info("User {} has successfully increased the amount of money", userInfo.getEmail());
         } catch (Exception e) {
-            throw  new DataProcessingException("Error during user balance update", e);
+            throw new DataProcessingException("Error during user balance update", e);
         }
     }
 }
