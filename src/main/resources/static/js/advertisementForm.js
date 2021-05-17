@@ -29,6 +29,9 @@ function createAdvertisement() {
         type: "POST",
         enctype: 'multipart/form-data',
         data: data,
+        beforeSend: function (xhr){
+            setTokenToHeader(xhr)
+        },
         url: API_ADVERTISEMENT + "/",
         processData: false,
         contentType: false

@@ -2,6 +2,9 @@ function addMoney(userInfoId, money) {
     $.ajax({
         type: "POST",
         data: JSON.stringify({value: money}),
+        beforeSend: function (xhr){
+            setTokenToHeader(xhr)
+        },
         url: SERVER_URL + "/api/user/" + userInfoId + "/money/",
         contentType: "application/json",
     })

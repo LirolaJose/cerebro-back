@@ -2,6 +2,9 @@ $(function () {
     function fillTypesSelect() {
         $.ajax({
             type: "GET",
+            beforeSend: function (xhr){
+                setTokenToHeader(xhr)
+            },
             url: TYPES + "/"
         }).done(function (typesList) {
             console.log(typesList);

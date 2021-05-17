@@ -2,7 +2,6 @@ package com.dataart.cerebro.domain;
 
 import com.dataart.cerebro.exception.NotFoundException;
 import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,7 +9,7 @@ import java.util.Map;
 @Getter
 public enum Type {
     BUY(1L, "buy"),
-    SALE(2L, "sale"),
+    SELL(2L, "sell"),
     WORK(4L, "work");
 
     private final Long id;
@@ -28,7 +27,7 @@ public enum Type {
         }
     }
 
-    public static Type getTypeById(Long id){
+    public static Type getTypeById(Long id) {
         if (!TYPE_MAP.containsKey(id)) {
             throw new NotFoundException("Type", id);
         }

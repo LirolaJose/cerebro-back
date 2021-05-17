@@ -2,6 +2,9 @@ $(function () {
     function fillOrderFormInfo(advertisementId) {
         $.ajax({
             type: "GET",
+           beforeSend: function (xhr){
+                setTokenToHeader(xhr)
+            },
             url: API_ADVERTISEMENT +"/" + advertisementId
         }).done(function (advertisement) {
             console.log(advertisement);
@@ -27,6 +30,9 @@ $(function () {
     function fillAdditionalServicesInfo(id) {
         $.ajax({
             type: "GET",
+           beforeSend: function (xhr){
+                setTokenToHeader(xhr)
+            },
             url: API_ADDITIONAL_SERVICES + "/advertisement/" + id
         }).done(function (additionalServicesList) {
             console.log(additionalServicesList);

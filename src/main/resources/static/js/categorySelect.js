@@ -3,6 +3,9 @@ $(function () {
         let type = $("#selectType option:selected").attr("value");
         $.ajax({
             type: "GET",
+            beforeSend: function (xhr){
+                setTokenToHeader(xhr)
+            },
             url:CATEGORIES +"/" + type
         }).done(function (categoriesList) {
             console.log(categoriesList);
