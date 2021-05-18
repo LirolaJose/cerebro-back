@@ -36,7 +36,7 @@ function loginUser() {
         contentType: "application/json"
     })
         .done(function (data) {
-            localStorage.setItem("token", data.token);
+            localStorage.setItem("token", data.value);
             redirectToHome();
         })
         .fail(function (err) {

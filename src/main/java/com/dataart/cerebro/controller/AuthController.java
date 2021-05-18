@@ -2,11 +2,13 @@ package com.dataart.cerebro.controller;
 
 import com.dataart.cerebro.configuration.security.jwt.JwtProvider;
 import com.dataart.cerebro.controller.dto.UserInfoDTO;
+import com.dataart.cerebro.controller.dto.ValueDTO;
 import com.dataart.cerebro.exception.ValidationException;
 import com.dataart.cerebro.service.AuthService;
 import com.dataart.cerebro.service.UserInfoService;
 import com.dataart.cerebro.util.SecurityUtils;
 import io.swagger.annotations.Api;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 @RestController
@@ -42,13 +45,13 @@ public class AuthController {
     }
 
     @PostMapping(value = "/auth", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public AuthResponse auth(@RequestBody @Valid AuthRequest request, BindingResult bindingResult) {
+    public ResponseEntity<?> auth(@RequestBody @Valid AuthRequest request, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             List<FieldError> fieldErrorList = bindingResult.getFieldErrors();
             throw new ValidationException(fieldErrorList);
         }
         String token = authService.getTokenAfterAuthentication(request.getLogin(), request.getPassword());
-        return new AuthResponse(token);
+        return ResponseEntity.ok(new ValueDTO(token));
     }
 
     @PostMapping(value = "/logout", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -56,4 +59,14 @@ public class AuthController {
         jwtProvider.logout(SecurityUtils.getCurrentUserEmail());
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @Data
+    public static class AuthRequest {
+        @NotEmpty
+        private String login;
+        @NotEmpty
+        private String password;
+    }
+
 }
+

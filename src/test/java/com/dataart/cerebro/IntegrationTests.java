@@ -129,6 +129,6 @@ class IntegrationTests {
         userInfoDTO.setPassword(password);
         userInfoDTO.setEmail(email);
 
-        return restTemplate.postForEntity("/registration/", userInfoDTO, UserInfoDTO.class);
+        return restTemplate.postForEntity("/api/registration", userInfoDTO, UserInfoDTO.class);
     }
 }
