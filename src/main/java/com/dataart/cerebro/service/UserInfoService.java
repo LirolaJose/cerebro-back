@@ -1,26 +1,26 @@
 package com.dataart.cerebro.service;
 
+import com.dataart.cerebro.configuration.security.CustomUserDetails;
 import com.dataart.cerebro.controller.dto.UserInfoDTO;
 import com.dataart.cerebro.domain.Role;
 import com.dataart.cerebro.domain.UserInfo;
 import com.dataart.cerebro.exception.*;
 import com.dataart.cerebro.repository.UserInfoRepository;
+import com.dataart.cerebro.util.SecurityUtils;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class UserInfoService {
     private final UserInfoRepository userInfoRepository;
+    private final CustomUserDetails customUserDetails;
 
-    public UserInfoService(UserInfoRepository userInfoRepository) {
-        this.userInfoRepository = userInfoRepository;
-    }
 
     public UserInfo findUserInfoById(Long userInfoId) {
         log.info("Searching User by id {}", userInfoId);
@@ -28,8 +28,17 @@ public class UserInfoService {
     }
 
     public UserInfo findUserInfoByEmail(String email) {
-        log.info("Searching User by email {}", email);
+        log.debug("Searching User by email {}", email);
         return userInfoRepository.findUserInfoByEmail(email);
+    }
+
+    public UserInfo findByEmailAndPassword(String email, String password) {
+        UserInfo userInfo = findUserInfoByEmail(email);
+        String encryptedPassword = encryptPassword(password);
+        if (userInfo == null || !encryptedPassword.equals(userInfo.getPassword())) {
+            throw new CredentialExpiredException("User has entered invalid credentials");
+        }
+        return userInfo;
     }
 
     @Transactional
@@ -63,8 +72,7 @@ public class UserInfoService {
     }
 
     public UserInfo getCurrentUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return findUserInfoByEmail(authentication.getName());
+        return findUserInfoByEmail(SecurityUtils.getCurrentUserEmail());
     }
 
     @Transactional

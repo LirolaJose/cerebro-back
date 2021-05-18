@@ -7,6 +7,9 @@ $(function () {
         let categoryId = $("#selectCategory option:selected").attr("value");
         $.ajax({
             type: "GET",
+            beforeSend: function (xhr){
+                setTokenToHeader(xhr)
+            },
             url: API_ADDITIONAL_SERVICES + "/category/" + categoryId
         }).done(function (additionalServicesList) {
             console.log(additionalServicesList);

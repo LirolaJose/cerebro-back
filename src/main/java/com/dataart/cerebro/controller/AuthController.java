@@ -1,9 +1,13 @@
 package com.dataart.cerebro.controller;
 
+import com.dataart.cerebro.configuration.security.jwt.JwtProvider;
 import com.dataart.cerebro.controller.dto.UserInfoDTO;
 import com.dataart.cerebro.exception.ValidationException;
+import com.dataart.cerebro.service.AuthService;
 import com.dataart.cerebro.service.UserInfoService;
+import com.dataart.cerebro.util.SecurityUtils;
 import io.swagger.annotations.Api;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,17 +22,16 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/registration")
-@Api(tags = "Registration")
-public class RegistrationController {
+@RequestMapping("/api")
+@Api(tags = "Auth")
+@RequiredArgsConstructor
+public class AuthController {
     private final UserInfoService userInfoService;
-
-    public RegistrationController(UserInfoService userInfoService) {
-        this.userInfoService = userInfoService;
-    }
+    private final JwtProvider jwtProvider;
+    private final AuthService authService;
 
 
-    @PostMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/registration", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> signUp(@RequestBody @Valid UserInfoDTO userInfoDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             List<FieldError> fieldErrorList = bindingResult.getFieldErrors();
@@ -36,5 +39,21 @@ public class RegistrationController {
         }
         userInfoService.createNewUserInfo(userInfoDTO);
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @PostMapping(value = "/auth", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public AuthResponse auth(@RequestBody @Valid AuthRequest request, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            List<FieldError> fieldErrorList = bindingResult.getFieldErrors();
+            throw new ValidationException(fieldErrorList);
+        }
+        String token = authService.getTokenAfterAuthentication(request.getLogin(), request.getPassword());
+        return new AuthResponse(token);
+    }
+
+    @PostMapping(value = "/logout", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> logout(){
+        jwtProvider.logout(SecurityUtils.getCurrentUserEmail());
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

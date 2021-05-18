@@ -2,6 +2,9 @@ $(function () {
     function getCurrentUser() {
         $.ajax({
             type: "GET",
+           beforeSend: function (xhr){
+                setTokenToHeader(xhr)
+            },
             url: CURRENT_USER +"/"
         }).done(function (resp) {
             console.log(resp);
@@ -19,6 +22,9 @@ $(function () {
     function getAdvertisementInfoById(advertisementId, user) {
         $.ajax({
             type: "GET",
+           beforeSend: function (xhr){
+                setTokenToHeader(xhr)
+            },
             url: API_ADVERTISEMENT +"/" + advertisementId
         }).done(function (advertisement) {
             console.log(advertisement);
@@ -49,6 +55,9 @@ $(function () {
     function getImagesList(advertisementId) {
         $.ajax({
             type: "GET",
+           beforeSend: function (xhr){
+                setTokenToHeader(xhr)
+            },
             url: API_IMAGE + "/imagesList/" + advertisementId
         }).done(function (imagesIdList) {
             console.log(imagesIdList);
@@ -70,6 +79,9 @@ $(function () {
     function getAdditionalServicesByAdvertisementId(advertisementId) {
         $.ajax({
             type: "GET",
+           beforeSend: function (xhr){
+                setTokenToHeader(xhr)
+            },
             url: API_ADDITIONAL_SERVICES + "/advertisement/" + advertisementId
         }).done(function (additionalServicesList) {
             console.log(additionalServicesList);

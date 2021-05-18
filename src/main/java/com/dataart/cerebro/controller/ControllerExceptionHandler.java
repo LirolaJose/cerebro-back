@@ -51,6 +51,13 @@ public class ControllerExceptionHandler {
         return new ErrorDTO("You don't have enough money to complete this order");
     }
 
+    @ExceptionHandler(CredentialExpiredException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ResponseBody
+    public ErrorDTO handleCredentialExpiredException(CredentialExpiredException e){
+        log.error("Error: {}", e.getMessage(), e);
+        return new ErrorDTO("Invalid credentials");
+    }
 
     @ExceptionHandler({DataProcessingException.class, RuntimeException.class})
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)

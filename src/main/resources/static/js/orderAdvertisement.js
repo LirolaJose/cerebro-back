@@ -17,6 +17,9 @@ function sendOrder(){
     $.ajax({
         type: "POST",
         data: JSON.stringify(order),
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader ("Authorization", "Bearer " + localStorage.getItem('token'));
+        },
         url: SERVER_URL + "/api/order/",
         contentType: "application/json"
     }).done(function (data) {

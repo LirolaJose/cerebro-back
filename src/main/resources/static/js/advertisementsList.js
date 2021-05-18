@@ -2,25 +2,26 @@ $(function () {
     function getCurrentUser() {
         $.ajax({
             type: "GET",
+            beforeSend: function (xhr){
+                setTokenToHeader(xhr)
+            },
             url: CURRENT_USER + "/"
         }).done(function (resp) {
             console.log(resp);
 
             let userInfo = resp.value;
             if (userInfo === null) {
-                $("#log-in-button").append($("<input/>")
+                $("#login-button-form").append($("<input/>")
                     .attr("type", "submit")
-                    .attr("value", "LOGIN")
-                    .attr("onclick", "location.href = LOGIN"));
+                    .attr("value", "LOGIN"));
 
                 $("#registration-button-form").append($("<input/>")
                     .attr("type", "submit")
                     .attr("value", "REGISTRATION"));
             } else {
-                $("#log-out-button").append($("<input/>")
+                $("#logout-button").append($("<input onclick='logoutUser()'/>")
                     .attr("type", "button")
-                    .attr("value", "LOGOUT")
-                    .attr("onclick", "location.href = LOGOUT"));
+                    .attr("value", "LOGOUT"));
 
                 $("#new-advertisement-button-form").append($("<input/>")
                     .attr("type", "submit")
@@ -51,6 +52,9 @@ $(function () {
     function showActiveAdvertisements() {
         $.ajax({
             type: "GET",
+           beforeSend: function (xhr){
+                setTokenToHeader(xhr)
+            },
             url: API_ADVERTISEMENT + "/"
         }).done(function (advertisementsList) {
             console.log(advertisementsList);
