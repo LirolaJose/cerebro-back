@@ -69,11 +69,12 @@ public class AdvertisementService {
         advertisement.setStatus(Status.ACTIVE);
         advertisement.setType(newAdvertisementDTO.getType());
         advertisement.setCategory(category);
-        advertisement.setAdditionalServices(additionalServices);
+//        advertisement.setAdditionalServices(additionalServices);
         advertisement.setOwner(owner);
         advertisement.setVisible(true);
         advertisement.setPublicationTime(publicationTime);
         advertisement.setExpiredTime(publicationTime.plusDays(7));
+
 
         try {
             Advertisement newAdvertisement = advertisementRepository.save(advertisement);
