@@ -18,4 +18,5 @@ public class AdditionalService {
 
     @Column(name = "price")
     private Double price;
+
 }

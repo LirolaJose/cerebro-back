@@ -20,5 +20,4 @@ public class Coordinates implements Serializable{
     @Column(name = "longitude")
     private Double longitude;
 
-
 }

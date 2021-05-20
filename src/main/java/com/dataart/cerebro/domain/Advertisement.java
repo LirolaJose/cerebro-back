@@ -54,9 +54,12 @@ public class Advertisement {
     @JoinColumn(name = "owner_id")
     private UserInfo owner;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "services_of_advertisement",
             joinColumns = @JoinColumn(name = "advertisement_id"),
             inverseJoinColumns = @JoinColumn(name = "service_id"))
     private Set<AdditionalService> additionalServices;
+
+    @OneToOne(mappedBy = "advertisement", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private Coordinates coordinates;
 }

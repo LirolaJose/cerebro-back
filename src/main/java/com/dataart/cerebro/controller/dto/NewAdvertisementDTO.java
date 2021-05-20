@@ -22,5 +22,7 @@ public class NewAdvertisementDTO {
 
     private Type type;
     private Long categoryId;
+    private Double latitude;
+    private Double longitude;
     private Set<Long> additionalServicesId;
 }

@@ -14,7 +14,7 @@ import java.util.Map;
 
 import static org.mockito.Mockito.*;
 
-public class ScheduledEmailTasksTest {
+class ScheduledEmailTasksTest {
 
     @Test
     void whenScheduledSendingExpiringLettersThenProperGroupingByEmail() {
