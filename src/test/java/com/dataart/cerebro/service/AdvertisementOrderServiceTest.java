@@ -30,10 +30,8 @@ class AdvertisementOrderServiceTest {
 
         AdvertisementOrder advertisementOrder = new AdvertisementOrder();
         Advertisement ad = new Advertisement();
-        Category category = new Category();
-        category.setOrderable(true);
         ad.setPrice(20.0);
-        ad.setCategory(category);
+        ad.setType(Type.SELL);
         ad.setStatus(Status.ACTIVE);
         advertisementOrder.setAdvertisement(ad);
 

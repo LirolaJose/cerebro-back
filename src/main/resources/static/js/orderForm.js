@@ -17,7 +17,7 @@ $(function () {
             $("#order-advertisement-image").append($("<img/>")
                 .attr("src", API_IMAGE + "/" + advertisementId));
 
-            if (advertisement.type !== "BUY" && advertisement.category.orderable === true && advertisement.status === "ACTIVE") {
+            if (advertisement.type.orderable === true && advertisement.status === "ACTIVE") {
                 $("#confirm-order").append($("<input id='order-button' onclick='sendOrder()'/>")
                     .attr("type", "submit")
                     .attr("value", "CONFIRM THE ORDER"));

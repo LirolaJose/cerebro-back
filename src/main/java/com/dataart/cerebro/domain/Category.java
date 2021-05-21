@@ -15,7 +15,4 @@ public class Category {
 
     @Column(name = "name")
     private String name;
-
-    @Column(name = "orderable")
-    private Boolean orderable;
 }

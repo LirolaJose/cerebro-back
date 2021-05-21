@@ -1,7 +1,6 @@
 package com.dataart.cerebro.service;
 
 import com.dataart.cerebro.domain.Category;
-import com.dataart.cerebro.domain.Type;
 import com.dataart.cerebro.exception.NotFoundException;
 import com.dataart.cerebro.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,8 +13,8 @@ import java.util.List;
 public class CategoryService {
     private final CategoryRepository categoryRepository;
 
-    public List<Category> findCategoriesByType(Type type) {
-        return categoryRepository.findCategoriesByTypeId(type.getId());
+    public List<Category> findCategoriesByType(Long typeId) {
+        return categoryRepository.findCategoriesByTypeId(typeId);
     }
 
     public Category findCategoryById(Long categoryId) {
