@@ -1,5 +1,6 @@
 package com.dataart.cerebro.service;
 
+import com.dataart.cerebro.configuration.model_mapper.AdvertisementMapper;
 import com.dataart.cerebro.controller.dto.NewAdvertisementDTO;
 import com.dataart.cerebro.domain.*;
 import com.dataart.cerebro.email.EmailService;
@@ -7,6 +8,7 @@ import com.dataart.cerebro.exception.DataProcessingException;
 import com.dataart.cerebro.exception.NotFoundException;
 import com.dataart.cerebro.repository.AdditionalServiceRepository;
 import com.dataart.cerebro.repository.AdvertisementRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +24,7 @@ import static java.util.stream.Collectors.groupingBy;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class AdvertisementService {
     private final AdvertisementRepository advertisementRepository;
     private final EmailService emailService;
@@ -29,17 +32,7 @@ public class AdvertisementService {
     private final CategoryService categoryService;
     private final ImageService imageService;
     private final AdditionalServiceRepository additionalServiceRepository;
-
-    public AdvertisementService(AdvertisementRepository advertisementRepository, EmailService emailService,
-                                UserInfoService userInfoService, CategoryService categoryService,
-                                ImageService imageService, AdditionalServiceRepository additionalServiceRepository) {
-        this.advertisementRepository = advertisementRepository;
-        this.emailService = emailService;
-        this.userInfoService = userInfoService;
-        this.categoryService = categoryService;
-        this.imageService = imageService;
-        this.additionalServiceRepository = additionalServiceRepository;
-    }
+    private final AdvertisementMapper advertisementMapper;
 
     public List<Advertisement> findActiveAdvertisements() {
         return advertisementRepository.findAdvertisementsByStatusOrderByPublicationTimeDesc(Status.ACTIVE);
@@ -62,19 +55,14 @@ public class AdvertisementService {
         LocalDateTime publicationTime = LocalDateTime.now();
         Set<AdditionalService> additionalServices = new HashSet<>(additionalServiceRepository.findAllById(newAdvertisementDTO.getAdditionalServicesId()));
 
-        Advertisement advertisement = new Advertisement();
-        advertisement.setTitle(newAdvertisementDTO.getTitle());
-        advertisement.setText(newAdvertisementDTO.getText());
-        advertisement.setPrice(newAdvertisementDTO.getPrice());
-        advertisement.setStatus(Status.ACTIVE);
-        advertisement.setType(newAdvertisementDTO.getType());
+        Advertisement advertisement = advertisementMapper.convertToAdvertisement(newAdvertisementDTO);
+
         advertisement.setCategory(category);
-//        advertisement.setAdditionalServices(additionalServices);
+        advertisement.setAdditionalServices(additionalServices);
         advertisement.setOwner(owner);
-        advertisement.setVisible(true);
+
         advertisement.setPublicationTime(publicationTime);
         advertisement.setExpiredTime(publicationTime.plusDays(7));
-
 
         try {
             Advertisement newAdvertisement = advertisementRepository.save(advertisement);

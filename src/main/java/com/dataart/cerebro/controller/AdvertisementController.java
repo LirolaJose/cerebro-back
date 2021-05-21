@@ -1,5 +1,6 @@
 package com.dataart.cerebro.controller;
 
+import com.dataart.cerebro.configuration.model_mapper.AdvertisementMapper;
 import com.dataart.cerebro.controller.dto.AdvertisementDTO;
 import com.dataart.cerebro.controller.dto.NewAdvertisementDTO;
 import com.dataart.cerebro.domain.Advertisement;
@@ -7,6 +8,7 @@ import com.dataart.cerebro.exception.ValidationException;
 import com.dataart.cerebro.service.AdvertisementService;
 import com.dataart.cerebro.service.ImageService;
 import io.swagger.annotations.Api;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,27 +25,25 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/advertisement")
 @Api(tags = "Advertisement")
+@RequiredArgsConstructor
 public class AdvertisementController {
     private final AdvertisementService advertisementService;
     private final ImageService imageService;
+    private final AdvertisementMapper advertisementMapper;
 
-    public AdvertisementController(AdvertisementService advertisementService, ImageService imageService) {
-        this.advertisementService = advertisementService;
-        this.imageService = imageService;
-    }
 
     @GetMapping
     public ResponseEntity<?> getActiveAdvertisements() {
         List<Advertisement> advertisements = advertisementService.findActiveAdvertisements();
         List<AdvertisementDTO> advertisementDTOS = new ArrayList<>();
-                advertisements.forEach(advertisement -> advertisementDTOS.add(new AdvertisementDTO(advertisement)));
+        advertisements.forEach(advertisement -> advertisementDTOS.add(advertisementMapper.convertToAdvertisementDTO(advertisement)));
         return ResponseEntity.ok(advertisementDTOS);
     }
 
     @GetMapping("/{advertisementId}")
     public ResponseEntity<?> getAdvertisementById(@PathVariable Long advertisementId) {
         Advertisement advertisement = advertisementService.findAdvertisementById(advertisementId);
-        AdvertisementDTO advertisementDTO = new AdvertisementDTO(advertisement);
+        AdvertisementDTO advertisementDTO = advertisementMapper.convertToAdvertisementDTO(advertisement);
         return ResponseEntity.ok(advertisementDTO);
     }
 
@@ -59,11 +59,11 @@ public class AdvertisementController {
     public ResponseEntity<?> saveAdvertisement(@RequestPart("advertisementDTO") @Valid NewAdvertisementDTO newAdvertisementDTO,
                                                BindingResult bindingResult,
                                                @RequestPart(value = "images", required = false) List<MultipartFile> images) {
-        if(bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             List<FieldError> fieldErrorList = bindingResult.getFieldErrors();
             throw new ValidationException(fieldErrorList);
         }
-        if(images != null) {
+        if (images != null) {
             for (MultipartFile image : images) {
                 String contentType = image.getContentType();
                 if (contentType != null && !isSupportedContentType(contentType)) {

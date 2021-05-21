@@ -1,6 +1,5 @@
 package com.dataart.cerebro.controller.dto;
 
-import com.dataart.cerebro.domain.UserInfo;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -33,14 +32,5 @@ public class UserInfoDTO {
     @Size(min = 4, max = 100)
     private String password;
 
-    private Double moneyAmount;
-
-    public UserInfoDTO(UserInfo userInfo) {
-        this.id = userInfo.getId();
-        this.firstName = userInfo.getFirstName();
-        this.secondName = userInfo.getSecondName();
-        this.phone = userInfo.getPhone();
-        this.email = userInfo.getEmail();
-        this.moneyAmount = userInfo.getMoneyAmount();
-    }
+    private Double moneyAmount = 0.0;
 }

@@ -1,8 +1,7 @@
 package com.dataart.cerebro.service;
 
-import com.dataart.cerebro.configuration.security.CustomUserDetails;
+import com.dataart.cerebro.configuration.model_mapper.UserInfoMapper;
 import com.dataart.cerebro.controller.dto.UserInfoDTO;
-import com.dataart.cerebro.domain.Role;
 import com.dataart.cerebro.domain.UserInfo;
 import com.dataart.cerebro.exception.*;
 import com.dataart.cerebro.repository.UserInfoRepository;
@@ -19,8 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class UserInfoService {
     private final UserInfoRepository userInfoRepository;
-    private final CustomUserDetails customUserDetails;
-
+    private final UserInfoMapper userInfoMapper;
 
     public UserInfo findUserInfoById(Long userInfoId) {
         log.info("Searching User by id {}", userInfoId);
@@ -47,17 +45,11 @@ public class UserInfoService {
             log.info("An attempt to create user with existing email: {}", userInfoDTO.getEmail());
             throw new EmailExistsException(userInfoDTO.getEmail());
         }
-        UserInfo userInfo = new UserInfo();
+        UserInfo userInfo = userInfoMapper.convertToUserInfo(userInfoDTO);
         log.info("Creating new USER");
-        userInfo.setFirstName(userInfoDTO.getFirstName());
-        userInfo.setSecondName(userInfoDTO.getSecondName());
-        userInfo.setPhone(userInfoDTO.getPhone());
-        userInfo.setEmail(userInfoDTO.getEmail());
-
         String encryptedPassword = encryptPassword(userInfoDTO.getPassword());
         userInfo.setPassword(encryptedPassword);
-        userInfo.setRole(Role.USER);
-        userInfo.setMoneyAmount(0.0);
+
         try {
             userInfoRepository.save(userInfo);
             log.info("Created new USER: {}, {}, {}, {}, {}", userInfo.getFirstName(), userInfo.getSecondName(),

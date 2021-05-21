@@ -2,6 +2,7 @@ package com.dataart.cerebro.service;
 
 import com.dataart.cerebro.domain.AdditionalService;
 import com.dataart.cerebro.repository.AdditionalServiceRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -10,12 +11,9 @@ import java.util.Set;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class AdditionalServiceService {
     private final AdditionalServiceRepository additionalServiceRepository;
-
-    public AdditionalServiceService(AdditionalServiceRepository additionalServiceRepository) {
-        this.additionalServiceRepository = additionalServiceRepository;
-    }
 
     public List<AdditionalService> findAdditionalServicesByCategory(Long categoryId) {
         return additionalServiceRepository.findAdditionalServiceByCategoryId(categoryId);

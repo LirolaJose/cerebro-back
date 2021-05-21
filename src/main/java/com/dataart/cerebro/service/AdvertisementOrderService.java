@@ -8,6 +8,7 @@ import com.dataart.cerebro.exception.ValidationException;
 import com.dataart.cerebro.repository.AdditionalServiceRepository;
 import com.dataart.cerebro.repository.AdvertisementOrderRepository;
 import com.dataart.cerebro.repository.AdvertisementRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -20,6 +21,7 @@ import java.util.Set;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class AdvertisementOrderService {
     private final AdvertisementOrderRepository advertisementOrderRepository;
     private final EmailService emailService;
@@ -28,16 +30,6 @@ public class AdvertisementOrderService {
     private final AdvertisementService advertisementService;
     private final AdditionalServiceService additionalServiceService;
     private final AdditionalServiceRepository additionalServiceRepository;
-
-    public AdvertisementOrderService(AdvertisementOrderRepository advertisementOrderRepository, EmailService emailService, UserInfoService userInfoService, AdvertisementRepository advertisementRepository, AdvertisementService advertisementService, AdditionalServiceService additionalServiceService, AdditionalServiceRepository additionalServiceRepository) {
-        this.advertisementOrderRepository = advertisementOrderRepository;
-        this.emailService = emailService;
-        this.userInfoService = userInfoService;
-        this.advertisementRepository = advertisementRepository;
-        this.advertisementService = advertisementService;
-        this.additionalServiceService = additionalServiceService;
-        this.additionalServiceRepository = additionalServiceRepository;
-    }
 
     public List<AdvertisementOrder> findAdvertisementOrdersByUserId(Long id) {
         return advertisementOrderRepository.findAdvertisementOrdersByAdvertisementOwnerId(id);

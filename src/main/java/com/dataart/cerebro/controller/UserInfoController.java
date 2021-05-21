@@ -1,5 +1,6 @@
 package com.dataart.cerebro.controller;
 
+import com.dataart.cerebro.configuration.model_mapper.UserInfoMapper;
 import com.dataart.cerebro.controller.dto.UserInfoDTO;
 import com.dataart.cerebro.controller.dto.ValueDTO;
 import com.dataart.cerebro.domain.Advertisement;
@@ -10,6 +11,7 @@ import com.dataart.cerebro.service.AdvertisementOrderService;
 import com.dataart.cerebro.service.AdvertisementService;
 import com.dataart.cerebro.service.UserInfoService;
 import io.swagger.annotations.Api;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,20 +22,16 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/user")
 @Api(tags = "User Info")
+@RequiredArgsConstructor
 public class UserInfoController {
     private final UserInfoService userInfoService;
     private final AdvertisementService advertisementService;
     private final AdvertisementOrderService advertisementOrderService;
-
-    public UserInfoController(UserInfoService userInfoService, AdvertisementService advertisementService, AdvertisementOrderService advertisementOrderService) {
-        this.userInfoService = userInfoService;
-        this.advertisementService = advertisementService;
-        this.advertisementOrderService = advertisementOrderService;
-    }
+    private final UserInfoMapper userInfoMapper;
 
     @GetMapping("/{userId}")
     public ResponseEntity<?> getUserInfoById(@PathVariable Long userId) {
-        UserInfoDTO userInfoDTO = new UserInfoDTO(userInfoService.findUserInfoById(userId));
+        UserInfoDTO userInfoDTO = userInfoMapper.convertToUserInfoDTO(userInfoService.findUserInfoById(userId));
         return ResponseEntity.ok(userInfoDTO);
     }
 
@@ -55,7 +53,7 @@ public class UserInfoController {
     @GetMapping("/")
     public ResponseEntity<?> getCurrentUser() {
         UserInfo userInfo = userInfoService.getCurrentUser();
-        return ResponseEntity.ok(new ValueDTO(userInfo == null ? null : new UserInfoDTO(userInfo)));
+        return ResponseEntity.ok(new ValueDTO(userInfo == null ? null : userInfoMapper.convertToUserInfoDTO(userInfo)));
     }
 
     @PostMapping(value = "/{userId}/money/", consumes = MediaType.APPLICATION_JSON_VALUE)
