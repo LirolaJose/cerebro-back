@@ -4,6 +4,7 @@ import com.dataart.cerebro.domain.Advertisement;
 import com.dataart.cerebro.domain.Image;
 import com.dataart.cerebro.exception.DataProcessingException;
 import com.dataart.cerebro.repository.ImageRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
@@ -16,12 +17,9 @@ import java.util.List;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class ImageService {
     private final ImageRepository imageRepository;
-
-    public ImageService(ImageRepository imageRepository) {
-        this.imageRepository = imageRepository;
-    }
 
     @Transactional
     public void saveImages(List<MultipartFile> images, Advertisement advertisement) {

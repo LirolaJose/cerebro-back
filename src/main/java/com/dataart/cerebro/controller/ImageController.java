@@ -3,6 +3,7 @@ package com.dataart.cerebro.controller;
 import com.dataart.cerebro.domain.Image;
 import com.dataart.cerebro.service.ImageService;
 import io.swagger.annotations.Api;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,12 +17,9 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/image")
 @Api(tags = "Images")
+@RequiredArgsConstructor
 public class ImageController {
     private final ImageService imageService;
-
-    public ImageController(ImageService imageService) {
-        this.imageService = imageService;
-    }
 
     @GetMapping(value = "/{advertisementId}",
             produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})

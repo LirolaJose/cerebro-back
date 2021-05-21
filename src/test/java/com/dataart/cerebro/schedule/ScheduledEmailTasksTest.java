@@ -22,7 +22,7 @@ class ScheduledEmailTasksTest {
         AdvertisementRepository advertisementRepository = mock(AdvertisementRepository.class);
         EmailService emailServiceMock = mock(EmailService.class);
         AdvertisementService advertisementService = new AdvertisementService(advertisementRepository, emailServiceMock,
-                null, null, null, null);
+                null, null, null, null, null);
 
         List<Advertisement> list = new ArrayList<>();
 

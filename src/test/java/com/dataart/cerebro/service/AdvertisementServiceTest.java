@@ -7,12 +7,9 @@ import com.dataart.cerebro.repository.AdvertisementRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.LazyInitializationException;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
@@ -20,13 +17,11 @@ import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
-@ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@PropertySource("classpath:application-test.properties")
 @ActiveProfiles("test")
 @Slf4j
 class AdvertisementServiceTest {
@@ -41,7 +36,6 @@ class AdvertisementServiceTest {
     AdditionalServiceRepository additionalServiceRepository;
 
     @Test
-    @Transactional
     void whenAdvertisementIsAddedThenCoordinatesIsAddedToo() {
         Advertisement advertisement = new Advertisement();
         LocalDateTime publicationTime = LocalDateTime.now();
@@ -100,7 +94,7 @@ class AdvertisementServiceTest {
         Advertisement advertisement = advertisementRepository.findById(1L).orElseThrow(() -> new NotFoundException("Advertisement", 1L));
         Set<AdditionalService> additionalServices = advertisement.getAdditionalServices();
         log.info("{}", additionalServices.size());
-        assertTrue(additionalServices.size() == 0);
+        assertEquals(additionalServices.size(), 0);
     }
 
 }

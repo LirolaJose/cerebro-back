@@ -19,7 +19,7 @@ class AdvertisementRepositoryServiceTest {
         //given
         AdvertisementRepository advertisementRepositoryMock = mock(AdvertisementRepository.class);
         AdvertisementService advertisementService = new AdvertisementService(advertisementRepositoryMock, null, null,
-                null, null,null);
+                null, null,null, null);
         List<Advertisement> list = new ArrayList<>();
 
         Advertisement ad1 = new Advertisement();

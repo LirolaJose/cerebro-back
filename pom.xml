@@ -23,6 +23,7 @@
         <maven-resources-plugin.version>3.2.0</maven-resources-plugin.version>
         <org.flywaydb.version>4.0.3</org.flywaydb.version>
         <jjwt.version>0.9.1</jjwt.version>
+        <model-mapper.version>2.4.3</model-mapper.version>
 
     </properties>
 
@@ -163,6 +164,11 @@
             <version>${jjwt.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.modelmapper</groupId>
+            <artifactId>modelmapper</artifactId>
+            <version>${model-mapper.version}</version>
+        </dependency>
 
     </dependencies>
 
