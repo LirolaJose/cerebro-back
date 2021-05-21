@@ -46,6 +46,7 @@ public class AdvertisementService {
         return advertisementRepository.findAdvertisementsByOwnerId(userInfoId);
     }
 
+    //Checked
     @Transactional
     public void createNewAdvertisement(NewAdvertisementDTO newAdvertisementDTO, List<MultipartFile> images) {
         log.info("Creating new advertisement");

@@ -62,7 +62,7 @@ public class UserInfoController {
         if (moneyValue <= 0){
             throw new ValidationException("Wrong money format. The number must be positive and minimum 1");
         }
-        userInfoService.increaseCurrentUserMoneyAmount(moneyValue, userId);
+        userInfoService.topUpUsersBalance(moneyValue, userId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

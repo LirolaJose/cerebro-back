@@ -79,7 +79,7 @@ public class UserInfoService {
     }
 
     @Transactional
-    public void increaseCurrentUserMoneyAmount(Double money, Long userId) {
+    public void topUpUsersBalance(Double money, Long userId) {
         UserInfo userInfo = getCurrentUser();
         if (!userInfo.getId().equals(userId)) {
             throw new ValidationException("Incorrect user data");

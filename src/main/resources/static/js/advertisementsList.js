@@ -33,7 +33,7 @@ $(function () {
 
                 $("#user-money-menu").append($("<div id='add-money-form'></div>"));
                 $("#add-money-form").append($("<div id='money-form-info'>"));
-                $("#money-form-info").append($("<input id='entered-money'  pattern='^\\d+(?:\\.\\d{1,2})?$\' >")
+                $("#money-form-info").append($("<input id='entered-money' >")
                     .attr("type", "number")
                     .attr("min", 1)
                     .attr("step", 1)

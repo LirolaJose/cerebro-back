@@ -19,6 +19,7 @@ public class ModelMapperConfig {
        ModelMapper modelMapper = new ModelMapper();
 
        modelMapper.createTypeMap(UserInfo.class, UserInfoDTO.class).addMappings(mapper -> mapper.skip(UserInfoDTO::setPassword));
+
        modelMapper.createTypeMap(UserInfoDTO.class, UserInfo.class).setPostConverter(mappingContext -> {
            mappingContext.getDestination().setRole(Role.USER);
            return mappingContext.getDestination();
@@ -29,6 +30,7 @@ public class ModelMapperConfig {
                     mappingContext.getDestination().setOwner(modelMapper.map(mappingContext.getSource().getOwner(), UserInfoDTO.class));
                     return mappingContext.getDestination();
                 });
+
        modelMapper.createTypeMap(NewAdvertisementDTO.class, Advertisement.class)
                .setPostConverter(mappingContext -> {
                    mappingContext.getDestination().setVisible(true);
