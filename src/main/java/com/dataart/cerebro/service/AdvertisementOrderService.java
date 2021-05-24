@@ -42,8 +42,8 @@ public class AdvertisementOrderService {
         AdvertisementOrder advertisementOrder = new AdvertisementOrder();
         Advertisement advertisement = advertisementService.findAdvertisementById(advertisementOrderDTO.getAdvertisementId());
 
-        if (!advertisement.getCategory().getOrderable() || advertisement.getStatus() != Status.ACTIVE) {
-            log.error("Category {} is not orderable or advertisement is not Active", advertisement.getCategory());
+        if (!advertisement.getType().getOrderable() || advertisement.getStatus() != Status.ACTIVE) {
+            log.error("Type {} is not orderable or advertisement is not Active", advertisement.getType());
             throw new ValidationException("Category is not orderable or not Active");
         }
             advertisementOrder.setOrderTime(LocalDateTime.now());

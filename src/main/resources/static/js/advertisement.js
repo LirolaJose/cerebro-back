@@ -32,11 +32,11 @@ $(function () {
             $("#textArea").append(advertisement.text);
             $("#price").append(advertisement.price + "$");
             $("#additional-service").append(advertisement.additionalServices);
-            $("#type").append(advertisement.type);
+            $("#type").append(advertisement.type.name);
             $("#category").append(advertisement.category.name);
             $("#owner").append(advertisement.owner.firstName + " " + advertisement.owner.secondName);
 
-                if (user !== null && advertisement.type !== "BUY" && advertisement.category.orderable === true && advertisement.status === "ACTIVE") {
+                if (user !== null && advertisement.type.orderable === true && advertisement.status === "ACTIVE") {
                     $("#order").append($("<form></form>")
                         .attr("id", "orderButtonForm")
                         .attr("action", "orderForm.html"));
@@ -64,7 +64,7 @@ $(function () {
             if (imagesIdList.length === 0) {
                 $("#images")
                     .append($("<img/>")
-                        .attr("src", "/image/notFound.JPG"));
+                        .attr("src", "/image/notFound.jpg"));
             } else {
                 $.each(imagesIdList, function (index, imageId) {
                     $("#images")

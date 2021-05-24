@@ -1,7 +1,6 @@
 package com.dataart.cerebro.controller;
 
 import com.dataart.cerebro.domain.Category;
-import com.dataart.cerebro.domain.Type;
 import com.dataart.cerebro.service.CategoryService;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
@@ -20,9 +19,9 @@ import java.util.List;
 public class CategoryController {
     private final CategoryService categoryService;
 
-    @GetMapping("/{type}")
-    public ResponseEntity<?> getCategoryByType(@PathVariable Type type) {
-        List<Category> categories = categoryService.findCategoriesByType(type);
+    @GetMapping("/{typeId}")
+    public ResponseEntity<?> getCategoryByType(@PathVariable Long typeId) {
+        List<Category> categories = categoryService.findCategoriesByType(typeId);
         return ResponseEntity.ok(categories);
     }
 }

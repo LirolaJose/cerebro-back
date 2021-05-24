@@ -10,7 +10,7 @@ function createAdvertisement() {
         title: $("#title").val(),
         text: $("#text").val(),
         price: $("#price").val(),
-        type: $("#selectType option:selected").val(),
+        type: $("#selectType option:selected").attr("val"),
         categoryId: $("#selectCategory option:selected").val(),
         additionalServicesId: checkboxes
     }

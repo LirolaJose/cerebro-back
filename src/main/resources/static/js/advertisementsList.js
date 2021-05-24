@@ -67,7 +67,7 @@ $(function () {
                     table += '<td>' + advertisement.text + '</td>';
                     table += '<td>' + advertisement.price + "$" +'</td>';
                     table += '<td>' + '<img src="' + API_IMAGE + "/" + advertisement.id + '"/>' + '</td>';
-                    table += '<td>' + advertisement.type + '</td>';
+                    table += '<td>' + advertisement.type.name + '</td>';
                     table += '<td>' + advertisement.category.name + '</td>';
                     table += '<td>' + advertisement.owner.firstName + " " + advertisement.owner.secondName + '</td>';
                     table += '</tr>'

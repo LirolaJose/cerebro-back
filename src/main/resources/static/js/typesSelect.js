@@ -10,8 +10,9 @@ $(function () {
             console.log(typesList);
             $.each(typesList, function (index, type) {
                 $("#selectType").append($("<option></option>")
-                    .attr("value", type)
-                    .text(type));
+                    .attr("value", type.id)
+                    .attr("val", type.name)
+                    .text(type.name));
             });
         });
     }
