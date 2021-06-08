@@ -1,6 +1,8 @@
 package com.dataart.cerebro.service;
 
 import com.dataart.cerebro.configuration.model_mapper.AdvertisementMapper;
+import com.dataart.cerebro.configuration.model_mapper.CoordinateMapper;
+import com.dataart.cerebro.controller.dto.CoordinatesDTO;
 import com.dataart.cerebro.controller.dto.NewAdvertisementDTO;
 import com.dataart.cerebro.domain.*;
 import com.dataart.cerebro.email.EmailService;
@@ -11,6 +13,7 @@ import com.dataart.cerebro.repository.AdvertisementRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -33,6 +36,7 @@ public class AdvertisementService {
     private final ImageService imageService;
     private final AdditionalServiceRepository additionalServiceRepository;
     private final AdvertisementMapper advertisementMapper;
+    private final CoordinateMapper coordinateMapper;
 
     public List<Advertisement> findActiveAdvertisements() {
         return advertisementRepository.findAdvertisementsByStatusOrderByPublicationTimeDesc(Status.ACTIVE);
@@ -46,8 +50,8 @@ public class AdvertisementService {
         return advertisementRepository.findAdvertisementsByOwnerId(userInfoId);
     }
 
-    @Transactional
-    public void createNewAdvertisement(NewAdvertisementDTO newAdvertisementDTO, List<MultipartFile> images) {
+    @Transactional(isolation = Isolation.READ_UNCOMMITTED)
+    public void createNewAdvertisement(NewAdvertisementDTO newAdvertisementDTO, List<MultipartFile> images, CoordinatesDTO coordinatesDTO) {
         log.info("Creating new advertisement");
 
         UserInfo owner = userInfoService.getCurrentUser();
@@ -55,12 +59,22 @@ public class AdvertisementService {
         LocalDateTime publicationTime = LocalDateTime.now();
         Set<AdditionalService> additionalServices = new HashSet<>(additionalServiceRepository.findAllById(newAdvertisementDTO.getAdditionalServicesId()));
 
+
         Advertisement advertisement = advertisementMapper.convertToAdvertisement(newAdvertisementDTO);
+
+        // TODO: 08.06.2021 if null
+        if (coordinatesDTO != null) {
+            Coordinates coordinates = coordinateMapper.convertToCoordinates(coordinatesDTO);
+            coordinates.setLatitude(coordinatesDTO.getLatitude());
+            coordinates.setLongitude(coordinatesDTO.getLongitude());
+
+            coordinates.setAdvertisement(advertisement);
+            advertisement.setCoordinates(coordinates);
+        }
 
         advertisement.setCategory(category);
         advertisement.setAdditionalServices(additionalServices);
         advertisement.setOwner(owner);
-
         advertisement.setPublicationTime(publicationTime);
         advertisement.setExpiredTime(publicationTime.plusDays(7));
 

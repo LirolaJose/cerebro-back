@@ -16,4 +16,6 @@ public class AdvertisementDTO {
     private Category category;
     private Status status;
     private UserInfoDTO owner;
+    private Double latitude;
+    private Double longitude;
 }

@@ -40,7 +40,7 @@ class AdvertisementServiceTest {
         Advertisement advertisement = new Advertisement();
         LocalDateTime publicationTime = LocalDateTime.now();
         Category category = categoryService.findCategoryById(1L);
-        UserInfo userInfo = userInfoService.findUserInfoById(177L);
+        UserInfo userInfo = userInfoService.findUserInfoById(3L);
         advertisement.setTitle("Ad Coordinates");
         advertisement.setPrice(100.0);
         advertisement.setStatus(Status.ACTIVE);
@@ -53,8 +53,8 @@ class AdvertisementServiceTest {
 
 
         Coordinates coordinates = new Coordinates();
-        coordinates.setLatitude(45.45);
-        coordinates.setLongitude(45.45);
+        coordinates.setLatitude(50.45);
+        coordinates.setLongitude(50.45);
         coordinates.setAdvertisement(advertisement);
 
         advertisement.setCoordinates(coordinates);
@@ -96,5 +96,4 @@ class AdvertisementServiceTest {
         log.info("{}", additionalServices.size());
         assertEquals(additionalServices.size(), 0);
     }
-
 }

@@ -48,9 +48,7 @@ public enum Type {
     }
 
     @JsonCreator
-    public static Type forValues(String typeMap) {
-
-        return findByName(typeMap);
-
+    public static Type forValues(Long typeMap) {
+        return getTypeById(typeMap);
     }
 }

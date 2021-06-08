@@ -11,7 +11,7 @@ import java.util.Set;
 public interface AdditionalServiceRepository extends JpaRepository<AdditionalService, Long> {
     @Query(value =
             "SELECT s.* FROM service s " +
-            "join services_of_category soc on s.id = soc.service_id\n" +
+            "join services_of_category soc on s.id = soc.service_id " +
             "join category c on c.id = soc.category_id " +
             "WHERE c.id = :categoryId ;",
             nativeQuery = true)

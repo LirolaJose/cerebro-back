@@ -2,6 +2,7 @@ package com.dataart.cerebro.controller;
 
 import com.dataart.cerebro.configuration.model_mapper.AdvertisementMapper;
 import com.dataart.cerebro.controller.dto.AdvertisementDTO;
+import com.dataart.cerebro.controller.dto.CoordinatesDTO;
 import com.dataart.cerebro.controller.dto.NewAdvertisementDTO;
 import com.dataart.cerebro.domain.Advertisement;
 import com.dataart.cerebro.exception.ValidationException;
@@ -50,7 +51,7 @@ public class AdvertisementController {
     @GetMapping("/image/{imageId}")
     public ResponseEntity<?> getAdvertisementImageByImageId(@PathVariable Long imageId) {
         byte[] imageBytes = imageService.findImageById(imageId);
-        return new ResponseEntity<>(imageBytes, HttpStatus.OK);
+        return ResponseEntity.ok(imageBytes);
     }
 
 
@@ -58,6 +59,7 @@ public class AdvertisementController {
     @PostMapping(value = "/", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> saveAdvertisement(@RequestPart("advertisementDTO") @Valid NewAdvertisementDTO newAdvertisementDTO,
                                                BindingResult bindingResult,
+                                               @RequestPart(value = "coordinatesDTO", required = false) CoordinatesDTO coordinatesDTO,
                                                @RequestPart(value = "images", required = false) List<MultipartFile> images) {
         if (bindingResult.hasErrors()) {
             List<FieldError> fieldErrorList = bindingResult.getFieldErrors();
@@ -71,7 +73,7 @@ public class AdvertisementController {
                 }
             }
         }
-        advertisementService.createNewAdvertisement(newAdvertisementDTO, images);
+        advertisementService.createNewAdvertisement(newAdvertisementDTO, images, coordinatesDTO);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 

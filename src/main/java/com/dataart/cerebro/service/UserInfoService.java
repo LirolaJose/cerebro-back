@@ -79,15 +79,17 @@ public class UserInfoService {
     }
 
     @Transactional
-    public void topUpUsersBalance(Double money, Long userId) {
+    public Double topUpUsersBalance(Double money, Long userId) {
         UserInfo userInfo = getCurrentUser();
         if (!userInfo.getId().equals(userId)) {
             throw new ValidationException("Incorrect user data");
         }
-        userInfo.setMoneyAmount(userInfo.getMoneyAmount() + money);
+        Double newMoneyAmount = userInfo.getMoneyAmount() + money;
+        userInfo.setMoneyAmount(newMoneyAmount);
         try {
             userInfoRepository.save(userInfo);
             log.info("User {} has successfully increased the amount of money", userInfo.getEmail());
+            return newMoneyAmount;
         } catch (Exception e) {
             throw new DataProcessingException("Error during user balance update", e);
         }
