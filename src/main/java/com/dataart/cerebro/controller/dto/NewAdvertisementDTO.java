@@ -20,9 +20,9 @@ public class NewAdvertisementDTO {
     @NotNull
     private Double price;
 
+    @NotNull
     private Type type;
+    @NotNull
     private Long categoryId;
-    private Double latitude;
-    private Double longitude;
     private Set<Long> additionalServicesId;
 }
