@@ -12,6 +12,8 @@ import com.dataart.cerebro.repository.AdditionalServiceRepository;
 import com.dataart.cerebro.repository.AdvertisementRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,8 +40,8 @@ public class AdvertisementService {
     private final AdvertisementMapper advertisementMapper;
     private final CoordinateMapper coordinateMapper;
 
-    public List<Advertisement> findActiveAdvertisements() {
-        return advertisementRepository.findAdvertisementsByStatusOrderByPublicationTimeDesc(Status.ACTIVE);
+    public Page<Advertisement> findActiveAdvertisements(Pageable pageable) {
+        return advertisementRepository.findAdvertisementsByStatusOrderByPublicationTimeDesc(Status.ACTIVE, pageable);
     }
 
     public Advertisement findAdvertisementById(Long advertisementId) {

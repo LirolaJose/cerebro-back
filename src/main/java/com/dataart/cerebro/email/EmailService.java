@@ -20,6 +20,7 @@ import javax.mail.internet.MimeMessage;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Service
 @Slf4j
@@ -83,7 +84,7 @@ public class EmailService {
             log.info("Sending email about purchase is started");
             String template = "orderTemplate";
             Advertisement advertisement = order.getAdvertisement();
-            List<AdditionalService> servicesSet = additionalServiceRepository.findAdditionalServiceByOrderId(order.getId());
+            Set<AdditionalService> servicesSet = order.getAdditionalServices();
             Map<String, Object> contextMap = new HashMap<>();
             contextMap.put("action", "purchase");
             contextMap.put("userInfo", customer);
@@ -104,7 +105,7 @@ public class EmailService {
             log.info("Sending email about sell is started");
             String template = "orderTemplate";
             Advertisement advertisement = order.getAdvertisement();
-            List<AdditionalService> servicesSet = additionalServiceRepository.findAdditionalServiceByOrderId(order.getId());
+            Set<AdditionalService> servicesSet = order.getAdditionalServices();
             Map<String, Object> contextMap = new HashMap<>();
             contextMap.put("action", "sell");
             contextMap.put("userInfo", advertisement.getOwner());

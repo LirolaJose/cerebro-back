@@ -10,6 +10,10 @@ import com.dataart.cerebro.service.AdvertisementService;
 import com.dataart.cerebro.service.ImageService;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -34,11 +38,13 @@ public class AdvertisementController {
 
 
     @GetMapping
-    public ResponseEntity<?> getActiveAdvertisements() {
-        List<Advertisement> advertisements = advertisementService.findActiveAdvertisements();
+    public ResponseEntity<?> getActiveAdvertisements(@PageableDefault(size = 5) Pageable pageable) {
+        Page<Advertisement> advertisements = advertisementService.findActiveAdvertisements(pageable);
         List<AdvertisementDTO> advertisementDTOS = new ArrayList<>();
         advertisements.forEach(advertisement -> advertisementDTOS.add(advertisementMapper.convertToAdvertisementDTO(advertisement)));
-        return ResponseEntity.ok(advertisementDTOS);
+
+        return ResponseEntity.ok(new PageImpl<>(advertisementDTOS, advertisements.getPageable(),
+                advertisements.getTotalElements()));
     }
 
     @GetMapping("/{advertisementId}")

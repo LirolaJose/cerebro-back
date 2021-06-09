@@ -24,13 +24,6 @@ public interface AdditionalServiceRepository extends JpaRepository<AdditionalSer
             nativeQuery = true)
     List<AdditionalService> findAdditionalServicesByAdvertisementId(@Param("advertisementId") Long advertisementId);
 
-    @Query(value =
-            "SELECT s.* FROM service s " +
-            "join services_of_order soo on s.id = soo.service_id " +
-            "WHERE order_id = :orderId",
-            nativeQuery = true)
-    List<AdditionalService> findAdditionalServiceByOrderId(@Param("orderId") Long orderId);
-
     @Query("SELECT SUM(price) FROM AdditionalService " +
             "WHERE id IN :services")
     Double getAdditionalServicesPriceSum(@Param("services") Set<Long> additionalServices);

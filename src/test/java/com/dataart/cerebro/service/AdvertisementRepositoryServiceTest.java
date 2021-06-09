@@ -4,6 +4,8 @@ import com.dataart.cerebro.domain.Advertisement;
 import com.dataart.cerebro.domain.Status;
 import com.dataart.cerebro.repository.AdvertisementRepository;
 import org.junit.jupiter.api.Test;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +23,7 @@ class AdvertisementRepositoryServiceTest {
         AdvertisementService advertisementService = new AdvertisementService(advertisementRepositoryMock, null, null,
                 null, null,null, null, null);
         List<Advertisement> list = new ArrayList<>();
+        Pageable pageable = mock(Pageable.class);
 
         Advertisement ad1 = new Advertisement();
         Advertisement ad2 = new Advertisement();
@@ -32,7 +35,7 @@ class AdvertisementRepositoryServiceTest {
         when(advertisementRepositoryMock.findAll()).thenReturn(list);
 
         //when
-        List<Advertisement> advertisementList = advertisementService.findActiveAdvertisements();
+        Page<Advertisement> advertisementList = advertisementService.findActiveAdvertisements(pageable);
 
         //then
         advertisementList.forEach(advertisementDTO -> assertEquals(Status.ACTIVE, advertisementDTO.getStatus()));
