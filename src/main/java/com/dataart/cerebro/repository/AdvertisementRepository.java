@@ -12,7 +12,6 @@ import java.util.List;
 
 
 public interface AdvertisementRepository extends JpaRepository<Advertisement, Long> {
-//    List<Advertisement> findAdvertisementsByStatusOrderByPublicationTimeDesc(Status status);
     Page<Advertisement> findAdvertisementsByStatusOrderByPublicationTimeDesc(Status status, Pageable pageable);
 
     List<Advertisement> findAdvertisementsByOwnerId(Long ownerId);

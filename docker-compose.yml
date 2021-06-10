@@ -1,0 +1,18 @@
+version: '2.1'
+
+services:
+  cerebro-back:
+    container_name: cerebro-back
+    image: cerebro:3.0
+    ports:
+      - "8080:8080"
+
+  cerebro-front:
+      container_name: cerebro-front
+      image: cerebro-front:3.0
+      ports:
+        - "80:80"
+      depends_on:
+        - cerebro-back
+      links:
+        - cerebro-back:cerebro-back

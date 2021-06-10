@@ -3,7 +3,10 @@ package com.dataart.cerebro.configuration.model_mapper;
 import com.dataart.cerebro.controller.dto.AdvertisementDTO;
 import com.dataart.cerebro.controller.dto.NewAdvertisementDTO;
 import com.dataart.cerebro.controller.dto.UserInfoDTO;
-import com.dataart.cerebro.domain.*;
+import com.dataart.cerebro.domain.Advertisement;
+import com.dataart.cerebro.domain.Role;
+import com.dataart.cerebro.domain.Status;
+import com.dataart.cerebro.domain.UserInfo;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +19,6 @@ public class ModelMapperConfig {
        ModelMapper modelMapper = new ModelMapper();
 
        modelMapper.createTypeMap(UserInfo.class, UserInfoDTO.class).addMappings(mapper -> mapper.skip(UserInfoDTO::setPassword));
-       modelMapper.createTypeMap(NewAdvertisementDTO.class, Coordinates.class).addMappings(mapper -> mapper.skip(Coordinates::setAdvertisement));
 
        modelMapper.createTypeMap(UserInfoDTO.class, UserInfo.class).setPostConverter(mappingContext -> {
            mappingContext.getDestination().setRole(Role.USER);

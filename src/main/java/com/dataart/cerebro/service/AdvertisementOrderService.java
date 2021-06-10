@@ -46,19 +46,19 @@ public class AdvertisementOrderService {
             log.error("Type {} is not orderable or advertisement is not Active", advertisement.getType());
             throw new ValidationException("Category is not orderable or not Active");
         }
-            advertisementOrder.setOrderTime(LocalDateTime.now());
-            Double totalPrice = advertisement.getPrice() +
-                    additionalServiceService.getAdditionalServicesTotalPrice(advertisementOrderDTO.getAdditionalServicesId());
+        advertisementOrder.setOrderTime(LocalDateTime.now());
+        Double totalPrice = advertisement.getPrice() +
+                additionalServiceService.getAdditionalServicesTotalPrice(advertisementOrderDTO.getAdditionalServicesId());
 
-            userInfoService.changeMoneyAmount(customer, advertisement.getOwner(), totalPrice);
-            advertisementOrder.setTotalPrice(totalPrice);
-            advertisementOrder.setAdvertisement(advertisement);
-            advertisementOrder.setCustomer(customer);
+        userInfoService.changeMoneyAmount(customer, advertisement.getOwner(), totalPrice);
+        advertisementOrder.setTotalPrice(totalPrice);
+        advertisementOrder.setAdvertisement(advertisement);
+        advertisementOrder.setCustomer(customer);
 
-            Set<AdditionalService> additionalServices = new HashSet<>
-                    (additionalServiceRepository.findAllById(advertisementOrderDTO.getAdditionalServicesId()));
+        Set<AdditionalService> additionalServices = new HashSet<>
+                (additionalServiceRepository.findAllById(advertisementOrderDTO.getAdditionalServicesId()));
 
-            advertisementOrder.setAdditionalServices(additionalServices);
+        advertisementOrder.setAdditionalServices(additionalServices);
         try {
             AdvertisementOrder newOrder = advertisementOrderRepository.save(advertisementOrder);
 

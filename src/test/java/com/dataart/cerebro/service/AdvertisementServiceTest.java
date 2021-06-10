@@ -89,7 +89,6 @@ class AdvertisementServiceTest {
 
     @Test
     @Transactional
-        // TODO: 19.05.2021 private method to create new Advertisement
     void whenTryToGetAdsAdditionalServicesThenGetAdditionalServicesList() {
         Advertisement advertisement = advertisementRepository.findById(1L).orElseThrow(() -> new NotFoundException("Advertisement", 1L));
         Set<AdditionalService> additionalServices = advertisement.getAdditionalServices();

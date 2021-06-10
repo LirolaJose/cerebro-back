@@ -15,7 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -52,7 +51,7 @@ public class AdvertisementService {
         return advertisementRepository.findAdvertisementsByOwnerId(userInfoId);
     }
 
-    @Transactional(isolation = Isolation.READ_UNCOMMITTED)
+    @Transactional
     public void createNewAdvertisement(NewAdvertisementDTO newAdvertisementDTO, List<MultipartFile> images, CoordinatesDTO coordinatesDTO) {
         log.info("Creating new advertisement");
 
@@ -64,7 +63,6 @@ public class AdvertisementService {
 
         Advertisement advertisement = advertisementMapper.convertToAdvertisement(newAdvertisementDTO);
 
-        // TODO: 08.06.2021 if null
         if (coordinatesDTO != null) {
             Coordinates coordinates = coordinateMapper.convertToCoordinates(coordinatesDTO);
             coordinates.setLatitude(coordinatesDTO.getLatitude());

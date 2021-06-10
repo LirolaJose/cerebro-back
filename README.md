@@ -12,7 +12,7 @@ Command line:
 mvn clean install -Pdocker
 
 2.   	Build Docker image:
-build --build-arg JAR_FILE=target/*.jar -t cerebro:3.0 .
+docker build --build-arg JAR_FILE=target/*.jar -t cerebro:3.0 .
 
 3.   	Run created image:
 docker run -p 8080:8080 -t cerebro:3.0
