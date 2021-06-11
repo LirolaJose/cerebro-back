@@ -84,8 +84,8 @@ public class AdvertisementController {
     }
 
     private boolean isSupportedContentType(String contentType) {
-        return contentType.equals("image/png")
-                || contentType.equals("image/jpg")
-                || contentType.equals("image/jpeg");
+        return contentType.equals("static/image/png")
+                || contentType.equals("static/image/jpg")
+                || contentType.equals("static/image/jpeg");
     }
 }

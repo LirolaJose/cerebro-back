@@ -58,7 +58,7 @@ public class ImageService {
             if (image != null) {
                 return image.getImageBytes();
             }
-            ClassPathResource path = new ClassPathResource("image/notFound.jpg");
+            ClassPathResource path = new ClassPathResource("static/image/notFound.png");
             return StreamUtils.copyToByteArray(path.getInputStream());
         } catch (IOException e) {
             log.error("Error: {}", e.getMessage(), e);

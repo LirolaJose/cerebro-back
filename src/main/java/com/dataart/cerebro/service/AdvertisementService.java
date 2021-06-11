@@ -47,10 +47,6 @@ public class AdvertisementService {
         return advertisementRepository.findById(advertisementId).orElseThrow(() -> new NotFoundException("Advertisement", advertisementId));
     }
 
-    public List<Advertisement> findAdvertisementsByUserInfoId(Long userInfoId) {
-        return advertisementRepository.findAdvertisementsByOwnerId(userInfoId);
-    }
-
     @Transactional
     public void createNewAdvertisement(NewAdvertisementDTO newAdvertisementDTO, List<MultipartFile> images, CoordinatesDTO coordinatesDTO) {
         log.info("Creating new advertisement");

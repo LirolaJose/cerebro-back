@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Service
@@ -30,10 +29,6 @@ public class AdvertisementOrderService {
     private final AdvertisementService advertisementService;
     private final AdditionalServiceService additionalServiceService;
     private final AdditionalServiceRepository additionalServiceRepository;
-
-    public List<AdvertisementOrder> findAdvertisementOrdersByUserId(Long id) {
-        return advertisementOrderRepository.findAdvertisementOrdersByAdvertisementOwnerId(id);
-    }
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)
     public void createNewAdvertisementOrder(AdvertisementOrderDTO advertisementOrderDTO) {
